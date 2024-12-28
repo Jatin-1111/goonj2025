@@ -5,9 +5,9 @@ import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaPhone, FaEnvelope,
 
 const Footer = () => {
   const socialLinks = [
-    { icon: FaFacebookF, href: "https://facebook.com", label: "Facebook" },
+    { icon: FaFacebookF, href: "https://www.facebook.com/uiet.goonj?mibextid=ZbWKwL", label: "Facebook" },
     { icon: FaTwitter, href: "https://twitter.com", label: "Twitter" },
-    { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
+    { icon: FaInstagram, href: "https://www.instagram.com/goonj.uietpu?igsh=MnlrOWlxNmh2Ym9o", label: "Instagram" },
     { icon: FaLinkedinIn, href: "https://linkedin.com", label: "LinkedIn" },
   ];
 
@@ -173,7 +173,7 @@ const Footer = () => {
               © {new Date().getFullYear()} Goonj&apos;25. All Rights Reserved.
             </p>
             <p className="text-xs">
-              Designed with ❤️ by UIET Students
+              Designed with ❤ by UIET Students
             </p>
           </motion.div>
         </div>

@@ -3,29 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import EventsSection from './Infinitecarousel';
 
-const Hero = ({ timeLeft }) => {
-    const CountdownBox = ({ value, label }) => (
-        <motion.div
-            initial={{ scale: 0.5, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="flex flex-col items-center"
-        >
-            <motion.div
-                className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20"
-                whileHover={{ scale: 1.05 }}
-            >
-                <motion.span
-                    className="text-3xl md:text-4xl font-bold text-white"
-                    animate={{ scale: [1, 1.1, 1] }}
-                    transition={{ duration: 1.5, repeat: Infinity }}
-                >
-                    {String(value).padStart(2, '0')}
-                </motion.span>
-            </motion.div>
-            <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
-        </motion.div>
-    );
-
+const Hero = ({ timeLeft, CountdownBox }) => {  // Add CountdownBox to props
     return (
         <main className="relative bg-[#0D0221] py-16">
             <section className="relative flex flex-col justify-center items-center min-h-screen px-4 overflow-hidden">
@@ -104,22 +82,18 @@ const Hero = ({ timeLeft }) => {
                         >
                             Coming Soon - February 19th, 2025
                         </motion.h2>
-                        <motion.div 
-                            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 justify-items-center p-6 rounded-xl backdrop-blur-sm bg-black/20"
-                            initial={{ y: 20, opacity: 0 }}
-                            animate={{ y: 0, opacity: 1 }}
-                            transition={{ delay: 0.8 }}
-                        >
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 justify-items-center p-6 rounded-xl backdrop-blur-sm bg-black/20">
                             <CountdownBox value={timeLeft.months} label="Months" />
                             <CountdownBox value={timeLeft.weeks} label="Weeks" />
                             <CountdownBox value={timeLeft.days} label="Days" />
                             <CountdownBox value={timeLeft.hours} label="Hours" />
                             <CountdownBox value={timeLeft.minutes} label="Minutes" />
                             <CountdownBox value={timeLeft.seconds} label="Seconds" />
-                        </motion.div>
+                        </div>
                     </motion.div>
 
-                    {/* Title and Description */}
+                    {/* Rest of the component remains the same */}
+                    {/* ... Title and Description section ... */}
                     <div className="max-w-4xl space-y-6">
                         <motion.h1
                             initial={{ y: -50, opacity: 0 }}
@@ -147,7 +121,7 @@ const Hero = ({ timeLeft }) => {
                     </div>
                 </div>
 
-                {/* Decorative Corner Elements remain the same */}
+                {/* Decorative Corner Elements */}
                 <div className="absolute top-0 left-0 w-20 h-20">
                     <motion.div
                         className="absolute inset-0 border-t-2 border-l-2 border-orange-500/30"

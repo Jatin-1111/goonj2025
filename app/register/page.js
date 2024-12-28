@@ -251,7 +251,7 @@ const RegistrationPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40">
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-44">
             <motion.div
                 className="relative w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8"
                 variants={containerVariants}

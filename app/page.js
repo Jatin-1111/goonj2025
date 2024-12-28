@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Hero from './components/Hero';
@@ -8,6 +8,22 @@ import FAQ from './components/faqs';
 import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
+
+// Memoized CountdownBox to prevent unnecessary re-renders
+const CountdownBox = memo(({ value, label }) => (
+  <div className="flex flex-col items-center">
+    <div
+      className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20 hover:scale-105 transition-transform duration-200"
+    >
+      <span className="text-3xl md:text-4xl font-bold text-white">
+        {String(value).padStart(2, '0')}
+      </span>
+    </div>
+    <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
+  </div>
+));
+
+CountdownBox.displayName = 'CountdownBox';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -54,7 +70,19 @@ const Home = () => {
         const minutes = totalMinutes % 60;
         const seconds = totalSeconds % 60;
 
-        setTimeLeft({ months, weeks, days, hours, minutes, seconds });
+        setTimeLeft((prev) => {
+          if (
+            prev.months === months &&
+            prev.weeks === weeks &&
+            prev.days === days &&
+            prev.hours === hours &&
+            prev.minutes === minutes &&
+            prev.seconds === seconds
+          ) {
+            return prev;
+          }
+          return { months, weeks, days, hours, minutes, seconds };
+        });
       }
     };
 
@@ -62,28 +90,6 @@ const Home = () => {
     const timer = setInterval(calculateTimeLeft, 1000);
     return () => clearInterval(timer);
   }, []);
-
-  const CountdownBox = ({ value, label }) => (
-    <motion.div
-      initial={{ scale: 0.5, opacity: 0 }}
-      animate={{ scale: 1, opacity: 1 }}
-      className="flex flex-col items-center"
-    >
-      <motion.div
-        className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20"
-        whileHover={{ scale: 1.05 }}
-      >
-        <motion.span
-          className="text-3xl md:text-4xl font-bold text-white"
-          animate={{ scale: [1, 1.1, 1] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-        >
-          {String(value).padStart(2, '0')}
-        </motion.span>
-      </motion.div>
-      <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
-    </motion.div>
-  );
 
   if (loading) {
     return <Preloader />;
