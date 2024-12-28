@@ -10,6 +10,11 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import EventSelectionModal from '../components/EventSelectionModal';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/app/firebase';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { QrCode, Copy, CheckCircle } from 'lucide-react';
+
 
 const RegistrationPage = () => {
     const [formData, setFormData] = useState({
@@ -20,7 +25,7 @@ const RegistrationPage = () => {
         course: '',
         year: '',
         events: [],
-        referralCode: '',
+        transactionId: '',
         totalAmount: 0
     });
 
@@ -29,7 +34,8 @@ const RegistrationPage = () => {
     const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
     const [selectedEvents, setSelectedEvents] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
-
+    const [showQrCode, setShowQrCode] = useState(false);
+    const [paymentCopied, setPaymentCopied] = useState(false);
 
     const handleEventsSelect = (events, price) => {
         setSelectedEvents(events);
@@ -70,32 +76,47 @@ const RegistrationPage = () => {
     const validateForm = () => {
         const newErrors = {};
 
-        if (!formData.name.trim()) {
+        // Required field validations
+        if (!formData.name?.trim()) {
             newErrors.name = 'Name is required';
         }
 
-        if (!formData.email.trim()) {
+        if (!formData.email?.trim()) {
             newErrors.email = 'Email is required';
         } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
             newErrors.email = 'Invalid email format';
         }
 
-        if (!formData.phone.trim()) {
+        if (!formData.phone?.trim()) {
             newErrors.phone = 'Phone number is required';
-        } else if (!/^\d{10}$/.test(formData.phone)) {
+        } else if (!/^\d{10}$/.test(formData.phone.trim())) {
             newErrors.phone = 'Invalid phone number';
         }
 
-        if (!formData.college.trim()) {
+        if (!formData.college?.trim()) {
             newErrors.college = 'College name is required';
         }
 
-        if (!formData.course) {
+        if (!formData.course || formData.course === 'all') {
             newErrors.course = 'Course is required';
         }
 
-        if (!formData.year) {
+        if (!formData.year || formData.year === 'all') {
             newErrors.year = 'Year is required';
+        }
+
+        // Events validation
+        if (!selectedEvents || selectedEvents.length === 0) {
+            newErrors.events = 'Please select at least one event';
+        }
+
+        // Payment validation
+        if (selectedEvents?.length > 0 && totalPrice > 0) {
+            if (!formData.transactionId?.trim()) {
+                newErrors.transactionId = 'Transaction ID is required for payment';
+            } else if (formData.transactionId.trim().length < 8) {
+                newErrors.transactionId = 'Please enter a valid transaction ID';
+            }
         }
 
         setErrors(newErrors);
@@ -106,29 +127,117 @@ const RegistrationPage = () => {
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitStatus(null);
-
-        if (validateForm()) {
-            try {
-                // Simulating API call
-                await new Promise(resolve => setTimeout(resolve, 1500));
-                setSubmitStatus('success');
-                // Reset form after successful submission
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    college: '',
-                    course: '',
-                    year: '',
-                    events: [],
-                    referralCode: ''
-                });
-            } catch (error) {
-                setSubmitStatus('error');
+    
+        try {
+            if (!validateForm()) {
+                throw new Error('Form validation failed');
             }
+    
+            // Clean and structure the data
+            const registrationData = {
+                // ... existing data structure ...
+                submittedAt: new Date().toISOString(),
+                status: 'pending' // Start with pending status
+            };
+    
+            // Save to Firebase with proper error handling
+            const docRef = await addDoc(collection(db, 'registrations'), registrationData);
+            
+            if (!docRef?.id) {
+                throw new Error('Failed to get document reference');
+            }
+    
+            // Update the document with its ID
+            await updateDoc(doc(db, 'registrations', docRef.id), {
+                registrationId: docRef.id,
+                status: 'active'
+            });
+    
+            setSubmitStatus('success');
+            resetForm(); // Use the new reset function
+    
+        } catch (error) {
+            console.error('Error in handleSubmit:', error);
+            setSubmitStatus('error');
+            
+            // More specific error messages
+            if (error.code === 'permission-denied') {
+                alert('Permission denied. Please check your authorization.');
+            } else if (error.code === 'unavailable') {
+                alert('Service temporarily unavailable. Please try again later.');
+            } else if (error.message === 'Form validation failed') {
+                // Form validation error already shown
+            } else {
+                alert('An error occurred while saving your registration. Please try again.');
+            }
+        } finally {
+            setIsSubmitting(false);
         }
-        setIsSubmitting(false);
     };
+
+    const PaymentQrDialog = ({ isOpen, onClose, totalPrice }) => {
+        const [paymentCopied, setPaymentCopied] = useState(false);
+        const PAYMENT_ID = "goonj2025@okpunjab"; // Replace with your actual GPay ID
+
+        const copyPaymentId = () => {
+            navigator.clipboard.writeText(PAYMENT_ID);
+            setPaymentCopied(true);
+            setTimeout(() => setPaymentCopied(false), 2000);
+        };
+
+        return (
+            <Dialog open={isOpen} onOpenChange={onClose}>
+                <DialogContent className="bg-gray-900/95 border-2 border-orange-900/50">
+                    <DialogHeader>
+                        <DialogTitle className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-cyan-400">
+                            Complete Payment
+                        </DialogTitle>
+                    </DialogHeader>
+                    <div className="space-y-6 p-4">
+                        <div className="p-4 bg-white rounded-lg mx-auto max-w-[280px] aspect-square">
+                            <img
+                                src="/qr-code.png" // Add your QR code image
+                                alt="Payment QR Code"
+                                className="w-full h-full object-contain"
+                            />
+                        </div>
+
+                        <div className="space-y-3">
+                            <p className="text-gray-400 text-sm">Or pay using UPI ID:</p>
+                            <div className="flex items-center gap-2 bg-gray-800/80 p-3 rounded-lg border border-orange-900/50">
+                                <span className="text-gray-200 flex-1 font-mono">{PAYMENT_ID}</span>
+                                <Button
+                                    variant="ghost"
+                                    size="icon"
+                                    className="hover:bg-gray-700"
+                                    onClick={copyPaymentId}
+                                >
+                                    {paymentCopied ? (
+                                        <CheckCircle2 className="w-4 h-4 text-green-400" />
+                                    ) : (
+                                        <Copy className="w-4 h-4 text-gray-400" />
+                                    )}
+                                </Button>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center text-lg font-medium">
+                                <span className="text-gray-300">Amount to Pay:</span>
+                                <span className="text-cyan-400">₹{totalPrice}</span>
+                            </div>
+                            <div className="bg-orange-500/10 border border-orange-500/20 rounded-lg p-4">
+                                <p className="text-orange-400 text-sm">
+                                    Important: After completing the payment, enter the UPI Reference ID in the registration form to confirm your registration.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </DialogContent>
+            </Dialog>
+        );
+    };
+
     const containerVariants = {
         hidden: { opacity: 0, y: 20 },
         visible: {
@@ -142,39 +251,19 @@ const RegistrationPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 pt-32 sm:pt-36 md:pt-40 pb-12 overflow-x-hidden">
-            {/* Background Effects */}
-            <div className="fixed inset-0">
-                <div className="absolute inset-0 bg-[url('/patterns/rangoli.png')] opacity-[0.02]" />
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-950/30 via-transparent to-cyan-950/30" />
-                <motion.div
-                    className="fixed inset-0 pointer-events-none"
-                    animate={{
-                        background: [
-                            'radial-gradient(circle at 20% 30%, rgba(251, 146, 60, 0.03) 0%, transparent 50%)',
-                            'radial-gradient(circle at 80% 70%, rgba(34, 211, 238, 0.03) 0%, transparent 50%)'
-                        ]
-                    }}
-                    transition={{
-                        duration: 10,
-                        repeat: Infinity,
-                        repeatType: "reverse"
-                    }}
-                />
-            </div>
-
-            {/* Main Content */}
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40">
             <motion.div
-                className="relative z-10 w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8"
+                className="relative w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8"
                 variants={containerVariants}
                 initial="hidden"
                 animate="visible"
             >
-                <Card className="bg-gray-900/90 backdrop-blur-sm border-2 border-orange-900/50 shadow-xl">
-                    <CardHeader className="space-y-1 pb-6 sm:pb-8">
-                        <div className="flex items-center justify-center gap-3 mb-4">
+                {/* Main Card */}
+                <Card className="bg-gray-900/90 backdrop-blur-sm border-2 border-orange-900/50 shadow-xl relative z-10">
+                    <CardHeader className="space-y-1 p-6 sm:p-8">
+                        <div className="flex items-center justify-center mb-4">
                             <motion.div
-                                className="w-12 h-12 bg-gradient-to-br from-orange-500 to-cyan-500 rounded-lg"
+                                className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-br from-orange-500 to-cyan-500 rounded-lg"
                                 animate={{
                                     rotate: [0, 180],
                                     borderRadius: ["20%", "50%", "20%"],
@@ -186,21 +275,23 @@ const RegistrationPage = () => {
                                 }}
                             />
                         </div>
-                        <CardTitle className="text-2xl sm:text-3xl md:text-4xl font-bold text-center bg-gradient-to-r from-orange-400 via-orange-300 to-cyan-400 text-transparent bg-clip-text">
+                        <CardTitle className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-center bg-gradient-to-r from-orange-400 via-orange-300 to-cyan-400 text-transparent bg-clip-text">
                             Register for Goonj 2025
                             <motion.div
-                                className="mt-2 h-1 mx-auto w-32 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500"
+                                className="mt-2 h-1 mx-auto w-24 sm:w-32 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500"
                                 initial={{ scaleX: 0 }}
                                 animate={{ scaleX: 1 }}
                                 transition={{ delay: 0.5 }}
                             />
                         </CardTitle>
-                        <CardDescription className="text-gray-400 text-center text-base sm:text-lg">
+                        <CardDescription className="text-gray-400 text-center text-sm sm:text-base lg:text-lg">
                             Join us in celebrating technology & culture at UIET&apos;s annual fest
                         </CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <form onSubmit={handleSubmit} className="space-y-6">
+
+                    <CardContent className="p-4 sm:p-6 lg:p-8">
+                        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+                            {/* Personal Details Section */}
                             <div className="space-y-4">
                                 {/* Name and Email */}
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -370,6 +461,69 @@ const RegistrationPage = () => {
                                 )}
                             </div>
 
+                            {/* Payment Section */}
+                            {selectedEvents.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    className="space-y-4"
+                                >
+                                    <Separator className="my-6 bg-orange-900/30" />
+
+                                    <div className="space-y-4">
+                                        <div className="flex items-center justify-between">
+                                            <Label className="text-xl font-semibold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-cyan-400">
+                                                Payment Details
+                                            </Label>
+                                            <Button
+                                                type="button"
+                                                variant="ghost"
+                                                className="text-cyan-400 hover:text-cyan-300 hover:bg-cyan-400/10"
+                                                onClick={() => setShowQrCode(true)}
+                                            >
+                                                <QrCode className="w-4 h-4 mr-2" />
+                                                Show QR Code
+                                            </Button>
+                                        </div>
+
+                                        <div className="grid gap-6">
+                                            <div className="space-y-2">
+                                                <Label htmlFor="transactionId" className="text-gray-300 font-medium">
+                                                    UPI Reference ID
+                                                    <span className="text-orange-400 ml-1">*</span>
+                                                </Label>
+                                                <Input
+                                                    id="transactionId"
+                                                    name="transactionId"
+                                                    value={formData.transactionId}
+                                                    onChange={handleInputChange}
+                                                    placeholder="Enter UPI Reference ID after payment"
+                                                    className="bg-gray-800/80 border-orange-900/50 text-gray-200 placeholder:text-gray-500 focus:border-cyan-500 focus:ring-cyan-500"
+                                                />
+                                                {errors.transactionId && (
+                                                    <p className="text-sm text-red-400 flex items-center gap-1">
+                                                        <AlertCircle className="w-4 h-4" />
+                                                        {errors.transactionId}
+                                                    </p>
+                                                )}
+                                            </div>
+
+                                            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-lg p-4 border border-orange-900/50">
+                                                <div className="flex justify-between items-center">
+                                                    <div className="space-y-1">
+                                                        <p className="text-gray-300 font-medium">Total Amount</p>
+                                                        <p className="text-sm text-gray-400">Including all event fees</p>
+                                                    </div>
+                                                    <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-orange-400 to-cyan-400">
+                                                        ₹{totalPrice}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            )}
+
                             {/* Submit Button */}
                             <motion.button
                                 whileHover={{ scale: 1.02 }}
@@ -414,9 +568,16 @@ const RegistrationPage = () => {
                     </CardContent>
                 </Card>
 
+                {/* Payment QR Dialog */}
+                <PaymentQrDialog
+                    isOpen={showQrCode}
+                    onClose={() => setShowQrCode(false)}
+                    totalPrice={totalPrice}
+                />
+
                 {/* Decorative Corner Elements - Inspired by Indian Patterns */}
                 {/* Top Left Corner - Paisley Pattern */}
-                <div className="absolute -top-4 -left-4 w-32 h-32">
+                <div className="absolute -top-4 -left-4 w-24 sm:w-32 h-24 sm:h-32 pointer-events-none">
                     <motion.div
                         className="absolute inset-0"
                         initial={{ opacity: 0 }}
@@ -467,7 +628,7 @@ const RegistrationPage = () => {
                 </div>
 
                 {/* Bottom Right Corner - Mandala Segment */}
-                <div className="absolute -bottom-20 -right-4 w-32 h-32">
+                <div className="absolute -bottom-16 -right-4 w-24 sm:w-32 h-24 sm:h-32 pointer-events-none">
                     <motion.div
                         className="absolute inset-0"
                         initial={{ opacity: 0 }}
@@ -531,7 +692,7 @@ const RegistrationPage = () => {
 
                 {/* Top Right Accent */}
                 <motion.div
-                    className="absolute -top-2 -right-2 w-24 h-24"
+                    className="absolute -top-2 -right-2 w-20 sm:w-24 h-20 sm:h-24 pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.5 }}
@@ -557,7 +718,7 @@ const RegistrationPage = () => {
 
                 {/* Bottom Left Accent */}
                 <motion.div
-                    className="absolute -bottom-2 -left-2 w-24 h-24"
+                    className="absolute -bottom-2 -left-2 w-20 sm:w-24 h-20 sm:h-24 pointer-events-none"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 1, delay: 0.5 }}
@@ -581,7 +742,7 @@ const RegistrationPage = () => {
                     </svg>
                 </motion.div>
             </motion.div>
-        </div>
+        </div >
     );
 };
 
