@@ -1,28 +1,110 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { db } from '@/app/firebase';
-import { collection, query, where, getDocs, orderBy } from 'firebase/firestore';
+import { collection, query, getDocs, orderBy, where, Timestamp } from 'firebase/firestore';
 import {
-    Download,
-    Filter,
-    Search,
-    Users,
-    Calendar,
-    School,
-    BookOpen,
-    Tag,
-    CheckCircle2,
-    AlertCircle,
-    Clock
+    Download, Filter, Users, CheckCircle2, Clock,
+    AlertCircle
 } from 'lucide-react';
 
+// SVG Patterns Component for Technology Elements
+const TechPatterns = () => (
+    <div className="absolute inset-0 overflow-hidden opacity-20">
+        <svg className="w-full h-full">
+            <defs>
+                <pattern id="circuitPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                    {/* Main Circuit Lines */}
+                    <path d="M10 50h80M50 10v80" stroke="currentColor" strokeWidth="0.5" fill="none" />
+
+                    {/* Circuit Nodes */}
+                    <circle cx="50" cy="50" r="2" fill="currentColor" />
+                    <circle cx="10" cy="50" r="1.5" fill="currentColor" />
+                    <circle cx="90" cy="50" r="1.5" fill="currentColor" />
+                    <circle cx="50" cy="10" r="1.5" fill="currentColor" />
+                    <circle cx="50" cy="90" r="1.5" fill="currentColor" />
+
+                    {/* Additional Circuit Details */}
+                    <path d="M50 50l30 30M50 50l-30 -30" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <path d="M10 10h20M70 90h20" stroke="currentColor" strokeWidth="0.5" fill="none" />
+
+                    {/* Circuit Components */}
+                    <rect x="45" y="70" width="10" height="5" stroke="currentColor" fill="none" />
+                    <circle cx="30" cy="70" r="3" stroke="currentColor" fill="none" />
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#circuitPattern)" className="text-orange-400" />
+        </svg>
+    </div>
+);
+
+// Cultural Design Elements Component
+const CulturalPatterns = () => (
+    <div className="absolute inset-0 overflow-hidden opacity-15 mix-blend-overlay">
+        <svg className="w-full h-full">
+            <defs>
+                <pattern id="mandalaPattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+                    {/* Main Mandala Circles */}
+                    <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="0.5" fill="none" />
+                    <circle cx="100" cy="100" r="40" stroke="currentColor" strokeWidth="0.5" fill="none" />
+
+                    {/* Radial Lines */}
+                    {[...Array(12)].map((_, i) => {
+                        const angle = (i * 30 * Math.PI) / 180;
+                        const x2 = 100 + 80 * Math.cos(angle);
+                        const y2 = 100 + 80 * Math.sin(angle);
+                        return (
+                            <path
+                                key={i}
+                                d={`M100 100L${x2} ${y2}`}
+                                stroke="currentColor"
+                                strokeWidth="0.5"
+                                fill="none"
+                            />
+                        );
+                    })}
+
+                    {/* Decorative Elements */}
+                    {[...Array(8)].map((_, i) => {
+                        const angle = (i * 45 * Math.PI) / 180;
+                        const x = 100 + 60 * Math.cos(angle);
+                        const y = 100 + 60 * Math.sin(angle);
+                        return (
+                            <path
+                                key={`petal-${i}`}
+                                d={`M100 100 Q${x} ${y} ${x + 20} ${y + 20}`}
+                                stroke="currentColor"
+                                strokeWidth="0.3"
+                                fill="none"
+                            />
+                        );
+                    })}
+
+                    {/* Central Design */}
+                    <path
+                        d="M90 100c0-5 10-5 10-0s-10 5-10 0"
+                        stroke="currentColor"
+                        strokeWidth="0.5"
+                        fill="none"
+                    />
+                </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#mandalaPattern)" className="text-cyan-400" />
+        </svg>
+    </div>
+);
+
 const AdminPanel = () => {
+
+
     const [registrations, setRegistrations] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [filters, setFilters] = useState({
@@ -30,107 +112,171 @@ const AdminPanel = () => {
         college: '',
         course: 'all',
         year: 'all',
-        eventType: 'all'
     });
-    
     const [paymentStatus, setPaymentStatus] = useState('all');
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
-    // Fetch data from Firebase
-    useEffect(() => {
-        const fetchRegistrations = async () => {
-            try {
-                const registrationsRef = collection(db, 'registrations');
-                const q = query(registrationsRef, orderBy('timestamp', 'desc'));
-                const querySnapshot = await getDocs(q);
-                const data = querySnapshot.docs.map(doc => ({
+    // Fetch data from Firebase with error handling and loading states
+    const fetchRegistrations = useCallback(async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const registrationsRef = collection(db, 'registrations');
+            let q = query(registrationsRef, orderBy('createdAt', 'desc'));
+
+            const querySnapshot = await getDocs(q);
+            const data = querySnapshot.docs.map(doc => {
+                const data = doc.data();
+                return {
                     id: doc.id,
-                    ...doc.data()
-                }));
-                setRegistrations(data);
-                setFilteredData(data);
-                setLoading(false);
-            } catch (error) {
-                console.error('Error fetching registrations:', error);
-                setLoading(false);
-            }
-        };
+                    ...data,
+                    createdAt: data.createdAt?.toDate?.() || new Date(),
+                    updatedAt: data.updatedAt?.toDate?.() || new Date(),
+                };
+            });
 
+            setRegistrations(data);
+            setFilteredData(data);
+            toast.success(`Successfully loaded ${data.length} registrations`, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } catch (error) {
+            console.error('Error fetching registrations:', error);
+            setError(error.message);
+            toast.error(`Error loading data: ${error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            setLoading(false);
+        }
+    }, [toast]);
+
+    useEffect(() => {
         fetchRegistrations();
-    }, []);
+    }, [fetchRegistrations]);
 
-    // Apply filters
-    const applyFilters = () => {
+    // Enhanced filter functionality
+    const applyFilters = useCallback(() => {
         let filtered = [...registrations];
 
+        // Search filter
         if (filters.search) {
             const searchTerm = filters.search.toLowerCase();
             filtered = filtered.filter(reg =>
-                reg.name.toLowerCase().includes(searchTerm) ||
-                reg.email.toLowerCase().includes(searchTerm) ||
-                reg.phone.includes(searchTerm) ||
-                (reg.transactionId && reg.transactionId.toLowerCase().includes(searchTerm))
+                reg.name?.toLowerCase().includes(searchTerm) ||
+                reg.email?.toLowerCase().includes(searchTerm) ||
+                reg.phone?.includes(searchTerm) ||
+                reg.transactionId?.toLowerCase().includes(searchTerm)
             );
         }
 
-        if (filters.course && filters.course !== 'all') {
+        // Course filter
+        if (filters.course !== 'all') {
             filtered = filtered.filter(reg => reg.course === filters.course);
         }
 
-        if (filters.year && filters.year !== 'all') {
+        // Year filter
+        if (filters.year !== 'all') {
             filtered = filtered.filter(reg => reg.year === filters.year);
         }
 
+        // Payment status filter
         if (paymentStatus !== 'all') {
             filtered = filtered.filter(reg => {
                 if (paymentStatus === 'pending') return !reg.transactionId;
-                if (paymentStatus === 'completed') return reg.transactionId;
+                if (paymentStatus === 'completed') return !!reg.transactionId;
                 return true;
             });
         }
 
         setFilteredData(filtered);
-    };
+    }, [registrations, filters, paymentStatus]);
 
-    // Handle filter changes
+    // Apply filters whenever filter state changes
+    useEffect(() => {
+        applyFilters();
+    }, [filters, paymentStatus, applyFilters]);
+
+    // Enhanced export functionality with error handling
+    const exportToCSV = useCallback(() => {
+        try {
+            const headers = ['Name', 'Email', 'Phone', 'College', 'Course', 'Year', 'Events', 'Amount', 'Transaction ID', 'Payment Status', 'Registration Date'];
+
+            const csvData = filteredData.map(reg => {
+                const events = Array.isArray(reg.events) ? reg.events.map(e => e.name).join('; ') : '';
+                const date = reg.createdAt instanceof Date ? reg.createdAt.toLocaleString() : 'N/A';
+
+                return [
+                    reg.name || '',
+                    reg.email || '',
+                    reg.phone || '',
+                    reg.college || '',
+                    reg.course || '',
+                    reg.year || '',
+                    events,
+                    reg.totalAmount || 0,
+                    reg.transactionId || 'Not Provided',
+                    reg.transactionId ? 'Completed' : 'Pending',
+                    date
+                ].map(field => `"${String(field).replace(/"/g, '""')}"`)
+            });
+
+            const csvContent = [
+                headers.join(','),
+                ...csvData.map(row => row.join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = `registrations_${new Date().toISOString()}.csv`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+
+            toast.success(`Successfully exported ${filteredData.length} records to CSV`, {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } catch (error) {
+            console.error('Export error:', error);
+            toast.error(`Export failed: ${error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        }
+    }, [filteredData, toast]);
+
     const handleFilterChange = (name, value) => {
         setFilters(prev => ({
             ...prev,
             [name]: value
         }));
-    };
-
-    // Export to CSV
-    const exportToCSV = () => {
-        const headers = ['Name', 'Email', 'Phone', 'College', 'Course', 'Year', 'Events', 'Amount', 'Transaction ID', 'Payment Status', 'Registration Date'];
-        const csvData = filteredData.map(reg => [
-            reg.name,
-            reg.email,
-            reg.phone,
-            reg.college,
-            reg.course,
-            reg.year,
-            reg.events.map(e => e.name).join('; '),
-            reg.totalAmount,
-            reg.transactionId || 'Not Provided',
-            reg.payment?.status || 'pending',
-            new Date(reg.timestamp).toLocaleString()
-        ]);
-
-        const csvContent = [
-            headers.join(','),
-            ...csvData.map(row => row.join(','))
-        ].join('\n');
-
-        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-        const link = document.createElement('a');
-        const url = URL.createObjectURL(blob);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `registrations_${new Date().toISOString()}.csv`);
-        link.style.visibility = 'hidden';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
     };
 
     const getPaymentStatusBadge = (registration) => {
@@ -150,23 +296,68 @@ const AdminPanel = () => {
         );
     };
 
-
     return (
         <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40">
+            <div className="fixed inset-0">
+                <TechPatterns />
+                <CulturalPatterns />
+            </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
+
             <div className="max-w-[90rem] mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-                <Card className="bg-gray-900/90 backdrop-blur-sm border-2 border-orange-900/50">
-                    <CardHeader className="p-6">
+                {error && (
+                    <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="mb-4 p-4 bg-red-900/50 border border-red-500/50 rounded-lg text-red-200 flex items-center gap-2"
+                    >
+                        <AlertCircle className="w-5 h-5" />
+                        {error}
+                    </motion.div>
+                )}
+
+
+                <Card className="bg-gray-900/90 backdrop-blur-sm border-2 border-orange-900/50 relative overflow-hidden">
+                    <TechPatterns />
+                    <CulturalPatterns />
+                    {/* Header Section */}
+                    <CardHeader className="p-6 relative">
                         <CardTitle className="flex items-center gap-3">
-                            <div className="bg-gradient-to-br from-orange-500 to-cyan-500 p-2 rounded-xl">
-                                <Users className="w-8 h-8 text-white" />
-                            </div>
+                            <motion.div
+                                className="bg-gradient-to-br from-orange-500 to-cyan-500 p-2 rounded-xl relative overflow-hidden"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: "spring", stiffness: 300 }}
+                            >
+                                <div className="absolute inset-0 bg-gradient-to-r from-orange-300/20 to-cyan-300/20 animate-pulse" />
+                                <Users className="w-8 h-8 text-white relative z-10" />
+                            </motion.div>
                             <div>
-                                <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-400 via-orange-300 to-cyan-400 text-transparent bg-clip-text">
+                                <motion.h2
+                                    className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-orange-300 via-orange-200 to-cyan-300 text-transparent bg-clip-text"
+                                    initial={{ opacity: 0, y: -20 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                >
                                     Registration Dashboard
-                                </h2>
-                                <p className="text-sm md:text-base text-gray-400 mt-1">
+                                </motion.h2>
+                                <motion.p
+                                    className="text-sm md:text-base text-gray-300 mt-1"
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    transition={{ delay: 0.2 }}
+                                >
                                     Total Registrations: {filteredData.length}
-                                </p>
+                                </motion.p>
                             </div>
                         </CardTitle>
                     </CardHeader>
@@ -180,7 +371,7 @@ const AdminPanel = () => {
                                     placeholder="Search by name, email, phone, transaction ID..."
                                     value={filters.search}
                                     onChange={(e) => handleFilterChange('search', e.target.value)}
-                                    className="bg-gray-800/80 border-orange-900/50 text-gray-200 placeholder:text-gray-500"
+                                    className="bg-gray-800/80 border-orange-900/50 text-gray-100 placeholder:text-gray-400"
                                 />
                             </div>
 
@@ -189,7 +380,7 @@ const AdminPanel = () => {
                                 value={filters.course}
                                 onValueChange={(value) => handleFilterChange('course', value)}
                             >
-                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-200">
+                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-100">
                                     <SelectValue placeholder="Filter by Course" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-800 border-orange-900/50">
@@ -207,7 +398,7 @@ const AdminPanel = () => {
                                 value={filters.year}
                                 onValueChange={(value) => handleFilterChange('year', value)}
                             >
-                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-200">
+                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-100">
                                     <SelectValue placeholder="Filter by Year" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-800 border-orange-900/50">
@@ -227,7 +418,7 @@ const AdminPanel = () => {
                                     applyFilters();
                                 }}
                             >
-                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-200">
+                                <SelectTrigger className="bg-gray-800/80 border-orange-900/50 text-gray-100">
                                     <SelectValue placeholder="Payment Status" />
                                 </SelectTrigger>
                                 <SelectContent className="bg-gray-800 border-orange-900/50">
@@ -241,7 +432,7 @@ const AdminPanel = () => {
                             <div className="flex gap-2">
                                 <Button
                                     onClick={applyFilters}
-                                    className="flex-1 bg-orange-500 hover:bg-orange-600"
+                                    className="flex-1 bg-orange-500 hover:bg-orange-600 text-white"
                                 >
                                     <Filter className="w-4 h-4 mr-2" />
                                     Filter
@@ -249,7 +440,7 @@ const AdminPanel = () => {
 
                                 <Button
                                     onClick={exportToCSV}
-                                    className="flex-1 bg-cyan-500 hover:bg-cyan-600"
+                                    className="flex-1 bg-cyan-500 hover:bg-cyan-600 text-white"
                                 >
                                     <Download className="w-4 h-4 mr-2" />
                                     Export
@@ -263,47 +454,50 @@ const AdminPanel = () => {
                                 <table className="w-full">
                                     <thead>
                                         <tr className="bg-gray-800/50">
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Name</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Email</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Phone</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">College</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Course</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Year</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Events</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Amount</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Transaction ID</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Status</th>
-                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-300 font-medium">Date</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Name</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Email</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Phone</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">College</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Course</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Year</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Events</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Amount</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Transaction ID</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Status</th>
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Date</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-orange-900/20">
                                         {filteredData.map((reg) => (
-                                            <tr
+                                            <motion.tr
                                                 key={reg.id}
                                                 className="hover:bg-gray-800/30 transition-colors"
+                                                initial={{ opacity: 0 }}
+                                                animate={{ opacity: 1 }}
+                                                transition={{ type: "spring", stiffness: 100 }}
                                             >
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-200">{reg.name}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">{reg.email}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">{reg.phone}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">{reg.college}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">{reg.course}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">{reg.year}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">
-                                                    <Badge variant="outline" className="bg-gray-800/50 text-gray-300">
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-100">{reg.name}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.email}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.phone}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.college}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.course}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.year}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">
+                                                    <Badge variant="outline" className="bg-gray-800/50 text-gray-200 border-orange-500/30">
                                                         {reg.events.length} Events
                                                     </Badge>
                                                 </td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-cyan-400">₹{reg.totalAmount}</td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-cyan-300">₹{reg.totalAmount}</td>
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">
                                                     {reg.transactionId || '-'}
                                                 </td>
                                                 <td className="whitespace-nowrap px-4 py-3 text-sm">
                                                     {getPaymentStatusBadge(reg)}
                                                 </td>
-                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-400">
-                                                    {new Date(reg.timestamp).toLocaleDateString()}
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">
+                                                    {new Date(reg.createdAt).toLocaleDateString()}
                                                 </td>
-                                            </tr>
+                                            </motion.tr>
                                         ))}
                                     </tbody>
                                 </table>
@@ -311,11 +505,11 @@ const AdminPanel = () => {
 
                             {/* Loading State */}
                             {loading && (
-                                <div className="absolute inset-0 bg-gray-900/50 backdrop-blur-sm flex items-center justify-center">
+                                <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center">
                                     <motion.div
                                         animate={{ rotate: 360 }}
                                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                        className="w-8 h-8 border-2 border-orange-500 border-t-transparent rounded-full"
+                                        className="w-8 h-8 border-2 border-orange-300 border-t-transparent rounded-full"
                                     />
                                 </div>
                             )}
@@ -323,9 +517,9 @@ const AdminPanel = () => {
                             {/* Empty State */}
                             {!loading && filteredData.length === 0 && (
                                 <div className="py-12 text-center">
-                                    <Users className="w-12 h-12 text-gray-500 mx-auto mb-4" />
-                                    <h3 className="text-gray-400 text-lg font-medium">No registrations found</h3>
-                                    <p className="text-gray-500 mt-2">Try adjusting your filters</p>
+                                    <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                                    <h3 className="text-gray-300 text-lg font-medium">No registrations found</h3>
+                                    <p className="text-gray-400 mt-2">Try adjusting your filters</p>
                                 </div>
                             )}
                         </div>

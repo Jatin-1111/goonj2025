@@ -161,10 +161,10 @@ const RegistrationPage = () => {
             events: [],
             transactionId: '',
             totalAmount: 0
-        });
-    };
+        });
+    };
 
-const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (isSubmitting) {
@@ -218,7 +218,34 @@ const handleSubmit = async (e) => {
             const registrationRef = doc(collection(db, "registrations"));
             registrationData.registrationId = registrationRef.id;
 
+            // Save to database
             await setDoc(registrationRef, registrationData);
+
+            // Send confirmation email with registration details
+            try {
+                const emailResponse = await fetch('/api/send-registration-confirmation', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: registrationData.email,
+                        name: registrationData.name,
+                        registrationId: registrationData.registrationId,
+                        events: registrationData.events,
+                        totalAmount: registrationData.totalAmount,
+                        paymentStatus: registrationData.paymentStatus
+                    }),
+                });
+
+                if (!emailResponse.ok) {
+                    console.error('Failed to send confirmation email');
+                    // Don't show error to user since registration was successful
+                }
+            } catch (emailError) {
+                console.error('Email sending error:', emailError);
+                // Don't fail the registration if email fails
+            }
 
             setSubmitStatus('success');
             toast.dismiss(toastSubmitting);
@@ -226,6 +253,7 @@ const handleSubmit = async (e) => {
                 duration: 5000,
                 position: 'top-center'
             });
+
             resetForm();
 
         } catch (error) {
