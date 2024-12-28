@@ -128,36 +128,34 @@ const Header = () => {
     )
 
     const Logo = ({ src, alt, className }) => (
-        <Link href="/">
+        <motion.div
+            variants={logoVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            className={`relative ${className}`}
+        >
+            <Image
+                src={src}
+                fill
+                style={{ objectFit: "contain" }}
+                alt={alt}
+                className="relative z-10"
+                sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 100px"
+            />
             <motion.div
-                variants={logoVariants}
-                initial="initial"
-                animate="animate"
-                whileHover="hover"
-                className={`relative ${className}`}
-            >
-                <Image
-                    src={src}
-                    fill
-                    style={{ objectFit: "contain" }}
-                    alt={alt}
-                    className="relative z-10"
-                    sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 100px"
-                />
-                <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-green-600/30 rounded-full blur-lg"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        rotate: [0, 180, 360],
-                    }}
-                    transition={{
-                        duration: 3,
-                        repeat: Infinity,
-                        repeatType: "reverse",
-                    }}
-                />
-            </motion.div>
-        </Link>
+                className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-green-600/30 rounded-full blur-lg"
+                animate={{
+                    scale: [1, 1.2, 1],
+                    rotate: [0, 180, 360],
+                }}
+                transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    repeatType: "reverse",
+                }}
+            />
+        </motion.div>
     )
 
     return (
@@ -169,12 +167,12 @@ const Header = () => {
             transition={{ duration: 0.3 }}
         >
             <div className="absolute inset-0 bg-gradient-to-r from-[#2D1810]/50 via-transparent to-[#1F2937]/50" />
-            
+
             {/* Decorative elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500" />
                 <div className="absolute top-1 left-0 w-full h-px bg-gradient-to-r from-orange-300/20 via-green-300/20 to-orange-300/20" />
-                <motion.div 
+                <motion.div
                     className="absolute top-2 left-4 w-4 h-4 rounded-full bg-orange-500/30"
                     animate={{
                         scale: [1, 1.2, 1],
@@ -185,7 +183,7 @@ const Header = () => {
                         repeat: Infinity,
                     }}
                 />
-                <motion.div 
+                <motion.div
                     className="absolute top-2 right-4 w-4 h-4 rounded-full bg-green-500/30"
                     animate={{
                         scale: [1, 1.2, 1],
@@ -198,14 +196,16 @@ const Header = () => {
                     }}
                 />
             </div>
-            
+
             <nav className="relative flex items-center justify-between px-4 sm:px-6 lg:px-8 h-full max-w-7xl mx-auto">
                 <div className="hidden md:block">
-                    <Logo 
-                        src="/UIET_logo.png" 
-                        alt="UIET Logo"
-                        className="w-12 h-12 sm:w-16 sm:h-16"
-                    />
+                    <Link href="https://uiet.puchd.ac.in/">
+                        <Logo
+                            src="/UIET_logo.png"
+                            alt="UIET Logo"
+                            className="w-12 h-12 sm:w-16 sm:h-16"
+                        />
+                    </Link>
                 </div>
 
                 <motion.ul
@@ -215,13 +215,13 @@ const Header = () => {
                 >
                     <NavItems items={primaryNavItems} />
                 </motion.ul>
-
-                <Logo 
-                    src="/goonj.jpg" 
-                    alt="Goonj Logo"
-                    className="w-16 h-16 sm:w-20 sm:h-20"
-                />
-
+                <Link href="/">
+                    <Logo
+                        src="/goonj.jpg"
+                        alt="Goonj Logo"
+                        className="w-16 h-16 sm:w-20 sm:h-20"
+                    />
+                </Link>
                 <motion.ul
                     className="hidden lg:flex gap-4 xl:gap-8 text-orange-50"
                     initial="initial"
@@ -231,11 +231,13 @@ const Header = () => {
                 </motion.ul>
 
                 <div className="hidden md:block">
-                    <Logo 
-                        src="/pu-logo.png" 
-                        alt="PU Logo"
-                        className="w-12 h-12 sm:w-16 sm:h-16"
-                    />
+                    <Link href="https://puchd.ac.in/">
+                        <Logo
+                            src="/pu-logo.png"
+                            alt="PU Logo"
+                            className="w-12 h-12 sm:w-16 sm:h-16"
+                        />
+                    </Link>
                 </div>
 
                 <motion.button
@@ -256,7 +258,7 @@ const Header = () => {
                         exit={{ opacity: 0, height: 0 }}
                         transition={{ duration: 0.3 }}
                     >
-                        <motion.ul 
+                        <motion.ul
                             className="flex flex-col px-4 py-4 space-y-4 text-orange-50"
                             initial="initial"
                             animate="animate"

@@ -6,13 +6,14 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { db } from '@/app/firebase';
-import { collection, query, getDocs, orderBy, where, Timestamp } from 'firebase/firestore';
+import { collection, query, getDocs, orderBy, where, Timestamp, deleteDoc, doc } from 'firebase/firestore';
 import {
     Download, Filter, Users, CheckCircle2, Clock,
-    AlertCircle
+    AlertCircle, Trash2
 } from 'lucide-react';
 
 // SVG Patterns Component for Technology Elements
@@ -102,6 +103,32 @@ const CulturalPatterns = () => (
     </div>
 );
 
+const DeleteConfirmationDialog = ({ isOpen, onClose, onConfirm, registrationDetails }) => (
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+        <AlertDialogContent className="bg-gray-900 border border-red-500/30">
+            <AlertDialogHeader>
+                <AlertDialogTitle className="text-red-400">Confirm Deletion</AlertDialogTitle>
+                <AlertDialogDescription className="text-gray-400">
+                    Are you sure you want to delete the registration for <span className="text-gray-200">{registrationDetails?.name}</span>?
+                    <br />
+                    <span className="text-red-400 text-sm mt-2 block">This action cannot be undone.</span>
+                </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+                <AlertDialogCancel className="bg-gray-800 text-gray-200 border-gray-700 hover:bg-gray-700">
+                    Cancel
+                </AlertDialogCancel>
+                <AlertDialogAction
+                    onClick={onConfirm}
+                    className="bg-red-600 text-white hover:bg-red-700"
+                >
+                    Delete
+                </AlertDialogAction>
+            </AlertDialogFooter>
+        </AlertDialogContent>
+    </AlertDialog>
+);
+
 const AdminPanel = () => {
 
 
@@ -116,6 +143,63 @@ const AdminPanel = () => {
     const [paymentStatus, setPaymentStatus] = useState('all');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [deleteDialogState, setDeleteDialogState] = useState({
+        isOpen: false,
+        registrationToDelete: null
+    });
+
+    const handleDeleteClick = (registration) => {
+        setDeleteDialogState({
+            isOpen: true,
+            registrationToDelete: registration
+        });
+    };
+
+    // Function to close delete dialog
+    const handleCloseDeleteDialog = () => {
+        setDeleteDialogState({
+            isOpen: false,
+            registrationToDelete: null
+        });
+    };
+
+    // Function to perform deletion
+    const handleConfirmDelete = async () => {
+        const { registrationToDelete } = deleteDialogState;
+        if (!registrationToDelete) return;
+
+        try {
+            // Delete from Firestore
+            await deleteDoc(doc(db, 'registrations', registrationToDelete.id));
+
+            // Update local state
+            setRegistrations(prev => prev.filter(reg => reg.id !== registrationToDelete.id));
+            setFilteredData(prev => prev.filter(reg => reg.id !== registrationToDelete.id));
+
+            toast.success('Registration deleted successfully', {
+                position: "top-right",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } catch (error) {
+            console.error('Error deleting registration:', error);
+            toast.error(`Error deleting registration: ${error.message}`, {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
+        } finally {
+            handleCloseDeleteDialog();
+        }
+    };
 
     // Fetch data from Firebase with error handling and loading states
     const fetchRegistrations = useCallback(async () => {
@@ -454,6 +538,7 @@ const AdminPanel = () => {
                                 <table className="w-full">
                                     <thead>
                                         <tr className="bg-gray-800/50">
+                                            <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Actions</th>
                                             <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Name</th>
                                             <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Email</th>
                                             <th className="whitespace-nowrap px-4 py-3 text-left text-sm text-gray-200 font-medium">Phone</th>
@@ -476,6 +561,16 @@ const AdminPanel = () => {
                                                 animate={{ opacity: 1 }}
                                                 transition={{ type: "spring", stiffness: 100 }}
                                             >
+                                                <td className="whitespace-nowrap px-4 py-3 text-sm">
+                                                    <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleDeleteClick(reg)}
+                                                        className="text-red-400 hover:text-red-300 hover:bg-red-900/30"
+                                                    >
+                                                        <Trash2 className="w-4 h-4" />
+                                                    </Button>
+                                                </td>
                                                 <td className="whitespace-nowrap px-4 py-3 text-sm font-medium text-gray-100">{reg.name}</td>
                                                 <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.email}</td>
                                                 <td className="whitespace-nowrap px-4 py-3 text-sm text-gray-300">{reg.phone}</td>
@@ -526,6 +621,12 @@ const AdminPanel = () => {
                     </CardContent>
                 </Card>
             </div>
+            <DeleteConfirmationDialog
+                isOpen={deleteDialogState.isOpen}
+                onClose={handleCloseDeleteDialog}
+                onConfirm={handleConfirmDelete}
+                registrationDetails={deleteDialogState.registrationToDelete}
+            />
         </div>
     );
 };
