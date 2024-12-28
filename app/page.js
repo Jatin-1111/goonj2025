@@ -4,10 +4,10 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Hero from './components/Hero';
 import Gallery from './components/gallery';
-import Timeline from './components/timeline';
 import FAQ from './components/faqs';
 import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
+import EventTimeline from './components/glimpse-timeline';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -105,9 +105,9 @@ const Home = () => {
         <Gallery />
       </section>
 
-      {/* Timeline Section */}
+      {/* Glimpse Timeline Section */}
       <section id="timeline" className="relative z-40">
-        <Timeline />
+        <EventTimeline />
       </section>
 
       {/* FAQ Section */}
