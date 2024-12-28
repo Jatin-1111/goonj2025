@@ -33,7 +33,7 @@ const ContactPage = () => {
   );
 
   return (
-    <main className="relative bg-[#0D0221] min-h-screen py-32">
+    <main className="relative bg-[#0D0221] min-h-screen py-44">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] opacity-50" />
       <div className="absolute inset-0">
@@ -81,6 +81,60 @@ const ContactPage = () => {
             transition={{ delay: 0.3 }}
             className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12"
           >
+            {/* Contact Form */}
+            <motion.form
+              initial={{ x: 50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              onSubmit={handleSubmit}
+              className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-orange-500/20 space-y-4"
+            >
+              <div>
+                <input
+                  type="text"
+                  placeholder="Your Name"
+                  className={inputClasses}
+                  value={formState.name}
+                  onChange={(e) => setFormState({...formState, name: e.target.value})}
+                />
+              </div>
+              <div>
+                <input
+                  type="email"
+                  placeholder="Your Email"
+                  className={inputClasses}
+                  value={formState.email}
+                  onChange={(e) => setFormState({...formState, email: e.target.value})}
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Subject"
+                  className={inputClasses}
+                  value={formState.subject}
+                  onChange={(e) => setFormState({...formState, subject: e.target.value})}
+                />
+              </div>
+              <div>
+                <textarea
+                  placeholder="Your Message"
+                  rows="4"
+                  className={inputClasses}
+                  value={formState.message}
+                  onChange={(e) => setFormState({...formState, message: e.target.value})}
+                />
+              </div>
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 text-white font-semibold py-3 rounded-lg hover:brightness-110 transition-all"
+                type="submit"
+              >
+                Send Message
+              </motion.button>
+            </motion.form>
+            
             {/* Contact Info */}
             <div className="space-y-6">
               <motion.div
@@ -154,60 +208,6 @@ const ContactPage = () => {
                 </motion.div>
               </motion.div>
             </div>
-
-            {/* Contact Form */}
-            <motion.form
-              initial={{ x: 50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ delay: 0.6 }}
-              onSubmit={handleSubmit}
-              className="bg-black/20 backdrop-blur-sm rounded-xl p-6 border border-orange-500/20 space-y-4"
-            >
-              <div>
-                <input
-                  type="text"
-                  placeholder="Your Name"
-                  className={inputClasses}
-                  value={formState.name}
-                  onChange={(e) => setFormState({...formState, name: e.target.value})}
-                />
-              </div>
-              <div>
-                <input
-                  type="email"
-                  placeholder="Your Email"
-                  className={inputClasses}
-                  value={formState.email}
-                  onChange={(e) => setFormState({...formState, email: e.target.value})}
-                />
-              </div>
-              <div>
-                <input
-                  type="text"
-                  placeholder="Subject"
-                  className={inputClasses}
-                  value={formState.subject}
-                  onChange={(e) => setFormState({...formState, subject: e.target.value})}
-                />
-              </div>
-              <div>
-                <textarea
-                  placeholder="Your Message"
-                  rows="4"
-                  className={inputClasses}
-                  value={formState.message}
-                  onChange={(e) => setFormState({...formState, message: e.target.value})}
-                />
-              </div>
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full bg-gradient-to-r from-orange-500 via-orange-400 to-orange-500 text-white font-semibold py-3 rounded-lg hover:brightness-110 transition-all"
-                type="submit"
-              >
-                Send Message
-              </motion.button>
-            </motion.form>
           </motion.div>
         </motion.div>
 

@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Diamond, Award, Medal, ExternalLink, ArrowRight } from 'lucide-react';
+import { Diamond, Award, Medal, ExternalLink, ArrowRight, Sparkles, Globe, Network, Zap } from 'lucide-react';
+import EnhancedCTA from '../components/sponsercta';
+
 
 const SponsorPage = () => {
     const [hoveredTier, setHoveredTier] = useState(null);
-    
+
     const sponsorTiers = [
         {
             title: "Diamond Sponsors",
@@ -68,7 +70,7 @@ const SponsorPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 pt-24 pb-12 overflow-x-hidden relative">
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40 overflow-x-hidden relative">
             {/* SVG Background Pattern */}
             <div className="fixed inset-0 pointer-events-none opacity-30">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -84,8 +86,8 @@ const SponsorPage = () => {
                             </circle>
                         </pattern>
                         <linearGradient id="dotGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stopColor="#f97316"/>
-                            <stop offset="100%" stopColor="#06b6d4"/>
+                            <stop offset="0%" stopColor="#f97316" />
+                            <stop offset="100%" stopColor="#06b6d4" />
                         </linearGradient>
                     </defs>
                     <rect width="100%" height="100%" fill="url(#dots)" />
@@ -100,7 +102,7 @@ const SponsorPage = () => {
                 animate="visible"
             >
                 {/* Enhanced Header Section */}
-                <motion.div 
+                <motion.div
                     className="text-center mb-16"
                     variants={itemVariants}
                 >
@@ -134,7 +136,7 @@ const SponsorPage = () => {
                         />
                         <Diamond className="absolute inset-0 m-auto w-10 h-10 text-orange-500" />
                     </motion.div>
-                    
+
                     <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-orange-400 via-orange-300 to-cyan-400 text-transparent bg-clip-text mb-6">
                         Our Sponsors
                     </h1>
@@ -164,7 +166,7 @@ const SponsorPage = () => {
                                     <p className="text-gray-400 mt-1">{tier.description}</p>
                                 </div>
                             </div>
-                            
+
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                                 {tier.sponsors.map((sponsor, sIndex) => (
                                     <motion.div
@@ -192,8 +194,8 @@ const SponsorPage = () => {
                                                     <h3 className="text-2xl font-bold text-gray-200 mb-3">
                                                         {sponsor.name}
                                                     </h3>
-                                                    <Badge 
-                                                        variant="secondary" 
+                                                    <Badge
+                                                        variant="secondary"
                                                         className={`bg-gradient-to-r ${tier.color} text-gray-900 font-semibold`}
                                                     >
                                                         {sponsor.type}
@@ -209,34 +211,7 @@ const SponsorPage = () => {
                 </div>
 
                 {/* Enhanced CTA Section */}
-                <motion.div
-                    className="mt-20"
-                    variants={itemVariants}
-                >
-                    <Card className="bg-gradient-to-br from-gray-900 to-gray-950 border-2 border-orange-900/50 overflow-hidden">
-                        <CardContent className="p-12">
-                            <div className="relative">
-                                <h2 className="text-3xl font-bold text-gray-200 mb-4">
-                                    Become a Sponsor
-                                </h2>
-                                <p className="text-gray-400 mb-8 text-lg max-w-2xl mx-auto">
-                                    Join our community of innovative partners and help shape the future of technology and culture at UIET&apos;s premier festival.
-                                </p>
-                                <motion.div
-                                    whileHover={{ scale: 1.05 }}
-                                    whileTap={{ scale: 0.95 }}
-                                >
-                                    <Button
-                                        className="bg-gradient-to-r from-orange-500 to-cyan-500 text-white font-semibold px-8 py-6 rounded-lg group"
-                                    >
-                                        <span className="mr-2">Get Sponsorship Details</span>
-                                        <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform" />
-                                    </Button>
-                                </motion.div>
-                            </div>
-                        </CardContent>
-                    </Card>
-                </motion.div>
+                <EnhancedCTA />
             </motion.div>
         </div>
     );

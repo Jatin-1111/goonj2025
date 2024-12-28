@@ -14,10 +14,10 @@ const Footer = () => {
   const quickLinks = [
     { label: "About Us", href: "/about" },
     { label: "Events", href: "/events" },
-    { label: "Schedule", href: "/schedule" },
+    { label: "Info", href: "/info" },
     { label: "Register", href: "/register" },
     { label: "Star Night", href: "/star-night" },
-    { label: "Gallery", href: "/gallery" }
+    { label: "Contact Us", href: "/contact" }
   ];
 
   const contactInfo = [
