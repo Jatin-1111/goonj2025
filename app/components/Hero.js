@@ -27,7 +27,7 @@ const Hero = ({ timeLeft }) => {
     );
 
     return (
-        <main className="relative bg-[#0D0221]">
+        <main className="relative bg-[#0D0221] py-16">
             <section className="relative flex flex-col justify-center items-center min-h-screen px-4 overflow-hidden">
                 {/* Background elements remain the same */}
                 <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] opacity-50" />
