@@ -94,10 +94,10 @@ const EventsPage = () => {
 
     const getCategoryColor = (category) => {
         switch (category) {
-            case 'technical': return 'bg-blue-100 text-blue-700 hover:bg-blue-200';
-            case 'cultural': return 'bg-purple-100 text-purple-700 hover:bg-purple-200';
-            case 'gaming': return 'bg-green-100 text-green-700 hover:bg-green-200';
-            default: return 'bg-gray-100 text-gray-700 hover:bg-gray-200';
+            case 'technical': return 'bg-orange-500/20 text-orange-400 hover:bg-orange-500/30';
+            case 'cultural': return 'bg-cyan-500/20 text-cyan-400 hover:bg-cyan-500/30';
+            case 'gaming': return 'bg-green-500/20 text-green-400 hover:bg-green-500/30';
+            default: return 'bg-gray-500/20 text-gray-400 hover:bg-gray-500/30';
         }
     };
 
@@ -147,26 +147,26 @@ const EventsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0A0A0F] pt-24 text-gray-200 overflow-x-hidden">
+        <div className="min-h-screen bg-[#0D0221] pt-24 text-gray-200 overflow-x-hidden">
             {/* Hero Section */}
             <motion.div
-                className="relative bg-gradient-to-r from-[#121420] via-transparent to-[#121420] text-white py-12 sm:py-16 backdrop-blur-sm"
+                className="relative bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] text-white py-12 sm:py-16 backdrop-blur-sm"
                 initial="hidden"
                 animate="visible"
                 variants={heroVariants}
             >
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10" />
+                <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-cyan-500/10" />
                 <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
                     <motion.h1
-                        className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-400"
+                        className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-cyan-400"
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2 }}
                     >
-                        GOONJ 2025
+                        GOONJ 2025 Events
                     </motion.h1>
                     <motion.p
-                        className="text-lg sm:text-xl mb-6 sm:mb-8 text-gray-300"
+                        className="text-lg sm:text-xl mb-6 sm:mb-8 text-orange-100/80"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4 }}
@@ -174,7 +174,7 @@ const EventsPage = () => {
                         UIET&apos;s Annual Techno-Cultural Fest
                     </motion.p>
                     <motion.p
-                        className="text-base sm:text-lg max-w-2xl mx-auto text-gray-400"
+                        className="text-base sm:text-lg max-w-2xl mx-auto text-orange-100/60"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.6 }}
@@ -182,6 +182,33 @@ const EventsPage = () => {
                         Experience the perfect blend of technology and culture. Showcase your talents, compete with the best, and be part of the biggest college fest of the year!
                     </motion.p>
                 </div>
+
+                {/* Decorative Elements */}
+                <motion.div
+                    className="absolute top-0 left-0 w-32 h-32 border-l-2 border-t-2 border-orange-500/20"
+                    animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    }}
+                />
+                <motion.div
+                    className="absolute bottom-0 right-0 w-32 h-32 border-r-2 border-b-2 border-cyan-500/20"
+                    animate={{
+                        scale: [1, 1.1, 1],
+                        opacity: [0.2, 0.4, 0.2],
+                    }}
+                    transition={{
+                        duration: 4,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                        delay: 2
+                    }}
+                />
             </motion.div>
 
             {/* Main Content */}
@@ -194,13 +221,13 @@ const EventsPage = () => {
                     className="overflow-x-auto"
                 >
                     <Tabs defaultValue="all" className="mb-8 sm:mb-12">
-                        <TabsList className="flex justify-center w-full bg-[#121420]/50 backdrop-blur-sm">
+                        <TabsList className="flex justify-center w-full bg-[#1A0F1F]/50 backdrop-blur-sm">
                             {categories.map(category => (
                                 <TabsTrigger
                                     key={category.id}
                                     value={category.id}
                                     onClick={() => setSelectedCategory(category.id)}
-                                    className="flex items-center gap-2 data-[state=active]:bg-[#1a1a2e] data-[state=active]:text-white px-3 py-2 text-sm sm:text-base"
+                                    className="flex items-center gap-2 data-[state=active]:bg-[#2D1810] data-[state=active]:text-orange-400 px-3 py-2 text-sm sm:text-base"
                                 >
                                     <category.icon className="w-4 h-4" />
                                     {category.label}
@@ -232,7 +259,7 @@ const EventsPage = () => {
                                 whileHover="hover"
                                 layout
                             >
-                                <Card className="bg-[#121420]/50 backdrop-blur-sm h-full border-gray-800 hover:bg-[#121420]/70 transition-colors">
+                                <Card className="bg-[#1A0F1F]/50 backdrop-blur-sm h-full border-orange-500/20 hover:bg-[#2D1810]/70 transition-colors">
                                     <AspectRatio ratio={16 / 9} className="bg-[#0A0A0F]">
                                         <img
                                             src={event.image}
@@ -490,9 +517,9 @@ const EventsPage = () => {
                 <Link href="/register">
                     <Button
                         size="lg"
-                        className="hidden md:inline-flex bg-gradient-to-r from-blue-900/80 to-purple-900/80 text-white shadow-lg hover:shadow-xl hover:from-blue-800/80 hover:to-purple-800/80 transition-all relative z-50 backdrop-blur-sm"
+                        className="hidden md:inline-flex bg-gradient-to-r from-orange-500/80 to-cyan-500/80 text-white shadow-lg hover:shadow-xl hover:from-orange-400/80 hover:to-cyan-400/80 transition-all relative z-50 backdrop-blur-sm"
                     >
-                        Register for Goonj 2024
+                        Register for Goonj 2025
                     </Button>
                 </Link>
             </motion.div>
