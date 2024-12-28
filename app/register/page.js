@@ -161,8 +161,8 @@ const RegistrationPage = () => {
             events: [],
             transactionId: '',
             totalAmount: 0
-        });
-    };
+        });
+    };
 
 const handleSubmit = async (e) => {
         e.preventDefault();
