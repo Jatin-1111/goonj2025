@@ -413,8 +413,6 @@ const AdminPanel = () => {
 
 
                 <Card className="bg-gray-900/90 backdrop-blur-sm border-2 border-orange-900/50 relative overflow-hidden">
-                    <TechPatterns />
-                    <CulturalPatterns />
                     {/* Header Section */}
                     <CardHeader className="p-6 relative">
                         <CardTitle className="flex items-center gap-3">
