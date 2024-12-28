@@ -10,11 +10,11 @@ import { AlertCircle, CheckCircle2 } from 'lucide-react';
 import EventSelectionModal from '../components/EventSelectionModal';
 import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
-import { collection, addDoc } from 'firebase/firestore';
+import { doc, setDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '@/app/firebase';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { QrCode, Copy, CheckCircle } from 'lucide-react';
-
+import { toast } from 'react-toastify';
 
 const RegistrationPage = () => {
     const [formData, setFormData] = useState({
@@ -73,103 +73,182 @@ const RegistrationPage = () => {
         }
     };
 
+    // Validation rules object - can be moved to a separate config file
+    const VALIDATION_RULES = {
+        name: {
+            required: true,
+            pattern: /^[A-Za-z\s]{2,50}$/,
+            message: 'Please enter a valid name (2-50 characters)'
+        },
+        email: {
+            required: true,
+            pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+            message: 'Please enter a valid email address'
+        },
+        phone: {
+            required: true,
+            pattern: /^[6-9]\d{9}$/,
+            message: 'Please enter a valid 10-digit Indian mobile number'
+        },
+        college: {
+            required: true,
+            message: 'College name is required'
+        },
+        course: {
+            required: true,
+            invalidValues: ['all'],
+            message: 'Please select your course'
+        },
+        year: {
+            required: true,
+            invalidValues: ['all'],
+            message: 'Please select your year'
+        },
+        transactionId: {
+            pattern: /^[0-9A-Za-z]{12,}$/,
+            message: 'Please enter a valid UPI reference ID'
+        }
+    };
+
+    // Validation function with error memoization
+    const validateField = (name, value, rules, required = false) => {
+        if (!rules) return '';
+
+        if (rules.required && !value?.trim()) {
+            return rules.message || `${name} is required`;
+        }
+
+        if (value?.trim()) {
+            if (rules.pattern && !rules.pattern.test(value.trim())) {
+                return rules.message;
+            }
+            if (rules.invalidValues?.includes(value)) {
+                return rules.message;
+            }
+        }
+
+        return '';
+    };
+
     const validateForm = () => {
         const newErrors = {};
 
-        // Required field validations
-        if (!formData.name?.trim()) {
-            newErrors.name = 'Name is required';
-        }
+        // Validate each field using the rules
+        Object.entries(VALIDATION_RULES).forEach(([field, rules]) => {
+            const error = validateField(
+                field,
+                formData[field],
+                rules,
+                rules.required
+            );
+            if (error) newErrors[field] = error;
+        });
 
-        if (!formData.email?.trim()) {
-            newErrors.email = 'Email is required';
-        } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-            newErrors.email = 'Invalid email format';
-        }
-
-        if (!formData.phone?.trim()) {
-            newErrors.phone = 'Phone number is required';
-        } else if (!/^\d{10}$/.test(formData.phone.trim())) {
-            newErrors.phone = 'Invalid phone number';
-        }
-
-        if (!formData.college?.trim()) {
-            newErrors.college = 'College name is required';
-        }
-
-        if (!formData.course || formData.course === 'all') {
-            newErrors.course = 'Course is required';
-        }
-
-        if (!formData.year || formData.year === 'all') {
-            newErrors.year = 'Year is required';
-        }
-
-        // Events validation
-        if (!selectedEvents || selectedEvents.length === 0) {
+        // Special validations
+        if (!selectedEvents?.length) {
             newErrors.events = 'Please select at least one event';
         }
 
-        // Payment validation
-        if (selectedEvents?.length > 0 && totalPrice > 0) {
-            if (!formData.transactionId?.trim()) {
-                newErrors.transactionId = 'Transaction ID is required for payment';
-            } else if (formData.transactionId.trim().length < 8) {
-                newErrors.transactionId = 'Please enter a valid transaction ID';
-            }
+        // Payment validation only if there's a price
+        if (totalPrice > 0) {
+            const transactionError = validateField(
+                'transactionId',
+                formData.transactionId,
+                VALIDATION_RULES.transactionId,
+                true
+            );
+            if (transactionError) newErrors.transactionId = transactionError;
         }
 
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
+    // Clean data utility
+    const cleanData = (data) => ({
+        ...data,
+        name: String(data.name || '').trim(),
+        email: String(data.email || '').trim().toLowerCase(),
+        phone: String(data.phone || '').trim(),
+        college: String(data.college || '').trim(),
+        course: String(data.course || ''),
+        year: String(data.year || ''),
+        transactionId: data.transactionId ? String(data.transactionId).trim() : null
+    });
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (isSubmitting) return;
         setIsSubmitting(true);
         setSubmitStatus(null);
-    
+
         try {
-            if (!validateForm()) {
-                throw new Error('Form validation failed');
-            }
-    
-            // Clean and structure the data
+            // Validate all required fields
+            const requiredFields = ['name', 'email', 'phone', 'college', 'course', 'year'];
+            const missingFields = requiredFields.filter(field => !formData[field]?.trim());
+
+            // Clean and prepare the data, ensuring no undefined values
             const registrationData = {
-                // ... existing data structure ...
-                submittedAt: new Date().toISOString(),
-                status: 'pending' // Start with pending status
+                // Personal details - convert undefined to null
+                name: formData.name?.trim() || null,
+                email: formData.email?.trim().toLowerCase() || null,
+                phone: formData.phone?.trim() || null,
+                college: formData.college?.trim() || null,
+                course: formData.course?.trim() || null,
+                year: formData.year?.trim() || null,
+
+                // Events - ensure each event has all required fields
+                events: selectedEvents.map(event => ({
+                    id: event.id?.toString() || '',
+                    name: event.name?.toString() || '',
+                    price: Number(event.price || 0),
+                    type: event.type?.toString() || 'general'
+                })),
+
+                // Payment details
+                totalAmount: Number(totalPrice || 0),
+                transactionId: formData.transactionId?.trim() || null,
+                paymentStatus: formData.transactionId?.trim() ? 'completed' : 'pending',
+
+                // Status and timestamps
+                status: 'pending',
+                submittedAt: serverTimestamp(),
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
             };
-    
-            // Save to Firebase with proper error handling
-            const docRef = await addDoc(collection(db, 'registrations'), registrationData);
-            
-            if (!docRef?.id) {
-                throw new Error('Failed to get document reference');
-            }
-    
-            // Update the document with its ID
-            await updateDoc(doc(db, 'registrations', docRef.id), {
-                registrationId: docRef.id,
-                status: 'active'
-            });
-    
+
+            // Create a new document reference
+            const registrationRef = doc(collection(db, "registrations"));
+
+            // Add the registration ID
+            registrationData.registrationId = registrationRef.id;
+
+            // Log the data being sent (for debugging)
+            console.log('Sending registration data:', registrationData);
+
+            // Store in Firestore
+            await setDoc(registrationRef, registrationData);
+
+            // Success handling
             setSubmitStatus('success');
-            resetForm(); // Use the new reset function
-    
+            toast.success('Registration completed successfully!');
+
+            // Reset form
+            cleanData();
+            setSelectedEvents([]);
+            setTotalPrice(0);
+
         } catch (error) {
-            console.error('Error in handleSubmit:', error);
+            console.error('Registration error:', error);
             setSubmitStatus('error');
-            
-            // More specific error messages
-            if (error.code === 'permission-denied') {
-                alert('Permission denied. Please check your authorization.');
-            } else if (error.code === 'unavailable') {
-                alert('Service temporarily unavailable. Please try again later.');
-            } else if (error.message === 'Form validation failed') {
-                // Form validation error already shown
-            } else {
-                alert('An error occurred while saving your registration. Please try again.');
-            }
+
+            // User-friendly error messages
+            const errorMessage = error.code === 'permission-denied'
+                ? 'Permission denied. Please check your authorization.'
+                : error.message || 'An error occurred during registration. Please try again.';
+
+            toast.error(errorMessage);
         } finally {
             setIsSubmitting(false);
         }
@@ -251,7 +330,7 @@ const RegistrationPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-44">
+        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-44 overflow-hidden">
             <motion.div
                 className="relative w-full max-w-2xl mx-auto px-4 sm:px-6 lg:px-8"
                 variants={containerVariants}
