@@ -8,22 +8,23 @@ import FAQ from './components/faqs';
 import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
+import Countdown from './components/countdown';
 
 // Memoized CountdownBox to prevent unnecessary re-renders
-const CountdownBox = memo(({ value, label }) => (
-  <div className="flex flex-col items-center">
-    <div
-      className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20 hover:scale-105 transition-transform duration-200"
-    >
-      <span className="text-3xl md:text-4xl font-bold text-white">
-        {String(value).padStart(2, '0')}
-      </span>
-    </div>
-    <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
-  </div>
-));
+// const CountdownBox = memo(({ value, label }) => (
+//   <div className="flex flex-col items-center">
+//     <div
+//       className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20 hover:scale-105 transition-transform duration-200"
+//     >
+//       <span className="text-3xl md:text-4xl font-bold text-white">
+//         {String(value).padStart(2, '0')}
+//       </span>
+//     </div>
+//     <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
+//   </div>
+// ));
 
-CountdownBox.displayName = 'CountdownBox';
+// CountdownBox.displayName = 'CountdownBox';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -98,7 +99,7 @@ const Home = () => {
   return (
     <main className="relative">
       <section id="hero" className="relative z-40">
-        <Hero timeLeft={timeLeft} CountdownBox={CountdownBox} />
+        <Hero timeLeft={timeLeft} Countdown={Countdown} />
       </section>
 
       {/* About Section */}

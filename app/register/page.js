@@ -31,21 +31,10 @@ const RegistrationPage = () => {
 
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+    const [submitStatus, setSubmitStatus] = useState(null);
     const [selectedEvents, setSelectedEvents] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [showQrCode, setShowQrCode] = useState(false);
-    const [paymentCopied, setPaymentCopied] = useState(false);
-
-    const handleEventsSelect = (events, price) => {
-        setSelectedEvents(events);
-        setTotalPrice(price);
-        setFormData(prev => ({
-            ...prev,
-            events: events,
-            totalAmount: price
-        }));
-    };
 
     const courses = [
         'B.Tech - Computer Science',
@@ -55,30 +44,33 @@ const RegistrationPage = () => {
         'B.Tech - Biotechnology',
         'Other'
     ];
-
     const years = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'Other'];
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-        // Clear error when user starts typing
-        if (errors[name]) {
-            setErrors(prev => ({
-                ...prev,
-                [name]: ''
-            }));
+    const validateField = (name, value, rules) => {
+        if (!rules) return '';
+
+        const trimmedValue = value?.trim();
+
+        if (rules.required && !trimmedValue) {
+            return rules.message || `${name} is required`;
         }
+
+        if (trimmedValue) {
+            if (rules.pattern && !rules.pattern.test(trimmedValue)) {
+                return rules.message;
+            }
+            if (rules.invalidValues?.includes(trimmedValue)) {
+                return rules.message;
+            }
+        }
+
+        return '';
     };
 
-    // Validation rules object - can be moved to a separate config file
     const VALIDATION_RULES = {
         name: {
             required: true,
-            pattern: /^[A-Za-z\s]{2,50}$/,
-            message: 'Please enter a valid name (2-50 characters)'
+            message: 'Name is required'
         },
         email: {
             required: true,
@@ -87,8 +79,8 @@ const RegistrationPage = () => {
         },
         phone: {
             required: true,
-            pattern: /^[6-9]\d{9}$/,
-            message: 'Please enter a valid 10-digit Indian mobile number'
+            pattern: /^\d{10}$/,
+            message: 'Please enter a valid 10-digit phone number'
         },
         college: {
             required: true,
@@ -96,66 +88,39 @@ const RegistrationPage = () => {
         },
         course: {
             required: true,
-            invalidValues: ['all'],
-            message: 'Please select your course'
+            message: 'Course is required'
         },
         year: {
             required: true,
-            invalidValues: ['all'],
-            message: 'Please select your year'
+            message: 'Year is required'
         },
         transactionId: {
-            pattern: /^[0-9A-Za-z]{12,}$/,
-            message: 'Please enter a valid UPI reference ID'
+            pattern: /^[a-zA-Z0-9-_]+$/,
+            message: 'Please enter a valid transaction ID'
         }
     };
 
-    // Validation function with error memoization
-    const validateField = (name, value, rules, required = false) => {
-        if (!rules) return '';
-
-        if (rules.required && !value?.trim()) {
-            return rules.message || `${name} is required`;
-        }
-
-        if (value?.trim()) {
-            if (rules.pattern && !rules.pattern.test(value.trim())) {
-                return rules.message;
-            }
-            if (rules.invalidValues?.includes(value)) {
-                return rules.message;
-            }
-        }
-
-        return '';
-    };
 
     const validateForm = () => {
         const newErrors = {};
 
-        // Validate each field using the rules
+        // Validate all fields based on rules
         Object.entries(VALIDATION_RULES).forEach(([field, rules]) => {
-            const error = validateField(
-                field,
-                formData[field],
-                rules,
-                rules.required
-            );
+            const error = validateField(field, formData[field], rules);
             if (error) newErrors[field] = error;
         });
 
-        // Special validations
+        // Event selection validation
         if (!selectedEvents?.length) {
             newErrors.events = 'Please select at least one event';
         }
 
-        // Payment validation only if there's a price
+        // Transaction validation for paid events
         if (totalPrice > 0) {
             const transactionError = validateField(
                 'transactionId',
                 formData.transactionId,
-                VALIDATION_RULES.transactionId,
-                true
+                VALIDATION_RULES.transactionId
             );
             if (transactionError) newErrors.transactionId = transactionError;
         }
@@ -164,91 +129,128 @@ const RegistrationPage = () => {
         return Object.keys(newErrors).length === 0;
     };
 
-    // Clean data utility
-    const cleanData = (data) => ({
-        ...data,
-        name: String(data.name || '').trim(),
-        email: String(data.email || '').trim().toLowerCase(),
-        phone: String(data.phone || '').trim(),
-        college: String(data.college || '').trim(),
-        course: String(data.course || ''),
-        year: String(data.year || ''),
-        transactionId: data.transactionId ? String(data.transactionId).trim() : null
-    });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
 
-    const handleSubmit = async (e) => {
+        setFormData(prev => ({ ...prev, [name]: value }));
+
+        // Clear error for the changed field
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }));
+        }
+    };
+
+    const handleEventsSelect = (events, price) => {
+        setSelectedEvents(events);
+        setTotalPrice(price);
+        setFormData(prev => ({
+            ...prev,
+            events,
+            totalAmount: price
+        }));
+    };
+
+    const resetForm = () => {
+        setFormData({
+            name: '',
+            email: '',
+            phone: '',
+            college: '',
+            course: '',
+            year: '',
+            events: [],
+            transactionId: '',
+            totalAmount: 0
+        });
+    };
+
+const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (isSubmitting) return;
+        if (isSubmitting) {
+            toast.warning('Form submission in progress...', {
+                duration: 2000,
+                position: 'top-center'
+            });
+            return;
+        }
+
         setIsSubmitting(true);
         setSubmitStatus(null);
 
-        try {
-            // Validate all required fields
-            const requiredFields = ['name', 'email', 'phone', 'college', 'course', 'year'];
-            const missingFields = requiredFields.filter(field => !formData[field]?.trim());
+        const toastSubmitting = toast.loading('Submitting registration...', {
+            position: 'top-center'
+        });
 
-            // Clean and prepare the data, ensuring no undefined values
+        try {
+            if (!validateForm()) {
+                toast.dismiss(toastSubmitting);
+                toast.error('Please fill in all required fields correctly', {
+                    duration: 3000,
+                    position: 'top-center'
+                });
+                setIsSubmitting(false);
+                return;
+            }
+
             const registrationData = {
-                // Personal details - convert undefined to null
                 name: formData.name?.trim() || null,
                 email: formData.email?.trim().toLowerCase() || null,
                 phone: formData.phone?.trim() || null,
                 college: formData.college?.trim() || null,
                 course: formData.course?.trim() || null,
                 year: formData.year?.trim() || null,
-
-                // Events - ensure each event has all required fields
                 events: selectedEvents.map(event => ({
-                    id: event.id?.toString() || '',
-                    name: event.name?.toString() || '',
+                    id: String(event.id || ''),
+                    name: String(event.name || ''),
                     price: Number(event.price || 0),
-                    type: event.type?.toString() || 'general'
+                    type: String(event.type || 'general')
                 })),
-
-                // Payment details
                 totalAmount: Number(totalPrice || 0),
                 transactionId: formData.transactionId?.trim() || null,
                 paymentStatus: formData.transactionId?.trim() ? 'completed' : 'pending',
-
-                // Status and timestamps
                 status: 'pending',
                 submittedAt: serverTimestamp(),
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp()
             };
 
-            // Create a new document reference
             const registrationRef = doc(collection(db, "registrations"));
-
-            // Add the registration ID
             registrationData.registrationId = registrationRef.id;
 
-            // Log the data being sent (for debugging)
-            console.log('Sending registration data:', registrationData);
-
-            // Store in Firestore
             await setDoc(registrationRef, registrationData);
 
-            // Success handling
             setSubmitStatus('success');
-            toast.success('Registration completed successfully!');
-
-            // Reset form
-            cleanData();
-            setSelectedEvents([]);
-            setTotalPrice(0);
+            toast.dismiss(toastSubmitting);
+            toast.success('Registration completed successfully! Check your email for confirmation.', {
+                duration: 5000,
+                position: 'top-center'
+            });
+            resetForm();
 
         } catch (error) {
             console.error('Registration error:', error);
             setSubmitStatus('error');
 
-            // User-friendly error messages
-            const errorMessage = error.code === 'permission-denied'
-                ? 'Permission denied. Please check your authorization.'
-                : error.message || 'An error occurred during registration. Please try again.';
+            toast.dismiss(toastSubmitting);
 
-            toast.error(errorMessage);
+            if (error.code === 'permission-denied') {
+                toast.error('Permission denied. Please check your authorization or try logging in again.', {
+                    duration: 4000,
+                    position: 'top-center'
+                });
+            } else if (error.code === 'network-error') {
+                toast.error('Network error. Please check your internet connection and try again.', {
+                    duration: 4000,
+                    position: 'top-center'
+                });
+            } else {
+                toast.error(error.message || 'An error occurred during registration. Please try again.', {
+                    duration: 4000,
+                    position: 'top-center'
+                });
+            }
+
         } finally {
             setIsSubmitting(false);
         }
