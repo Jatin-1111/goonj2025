@@ -1,7 +1,5 @@
 "use client"
 import React, { useState, useEffect, memo } from 'react';
-import Image from 'next/image';
-import { motion } from 'framer-motion';
 import Hero from './components/Hero';
 import Gallery from './components/gallery';
 import FAQ from './components/faqs';
@@ -58,25 +56,15 @@ const Home = () => {
         const totalSeconds = Math.floor(difference / 1000);
         const totalMinutes = Math.floor(totalSeconds / 60);
         const totalHours = Math.floor(totalMinutes / 60);
-        const totalDays = Math.floor(totalHours / 24);
-
-        // Calculate months (approximate - assuming 30.44 days per month)
-        const months = Math.floor(totalDays / 30.44);
-
-        // Calculate weeks from remaining days after months
-        const remainingDaysAfterMonths = totalDays % 30.44;
-        const weeks = Math.floor(remainingDaysAfterMonths / 7);
+        const days = Math.floor(totalHours / 24);
 
         // Calculate remaining units
-        const days = Math.floor(remainingDaysAfterMonths % 7);
         const hours = totalHours % 24;
         const minutes = totalMinutes % 60;
         const seconds = totalSeconds % 60;
 
         setTimeLeft((prev) => {
           if (
-            prev.months === months &&
-            prev.weeks === weeks &&
             prev.days === days &&
             prev.hours === hours &&
             prev.minutes === minutes &&
@@ -84,7 +72,7 @@ const Home = () => {
           ) {
             return prev;
           }
-          return { months, weeks, days, hours, minutes, seconds };
+          return { days, hours, minutes, seconds };
         });
       }
     };

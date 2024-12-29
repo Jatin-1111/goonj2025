@@ -128,107 +128,121 @@ const FAQ = () => {
   }, [mouseX, mouseY]);
 
   return (
-    <div className="bg-[#0D0221] py-24 relative overflow-hidden min-h-screen">
-      <div className="absolute inset-0 overflow-hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" className="w-full h-full">
+    <div className="bg-[#0D0221] py-20 relative overflow-hidden min-h-screen">
+      {/* SVG Background Layer */}
+      <motion.div
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        animate={{
+          scale: openIndex !== null ? 1.1 : 1,
+          opacity: openIndex !== null ? 0.7 : 1
+        }}
+        transition={{
+          duration: 0.3,
+          ease: "easeInOut"
+        }}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1000 800"
+          preserveAspectRatio="xMidYMid slice"
+          className="absolute w-full h-full object-cover"
+        >
           <defs>
-            {/* Gradient and Pattern Definitions */}
-            <linearGradient id="code-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#1E40AF" stopOpacity="0.8" />
-              <stop offset="100%" stopColor="#3B82F6" stopOpacity="0.6" />
+            {/* Gradient Definitions with South Indian Color Palette */}
+            <linearGradient id="south-indian-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="#DB2777" stopOpacity="0.3" />
             </linearGradient>
 
-            <pattern id="circuit-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-              <path d="M0 10 L10 10 M10 0 L10 10 M10 20 L10 10" fill="none" stroke="#7E22CE" strokeWidth="1" opacity="0.3" />
+            {/* Kolam-inspired Intricate Pattern */}
+            <pattern id="kolam-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+              <path
+                d="M100 0 
+           Q150 50, 100 100 
+           Q50 150, 100 200 
+           Q150 250, 100 100 
+           Q50 50, 100 0"
+                fill="none"
+                stroke="#9333EA"
+                strokeWidth="1"
+                opacity="0.2"
+              />
+            </pattern>
+
+            {/* Lotus Flower Clip Path */}
+            <clipPath id="lotus-clip">
+              <path
+                d="M100 0 
+           Q150 50, 100 100 
+           Q50 150, 0 100 
+           Q50 50, 100 0 
+           M100 0 
+           Q150 50, 200 100 
+           Q150 150, 100 200 
+           Q50 150, 100 0"
+              />
+            </clipPath>
+
+            {/* Bharatanatyam Dance Inspired Patterns */}
+            <pattern id="dance-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path
+                d="M50 0 L75 50 L25 50 Z 
+           M50 100 L75 50 L25 50 Z"
+                fill="#6D28D9"
+                opacity="0.1"
+              />
             </pattern>
           </defs>
 
-          {/* Computer Science - Code Representation */}
-          <g transform="translate(50, 100)">
-            <rect width="300" height="200" fill="url(#code-gradient)" rx="10" ry="10" opacity="0.7" />
-            <text x="10" y="30" fontFamily="monospace" fontSize="16" fill="#FFFFFF">
-              <tspan x="10" dy="0">def indian_tech_innovation():</tspan>
-              <tspan x="10" dy="30">    cs_fields = [</tspan>
-              <tspan x="30" dy="30">{'AI'} {'Machine Learning'},</tspan>
-              <tspan x="30" dy="30">{'Quantum Computing'}</tspan>
-              <tspan x="10" dy="30">    return innovate(cs_fields)</tspan>
-            </text>
-          </g>
+          {/* Background Layers */}
+          <rect width="1000" height="800" fill="url(#kolam-pattern)" opacity="0.3" />
+          <rect width="1000" height="800" fill="url(#south-indian-gradient)" opacity="0.2" />
+          <rect width="1000" height="800" fill="url(#dance-pattern)" opacity="0.1" />
 
-          {/* IT - Network and Code */}
-          <g transform="translate(400, 100)">
-            <rect width="300" height="200" fill="#10B981" rx="10" ry="10" opacity="0.6" />
-            <path d="M50 100 Q100 50, 150 100 T250 100" fill="none" stroke="#FFFFFF" strokeWidth="3" />
-            <text x="10" y="30" fontFamily="monospace" fontSize="16" fill="#FFFFFF">
-              <tspan x="10" dy="0">class NetworkInnovation:</tspan>
-              <tspan x="10" dy="30">    def connect_india(self):</tspan>
-              <tspan x="30" dy="30">        global_network =</tspan>
-              <tspan x="30" dy="30">            create_infrastructure()</tspan>
-            </text>
-          </g>
-
-          {/* ECE - Circuit Board */}
-          <g transform="translate(50, 400)">
-            <rect width="300" height="200" fill="url(#circuit-pattern)" rx="10" ry="10" opacity="0.8" />
-            <path d="M50 100 L100 50 L150 100 L200 50 L250 100" fill="none" stroke="#8B5CF6" strokeWidth="3" />
-            <circle cx="75" cy="100" r="10" fill="#6D28D9" />
-            <circle cx="175" cy="50" r="10" fill="#6D28D9" />
-            <text x="10" y="180" fontFamily="sans-serif" fontSize="16" fill="#4C1D95">
-              Electronic Circuits
-            </text>
-          </g>
-
-          {/* Electrical Engineering - Advanced Circuit Design */}
-          <g transform="translate(400, 400)">
-            <rect width="300" height="200" fill="#F43F5E" rx="10" ry="10" opacity="0.6" />
-            <path d="M50 50 L100 100 L150 50 L200 100 L250 50" fill="none" stroke="#FFFFFF" strokeWidth="3" />
-            <rect x="75" y="75" width="50" height="50" fill="#FFFFFF" opacity="0.3" />
-            <text x="10" y="180" fontFamily="sans-serif" fontSize="16" fill="#FFFFFF">
-              Electrical Systems Design
-            </text>
-          </g>
-
-          {/* Mechanical Engineering - Gears and Tools */}
-          <g transform="translate(50, 650)">
-            <rect width="300" height="200" fill="#F97316" rx="10" ry="10" opacity="0.7" />
-            <path
-              d="M100 100 
-               A50 50 0 1 1 100 200 
-               A50 50 0 1 1 100 100 
-               M100 125 L150 125 
-               M100 175 L150 175"
+          {/* Decorative Elements */}
+          {/* Lotus Flower Inspired Shapes */}
+          <g transform="translate(200, 200)">
+            <circle
+              cx="100"
+              cy="100"
+              r="80"
               fill="none"
-              stroke="#FFFFFF"
-              strokeWidth="5"
-            />
-            <path
-              d="M200 150 L250 100 L300 150 L250 200 Z"
-              fill="#FFFFFF"
+              stroke="#8B5CF6"
+              strokeWidth="2"
+              strokeDasharray="10 5"
               opacity="0.3"
             />
-            <text x="10" y="180" fontFamily="sans-serif" fontSize="16" fill="#FFFFFF">
-              Mechanical Design & Tools
-            </text>
-          </g>
-
-          {/* Bio-tech - DNA and Molecular Structure */}
-          <g transform="translate(400, 650)">
-            <rect width="300" height="200" fill="#22D3EE" rx="10" ry="10" opacity="0.7" />
             <path
-              d="M100 50 Q150 100, 100 150 Q50 100, 100 50 
-               M100 50 L120 30 M100 150 L120 170
-               M100 50 L80 30 M100 150 L80 170"
+              d="M100 20 
+         Q140 60, 100 100 
+         Q60 140, 100 180 
+         Q140 220, 100 180"
               fill="none"
-              stroke="#FFFFFF"
-              strokeWidth="3"
+              stroke="#DB2777"
+              strokeWidth="2"
+              opacity="0.4"
             />
-            <circle cx="100" cy="100" r="20" fill="#FFFFFF" opacity="0.3" />
-            <text x="10" y="180" fontFamily="sans-serif" fontSize="16" fill="#FFFFFF">
-              Biotechnology Innovations
-            </text>
           </g>
 
-          {/* Decorative Indian Cultural Border */}
+          {/* Rangoli-like Circular Patterns */}
+          <g transform="translate(600, 500)">
+            <path
+              d="M100 0 
+         Q150 50, 100 100 
+         Q50 150, 0 100 
+         Q50 50, 100 0
+         M100 0 
+         Q150 50, 200 100 
+         Q150 150, 100 200 
+         Q50 150, 0 100"
+              fill="none"
+              stroke="#9333EA"
+              strokeWidth="1"
+              opacity="0.3"
+            />
+          </g>
+
+          {/* Temple Architecture Inspired Border */}
           <rect
             x="10" y="10"
             width="980"
@@ -236,18 +250,32 @@ const FAQ = () => {
             fill="none"
             stroke="#7E22CE"
             strokeWidth="5"
-            strokeDasharray="20,10"
+            strokeDasharray="40 20"
+            opacity="0.5"
           />
+
+          {/* Tamil Script Inspired Text */}
+          <text
+            x="500"
+            y="750"
+            textAnchor="middle"
+            fontFamily="Tamil"
+            fontSize="40"
+            fill="rgba(255,255,255,0.2)"
+            transform="rotate(-5 500 750)"
+          >
+            தென்னிந்திய கலாச்சாரம்
+          </text>
         </svg>
-      </div>
+      </motion.div>
 
       {/* Background Animation */}
       <motion.div
         className="absolute inset-0 pointer-events-none"
         animate={{
           background: [
-            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(255, 165, 0, 0.15), transparent 80%)',
-            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(0, 255, 255, 0.15), transparent 80%)',
+            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(255, 165, 0, 0.1), transparent 80%)',
+            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(0, 255, 255, 0.1), transparent 80%)',
           ]
         }}
         transition={{ duration: 10, repeat: Infinity }}
@@ -257,7 +285,7 @@ const FAQ = () => {
         }}
       />
 
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -266,7 +294,7 @@ const FAQ = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-center mb-6">
             <motion.div
               animate={{
                 scale: [1, 1.1, 1],
@@ -281,13 +309,13 @@ const FAQ = () => {
               <MessageCircleQuestion className="w-16 h-16 text-orange-500" />
             </motion.div>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-rose-600 mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Frequently Asked Questions
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mb-8" />
 
           {/* Search and Filter Section */}
-          <div className="max-w-xl mx-auto space-y-4">
+          <div className="max-w-xl mx-auto space-y-6">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -295,7 +323,7 @@ const FAQ = () => {
                 placeholder="Search FAQs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white/5 border-white/10 text-white placeholder:text-gray-400"
+                className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/50"
               />
             </div>
 
@@ -304,7 +332,7 @@ const FAQ = () => {
                 <Badge
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "secondary"}
-                  className="cursor-pointer hover:bg-orange-500/20"
+                  className="cursor-pointer hover:bg-orange-500/30 transition-all duration-300"
                   onClick={() => setSelectedCategory(category.id)}
                 >
                   {category.label}
@@ -315,7 +343,7 @@ const FAQ = () => {
         </motion.div>
 
         {/* FAQ Items */}
-        <div className="space-y-4">
+        <div className="space-y-6">
           <AnimatePresence>
             {filteredFaqs.length === 0 ? (
               <motion.div
@@ -323,8 +351,8 @@ const FAQ = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
               >
-                <Alert>
-                  <AlertDescription>
+                <Alert variant="destructive">
+                  <AlertDescription className="text-center">
                     No FAQs found matching your search criteria. Try adjusting your search or filters.
                   </AlertDescription>
                 </Alert>
@@ -351,7 +379,7 @@ const FAQ = () => {
                     transition={{ duration: 0.3 }}
                   />
                   <motion.div
-                    className="bg-white/5 backdrop-blur-sm rounded-lg overflow-hidden relative"
+                    className="bg-white/5 backdrop-blur-md rounded-lg overflow-hidden relative border border-white/10"
                     animate={{
                       scale: hoveredIndex === index ? 1.02 : 1
                     }}
@@ -416,9 +444,9 @@ const FAQ = () => {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center space-x-2 bg-white/5 backdrop-blur-sm px-6 py-3 rounded-full">
+          <div className="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
             <Mail className="w-5 h-5 text-orange-500" />
-            <span className="text-gray-300">Have more questions? Email us at</span>
+            <span className="text-gray-300">Have more questions?</span>
             <a
               href="mailto:contact@goonj2025.com"
               className="text-orange-500 hover:text-orange-400 font-medium transition-colors"

@@ -124,7 +124,7 @@ const Gallery = () => {
                       src={image.src}
                       alt={image.alt}
                       fill
-                      className="rounded-3xl object-cover"
+                      className="rounded-3xl object-contain"
                       draggable={false}
                       priority={index === active}
                     />

@@ -2,23 +2,23 @@ import React, { memo, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // Enhanced Flip Digit Animation Component
-const FlipDigit = ({ digit, key, position, total }) => {
+const FlipDigit = ({ digit, position, total, value }) => {
   return (
     <div className="relative h-full w-1/2 flex justify-center overflow-hidden">
       <AnimatePresence mode="popLayout">
         <motion.div
-          key={key}
+          key={`${position}-${value}`}
           initial={{ rotateX: -90, opacity: 0 }}
-          animate={{ 
-            rotateX: 0, 
+          animate={{
+            rotateX: 0,
             opacity: 1,
             transition: {
               rotateX: { duration: 0.6, ease: [0.455, 0.03, 0.515, 0.955] },
               opacity: { duration: 0.3 }
             }
           }}
-          exit={{ 
-            rotateX: 90, 
+          exit={{
+            rotateX: 90,
             opacity: 0,
             transition: {
               rotateX: { duration: 0.6, ease: [0.455, 0.03, 0.515, 0.955] },
@@ -28,7 +28,7 @@ const FlipDigit = ({ digit, key, position, total }) => {
           className="absolute w-full h-full flex items-center justify-center text-3xl md:text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-orange-300 to-orange-500"
         >
           {digit}
-          <div 
+          <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background: `linear-gradient(180deg, 
@@ -70,11 +70,11 @@ const FlipCountdownBox = memo(({ value, label, total, index }) => {
       setIsFlipping(true);
       setPrevValue(currentValue);
       setCurrentValue(value);
-      
+
       const timer = setTimeout(() => {
         setIsFlipping(false);
       }, 600); // Match the flip animation duration
-      
+
       return () => clearTimeout(timer);
     }
   }, [value, currentValue]);
@@ -85,7 +85,7 @@ const FlipCountdownBox = memo(({ value, label, total, index }) => {
     <motion.div
       initial={{ scale: 0.5, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ 
+      transition={{
         delay: index * 0.1,
         duration: 0.5,
         ease: [0.23, 1, 0.32, 1]
@@ -96,23 +96,24 @@ const FlipCountdownBox = memo(({ value, label, total, index }) => {
         <motion.div
           animate={{
             scale: isFlipping ? 1.05 : 1,
-            boxShadow: isFlipping 
-              ? '0 8px 16px rgba(0,0,0,0.5)' 
+            boxShadow: isFlipping
+              ? '0 8px 16px rgba(0,0,0,0.5)'
               : '0 4px 8px rgba(0,0,0,0.3)'
           }}
           transition={{ duration: 0.3 }}
           className="absolute inset-0 rounded-lg overflow-hidden"
         >
           <CardBackground />
-          
+
           {/* Digits Container */}
           <div className="absolute inset-0 flex">
             {digits.map((digit, idx) => (
               <FlipDigit
-                key={`${idx}-${digit}-${value}`}
+                key={`${idx}-${digit}`}
                 digit={digit}
                 position={idx}
                 total={total}
+                value={currentValue}
               />
             ))}
           </div>
@@ -171,8 +172,6 @@ FlipCountdownBox.displayName = 'FlipCountdownBox';
 // Enhanced Main Countdown Component
 const Countdown = ({ timeLeft }) => {
   const timeUnits = [
-    { value: timeLeft.months, label: "Months" },
-    { value: timeLeft.weeks, label: "Weeks" },
     { value: timeLeft.days, label: "Days" },
     { value: timeLeft.hours, label: "Hours" },
     { value: timeLeft.minutes, label: "Minutes" },
@@ -191,7 +190,7 @@ const Countdown = ({ timeLeft }) => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.23, 1, 0.32, 1] }}
-        className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 md:gap-6 justify-items-center p-8 rounded-xl backdrop-blur-md bg-black/20"
+        className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 justify-items-center p-8 rounded-xl backdrop-blur-md bg-black/20"
       >
         {timeUnits.map((unit, index) => (
           <FlipCountdownBox
