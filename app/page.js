@@ -10,22 +10,6 @@ import Countdown from './components/countdown';
 import EventsSection from './components/Infinitecarousel';
 import GalleryParallax, { HeroParallax } from './components/gallery2';
 
-// Memoized CountdownBox to prevent unnecessary re-renders
-// const CountdownBox = memo(({ value, label }) => (
-//   <div className="flex flex-col items-center">
-//     <div
-//       className="w-20 h-20 md:w-24 md:h-24 bg-white/10 backdrop-blur-sm rounded-lg flex items-center justify-center border border-orange-500/20 hover:scale-105 transition-transform duration-200"
-//     >
-//       <span className="text-3xl md:text-4xl font-bold text-white">
-//         {String(value).padStart(2, '0')}
-//       </span>
-//     </div>
-//     <div className="text-sm md:text-base text-white/80 uppercase tracking-wider mt-2">{label}</div>
-//   </div>
-// ));
-
-// CountdownBox.displayName = 'CountdownBox';
-
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [timeLeft, setTimeLeft] = useState({

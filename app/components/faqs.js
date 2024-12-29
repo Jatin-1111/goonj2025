@@ -128,7 +128,7 @@ const FAQ = () => {
   }, [mouseX, mouseY]);
 
   return (
-    <div className="bg-[#0D0221] py-20 relative overflow-hidden min-h-screen">
+    <div className="bg-[#F3E8D5] py-20 relative overflow-hidden min-h-screen">
       {/* SVG Background Layer */}
       <motion.div
         className="absolute inset-0 overflow-hidden pointer-events-none"
@@ -141,130 +141,96 @@ const FAQ = () => {
           ease: "easeInOut"
         }}
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1000 800"
-          preserveAspectRatio="xMidYMid slice"
-          className="absolute w-full h-full object-cover"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
           <defs>
-            {/* Gradient Definitions with South Indian Color Palette */}
+            {/* Enhanced Gradient with New Color Palette */}
             <linearGradient id="south-indian-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#8B5CF6" stopOpacity="0.4" />
-              <stop offset="100%" stopColor="#DB2777" stopOpacity="0.3" />
+              <stop offset="0%" stopColor="#A41E34" stopOpacity="0.4" />
+              <stop offset="33%" stopColor="#CC704B" stopOpacity="0.3" />
+              <stop offset="66%" stopColor="#D6A531" stopOpacity="0.3" />
+              <stop offset="100%" stopColor="#B87333" stopOpacity="0.3" />
             </linearGradient>
 
-            {/* Kolam-inspired Intricate Pattern */}
-            <pattern id="kolam-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
-              <path
-                d="M100 0 
-           Q150 50, 100 100 
-           Q50 150, 100 200 
-           Q150 250, 100 100 
-           Q50 50, 100 0"
-                fill="none"
-                stroke="#9333EA"
-                strokeWidth="1"
-                opacity="0.2"
-              />
+            {/* More Complex Kolam Pattern */}
+            <pattern id="kolam-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M25 25 L75 25 L75 75 L25 75 Z M50 0 L100 50 L50 100 L0 50 Z"
+                fill="none" stroke="#B87333" strokeWidth="0.5" opacity="0.2" />
+              <circle cx="50" cy="50" r="25" fill="none" stroke="#CC704B" strokeWidth="0.5" opacity="0.2" />
+              <path d="M25 50 Q50 25, 75 50 Q50 75, 25 50" fill="none" stroke="#D6A531" strokeWidth="0.5" opacity="0.2" />
             </pattern>
 
-            {/* Lotus Flower Clip Path */}
-            <clipPath id="lotus-clip">
-              <path
-                d="M100 0 
-           Q150 50, 100 100 
-           Q50 150, 0 100 
-           Q50 50, 100 0 
-           M100 0 
-           Q150 50, 200 100 
-           Q150 150, 100 200 
-           Q50 150, 100 0"
-              />
-            </clipPath>
+            {/* Enhanced Jasmine Pattern */}
+            <pattern id="jasmine-pattern" x="0" y="0" width="50" height="50" patternUnits="userSpaceOnUse">
+              <circle cx="25" cy="25" r="10" fill="#FEF8EF" opacity="0.1" />
+              <circle cx="25" cy="25" r="5" fill="#F3E8D5" opacity="0.2" />
+              <path d="M25 15 Q30 20, 25 25 Q20 30, 15 25" fill="none" stroke="#FEF8EF" strokeWidth="0.5" opacity="0.2" />
+              <path d="M25 15 Q20 20, 25 25 Q30 30, 35 25" fill="none" stroke="#FEF8EF" strokeWidth="0.5" opacity="0.2" />
+            </pattern>
 
-            {/* Bharatanatyam Dance Inspired Patterns */}
-            <pattern id="dance-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-              <path
-                d="M50 0 L75 50 L25 50 Z 
-           M50 100 L75 50 L25 50 Z"
-                fill="#6D28D9"
-                opacity="0.1"
-              />
+            {/* Enhanced Temple Gopuram Pattern */}
+            <pattern id="gopuram-pattern" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
+              <path d="M0 200 L100 0 L200 200 Z" fill="none" stroke="#A41E34" strokeWidth="1" opacity="0.15" />
+              <path d="M50 200 L100 50 L150 200 Z" fill="none" stroke="#CC704B" strokeWidth="1" opacity="0.15" />
+              <path d="M25 200 L100 25 L175 200" fill="none" stroke="#D6A531" strokeWidth="1" opacity="0.15" />
+            </pattern>
+
+            {/* Enhanced Traditional Patterns */}
+            <pattern id="traditional-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+              <path d="M50 0 Q75 50, 50 100 Q25 50, 50 0" fill="none" stroke="#B87333" strokeWidth="1" opacity="0.2" />
+              <circle cx="50" cy="50" r="5" fill="#CC704B" opacity="0.2" />
+            </pattern>
+
+            {/* Traditional Motif Pattern */}
+            <pattern id="motif-pattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+              <path d="M30 0 Q45 30, 30 60 Q15 30, 30 0" fill="none" stroke="#D6A531" strokeWidth="0.5" opacity="0.2" />
             </pattern>
           </defs>
 
           {/* Background Layers */}
-          <rect width="1000" height="800" fill="url(#kolam-pattern)" opacity="0.3" />
+          <rect width="1000" height="800" fill="#F3E8D5" />
+          <rect width="1000" height="800" fill="url(#kolam-pattern)" />
           <rect width="1000" height="800" fill="url(#south-indian-gradient)" opacity="0.2" />
-          <rect width="1000" height="800" fill="url(#dance-pattern)" opacity="0.1" />
+          <rect width="1000" height="800" fill="url(#jasmine-pattern)" opacity="0.1" />
+          <rect width="1000" height="800" fill="url(#traditional-pattern)" opacity="0.1" />
+          <rect width="1000" height="800" fill="url(#motif-pattern)" opacity="0.1" />
 
-          {/* Decorative Elements */}
-          {/* Lotus Flower Inspired Shapes */}
-          <g transform="translate(200, 200)">
-            <circle
-              cx="100"
-              cy="100"
-              r="80"
-              fill="none"
-              stroke="#8B5CF6"
-              strokeWidth="2"
-              strokeDasharray="10 5"
-              opacity="0.3"
-            />
-            <path
-              d="M100 20 
-         Q140 60, 100 100 
-         Q60 140, 100 180 
-         Q140 220, 100 180"
-              fill="none"
-              stroke="#DB2777"
-              strokeWidth="2"
-              opacity="0.4"
-            />
+          {/* Enhanced Cultural Elements */}
+          <g transform="translate(300,300)">
+            <path d="M0 0 Q50 -25, 100 0 Q150 25, 100 50 Q50 75, 0 50 Z"
+              fill="none" stroke="#A41E34" strokeWidth="2" opacity="0.3" />
+            <path d="M90 0 L90 50" stroke="#CC704B" strokeWidth="1" opacity="0.3" />
+            <circle cx="90" cy="10" r="5" fill="#D6A531" opacity="0.3" />
+            <circle cx="90" cy="40" r="5" fill="#D6A531" opacity="0.3" />
           </g>
 
-          {/* Rangoli-like Circular Patterns */}
-          <g transform="translate(600, 500)">
-            <path
-              d="M100 0 
-         Q150 50, 100 100 
-         Q50 150, 0 100 
-         Q50 50, 100 0
-         M100 0 
-         Q150 50, 200 100 
-         Q150 150, 100 200 
-         Q50 150, 0 100"
-              fill="none"
-              stroke="#9333EA"
-              strokeWidth="1"
-              opacity="0.3"
-            />
+          {/* Traditional Design Elements */}
+          <g transform="translate(700, 200) scale(0.5)">
+            <path d="M0 0 Q50 -20, 100 0 Q150 20, 100 40 Q50 60, 0 40 Z"
+              fill="none" stroke="#A41E34" strokeWidth="3" opacity="0.4" />
+            <circle cx="30" cy="20" r="5" fill="#CC704B" opacity="0.4" />
+            <circle cx="70" cy="20" r="5" fill="#CC704B" opacity="0.4" />
           </g>
 
-          {/* Temple Architecture Inspired Border */}
-          <rect
-            x="10" y="10"
-            width="980"
-            height="780"
-            fill="none"
-            stroke="#7E22CE"
-            strokeWidth="5"
-            strokeDasharray="40 20"
-            opacity="0.5"
-          />
+          {/* Border with Traditional Pattern */}
+          <rect x="20" y="20" width="960" height="760"
+            fill="none" stroke="#D6A531" strokeWidth="15" opacity="0.3" />
 
-          {/* Tamil Script Inspired Text */}
-          <text
-            x="500"
-            y="750"
-            textAnchor="middle"
-            fontFamily="Tamil"
-            fontSize="40"
-            fill="rgba(255,255,255,0.2)"
-            transform="rotate(-5 500 750)"
-          >
+          {/* Corner Elements */}
+          <g opacity="0.4">
+            <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(30,30)" />
+            <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(920,30) scale(-1,1)" />
+            <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(30,720) scale(1,-1)" />
+            <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(920,720) scale(-1,-1)" />
+          </g>
+
+          {/* South Indian Scripts */}
+          <text x="500" y="750" textAnchor="middle" fontFamily="Tamil" fontSize="40"
+            fill="#4A4A4A" transform="rotate(-5 500 750)">
             தென்னிந்திய கலாச்சாரம்
+          </text>
+          <text x="500" y="700" textAnchor="middle" fontFamily="Malayalam" fontSize="30"
+            fill="#4A4A4A" transform="rotate(5 500 700)">
+            തെക്കേ ഇന്ത്യൻ സംസ്കാരം
           </text>
         </svg>
       </motion.div>
@@ -274,8 +240,8 @@ const FAQ = () => {
         className="absolute inset-0 pointer-events-none"
         animate={{
           background: [
-            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(255, 165, 0, 0.1), transparent 80%)',
-            'radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(0, 255, 255, 0.1), transparent 80%)',
+            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)}, ${parseInt("#D6A531".slice(3, 5), 16)}, ${parseInt("#D6A531".slice(5, 7), 16)}, 0.1), transparent 80%)`,
+            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#CC704B".slice(1, 3), 16)}, ${parseInt("#CC704B".slice(3, 5), 16)}, ${parseInt("#CC704B".slice(5, 7), 16)}, 0.1), transparent 80%)`,
           ]
         }}
         transition={{ duration: 10, repeat: Infinity }}
@@ -306,24 +272,24 @@ const FAQ = () => {
                 ease: "easeInOut"
               }}
             >
-              <MessageCircleQuestion className="w-16 h-16 text-orange-500" />
+              <MessageCircleQuestion className="w-16 h-16 text-[#A41E34]" />
             </motion.div>
           </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-5xl font-bold text-[#4A4A4A] mb-4">
             Frequently Asked Questions
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mb-8" />
+          <div className="w-24 h-1 bg-gradient-to-r from-[#A41E34] via-[#D6A531] to-[#CC704B] mx-auto mb-8" />
 
           {/* Search and Filter Section */}
           <div className="max-w-xl mx-auto space-y-6">
             <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#4A4A4A]" />
               <Input
                 type="text"
                 placeholder="Search FAQs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white/10 border-white/20 text-white placeholder:text-gray-400 focus:ring-2 focus:ring-orange-500/50"
+                className="pl-10 bg-white/10 border-[#D6A531]/20 text-[#4A4A4A] placeholder:text-[#4A4A4A]/60 focus:ring-2 focus:ring-[#A41E34]/50"
               />
             </div>
 
@@ -332,7 +298,7 @@ const FAQ = () => {
                 <Badge
                   key={category.id}
                   variant={selectedCategory === category.id ? "default" : "secondary"}
-                  className="cursor-pointer hover:bg-orange-500/30 transition-all duration-300"
+                  className="cursor-pointer hover:bg-[#A41E34]/30 transition-all duration-300"
                   onClick={() => setSelectedCategory(category.id)}
                 >
                   {category.label}
@@ -345,94 +311,61 @@ const FAQ = () => {
         {/* FAQ Items */}
         <div className="space-y-6">
           <AnimatePresence>
-            {filteredFaqs.length === 0 ? (
+            {filteredFaqs.map((faq, index) => (
               <motion.div
+                key={index}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
+                transition={{ delay: index * 0.1 }}
+                className="relative"
               >
-                <Alert variant="destructive">
-                  <AlertDescription className="text-center">
-                    No FAQs found matching your search criteria. Try adjusting your search or filters.
-                  </AlertDescription>
-                </Alert>
-              </motion.div>
-            ) : (
-              filteredFaqs.map((faq, index) => (
                 <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ delay: index * 0.1 }}
-                  onMouseMove={handleMouseMove}
-                  onHoverStart={() => setHoveredIndex(index)}
-                  onHoverEnd={() => setHoveredIndex(null)}
-                  className="relative"
+                  className="absolute inset-0 bg-gradient-to-r from-[#A41E34]/20 to-[#D6A531]/20 rounded-lg blur-xl"
+                  animate={{
+                    opacity: hoveredIndex === index ? 1 : 0,
+                    scale: hoveredIndex === index ? 1.02 : 1
+                  }}
+                  transition={{ duration: 0.3 }}
+                />
+                <motion.div
+                  className="bg-[#FEF8EF]/80 backdrop-blur-md rounded-lg overflow-hidden relative border border-[#D6A531]/20"
+                  animate={{
+                    scale: hoveredIndex === index ? 1.02 : 1
+                  }}
+                  transition={{ duration: 0.3 }}
                 >
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-r from-orange-500/20 to-cyan-500/20 rounded-lg blur-xl"
-                    animate={{
-                      opacity: hoveredIndex === index ? 1 : 0,
-                      scale: hoveredIndex === index ? 1.02 : 1
-                    }}
-                    transition={{ duration: 0.3 }}
-                  />
-                  <motion.div
-                    className="bg-white/5 backdrop-blur-md rounded-lg overflow-hidden relative border border-white/10"
-                    animate={{
-                      scale: hoveredIndex === index ? 1.02 : 1
-                    }}
-                    transition={{ duration: 0.3 }}
+                  <button
+                    onClick={() => setOpenIndex(openIndex === index ? null : index)}
+                    className="w-full text-left p-6 flex items-center justify-between group"
                   >
-                    <button
-                      onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                      className="w-full text-left p-6 flex items-center justify-between group"
-                    >
-                      <span className="text-lg text-white font-medium pr-8 group-hover:text-orange-400 transition-colors">
-                        {faq.question}
-                      </span>
-                      <motion.div
-                        animate={{
-                          rotate: openIndex === index ? 180 : 0,
-                          scale: hoveredIndex === index ? 1.1 : 1
-                        }}
-                        transition={{ duration: 0.3 }}
-                      >
-                        <ChevronDown className="w-6 h-6 text-orange-500" />
-                      </motion.div>
-                    </button>
+                    <span className="text-lg text-[#4A4A4A] font-medium pr-8 group-hover:text-[#A41E34] transition-colors">
+                      {faq.question}
+                    </span>
+                    <ChevronDown className="w-6 h-6 text-[#A41E34]" />
+                  </button>
 
-                    <AnimatePresence>
-                      {openIndex === index && (
-                        <motion.div
-                          initial={{ height: 0, opacity: 0 }}
-                          animate={{ height: "auto", opacity: 1 }}
-                          exit={{ height: 0, opacity: 0 }}
-                          transition={{ duration: 0.3 }}
-                        >
-                          <div className="p-6 pt-0">
-                            <motion.p
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              exit={{ opacity: 0, y: -10 }}
-                              className="text-gray-300"
-                            >
-                              {faq.answer}
-                            </motion.p>
-                            <div className="mt-4">
-                              <Badge variant="outline" className="text-orange-500 border-orange-500/30">
-                                {categories.find(c => c.id === faq.category)?.label}
-                              </Badge>
-                            </div>
-                          </div>
-                        </motion.div>
-                      )}
-                    </AnimatePresence>
-                  </motion.div>
+                  <AnimatePresence>
+                    {openIndex === index && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="p-6 pt-0"
+                      >
+                        <p className="text-[#4A4A4A]">{faq.answer}</p>
+                        <div className="mt-4">
+                          <Badge variant="outline" className="text-[#A41E34] border-[#A41E34]/30">
+                            {categories.find(c => c.id === faq.category)?.label}
+                          </Badge>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </motion.div>
-              ))
-            )}
+              </motion.div>
+            ))}
           </AnimatePresence>
         </div>
 
@@ -444,12 +377,12 @@ const FAQ = () => {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center space-x-3 bg-white/10 backdrop-blur-md px-6 py-3 rounded-full border border-white/20">
-            <Mail className="w-5 h-5 text-orange-500" />
-            <span className="text-gray-300">Have more questions?</span>
+          <div className="inline-flex items-center space-x-3 bg-[#FEF8EF]/10 backdrop-blur-md px-6 py-3 rounded-full border border-[#D6A531]/20">
+            <Mail className="w-5 h-5 text-[#A41E34]" />
+            <span className="text-[#4A4A4A]">Have more questions?</span>
             <a
               href="mailto:contact@goonj2025.com"
-              className="text-orange-500 hover:text-orange-400 font-medium transition-colors"
+              className="text-[#A41E34] hover:text-[#CC704B] font-medium transition-colors"
             >
               contact@goonj2025.com
             </a>
@@ -465,7 +398,7 @@ const FAQ = () => {
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={scrollToTop}
-            className="fixed bottom-8 right-8 p-2 bg-orange-500 text-white rounded-full shadow-lg hover:bg-orange-600 transition-colors"
+            className="fixed bottom-8 right-8 p-2 bg-[#A41E34] text-[#FEF8EF] rounded-full shadow-lg hover:bg-[#CC704B] transition-colors"
           >
             <ArrowUpCircle className="w-6 h-6" />
           </motion.button>
@@ -475,7 +408,7 @@ const FAQ = () => {
       {/* Decorative Elements */}
       <div className="absolute bottom-0 left-0 w-96 h-96 -translate-x-1/2 translate-y-1/2">
         <motion.div
-          className="absolute inset-0 border-l-2 border-b-2 border-orange-500/20 rounded-full"
+          className="absolute inset-0 border-l-2 border-b-2 border-[#A41E34]/20 rounded-full"
           animate={{
             rotate: 360,
             scale: [1, 1.1, 1],
@@ -490,7 +423,7 @@ const FAQ = () => {
       </div>
       <div className="absolute top-0 right-0 w-96 h-96 translate-x-1/2 -translate-y-1/2">
         <motion.div
-          className="absolute inset-0 border-r-2 border-t-2 border-cyan-500/20 rounded-full"
+          className="absolute inset-0 border-r-2 border-t-2 border-[#D6A531]/20 rounded-full"
           animate={{
             rotate: -360,
             scale: [1, 1.1, 1],
@@ -509,8 +442,8 @@ const FAQ = () => {
         className="fixed inset-0 pointer-events-none z-50"
         animate={{
           background: [
-            'radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(255,165,0,0.15), transparent)',
-            'radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(0,255,255,0.15), transparent)'
+            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#A41E34".slice(1, 3), 16)},${parseInt("#A41E34".slice(3, 5), 16)},${parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`,
+            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)},${parseInt("#D6A531".slice(3, 5), 16)},${parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`
           ]
         }}
         transition={{ duration: 2, repeat: Infinity }}
@@ -525,3 +458,407 @@ const FAQ = () => {
 
 
 export default FAQ;
+
+
+
+// FOR DARK THEME:
+
+// return (
+//   <div className="bg-[#1A0F2E] py-20 relative overflow-hidden min-h-screen">
+//     {/* SVG Background Layer */}
+//     <motion.div
+//       className="absolute inset-0 overflow-hidden pointer-events-none"
+//       animate={{
+//         scale: openIndex !== null ? 1.1 : 1,
+//         opacity: openIndex !== null ? 0.7 : 1
+//       }}
+//       transition={{
+//         duration: 0.3,
+//         ease: "easeInOut"
+//       }}
+//     >
+//       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" preserveAspectRatio="xMidYMid slice">
+//         <defs>
+//           {/* Enhanced Gradient with Dark Theme Colors */}
+//           <linearGradient id="south-indian-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+//             <stop offset="0%" stopColor="#A41E34" stopOpacity="0.2" />
+//             <stop offset="33%" stopColor="#CC704B" stopOpacity="0.15" />
+//             <stop offset="66%" stopColor="#D6A531" stopOpacity="0.15" />
+//             <stop offset="100%" stopColor="#B87333" stopOpacity="0.2" />
+//           </linearGradient>
+
+//           {/* Dark Theme Kolam Pattern */}
+//           <pattern id="kolam-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+//             <path d="M25 25 L75 25 L75 75 L25 75 Z M50 0 L100 50 L50 100 L0 50 Z"
+//               fill="none" stroke="#B87333" strokeWidth="0.5" opacity="0.15" />
+//             <circle cx="50" cy="50" r="25" fill="none" stroke="#CC704B" strokeWidth="0.5" opacity="0.15" />
+//             <path d="M25 50 Q50 25, 75 50 Q50 75, 25 50" fill="none" stroke="#D6A531" strokeWidth="0.5" opacity="0.15" />
+//           </pattern>
+
+//           {/* Dark Theme Traditional Pattern */}
+//           <pattern id="traditional-pattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+//             <path d="M50 0 Q75 50, 50 100 Q25 50, 50 0" fill="none" stroke="#A41E34" strokeWidth="1" opacity="0.1" />
+//             <circle cx="50" cy="50" r="5" fill="#CC704B" opacity="0.1" />
+//           </pattern>
+
+//           {/* Dark Theme Motif Pattern */}
+//           <pattern id="motif-pattern" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
+//             <path d="M30 0 Q45 30, 30 60 Q15 30, 30 0" fill="none" stroke="#D6A531" strokeWidth="0.5" opacity="0.1" />
+//           </pattern>
+//         </defs>
+
+//         {/* Background Layers */}
+//         <rect width="1000" height="800" fill="#1A0F2E" />
+//         <rect width="1000" height="800" fill="url(#kolam-pattern)" />
+//         <rect width="1000" height="800" fill="url(#south-indian-gradient)" opacity="0.15" />
+//         <rect width="1000" height="800" fill="url(#traditional-pattern)" opacity="0.1" />
+//         <rect width="1000" height="800" fill="url(#motif-pattern)" opacity="0.1" />
+
+//         {/* Cultural Elements */}
+//         <g transform="translate(300,300)">
+//           <path d="M0 0 Q50 -25, 100 0 Q150 25, 100 50 Q50 75, 0 50 Z"
+//             fill="none" stroke="#A41E34" strokeWidth="2" opacity="0.2" />
+//           <path d="M90 0 L90 50" stroke="#CC704B" strokeWidth="1" opacity="0.2" />
+//           <circle cx="90" cy="10" r="5" fill="#D6A531" opacity="0.2" />
+//           <circle cx="90" cy="40" r="5" fill="#D6A531" opacity="0.2" />
+//         </g>
+
+//         {/* Border with Traditional Pattern */}
+//         <rect x="20" y="20" width="960" height="760"
+//           fill="none" stroke="#D6A531" strokeWidth="15" opacity="0.1" />
+
+//         {/* Corner Elements */}
+//         <g opacity="0.2">
+//           <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(30,30)" />
+//           <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(920,30) scale(-1,1)" />
+//           <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(30,720) scale(1,-1)" />
+//           <path d="M0 0 L50 0 L50 50 L0 50 Q25 25, 0 0 Z" fill="#A41E34" transform="translate(920,720) scale(-1,-1)" />
+//         </g>
+
+//         {/* Scripts with Dark Theme Colors */}
+//         <text x="500" y="750" textAnchor="middle" fontFamily="Tamil" fontSize="40"
+//           fill="#FEF8EF" opacity="0.1" transform="rotate(-5 500 750)">
+//           தென்னிந்திய கலாச்சாரம்
+//         </text>
+//         <text x="500" y="700" textAnchor="middle" fontFamily="Malayalam" fontSize="30"
+//           fill="#FEF8EF" opacity="0.1" transform="rotate(5 500 700)">
+//           തെക്കേ ഇന്ത്യൻ സംസ്കാരം
+//         </text>
+//       </svg>
+//     </motion.div>
+
+//     <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+//       {/* Header Section */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 20 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         viewport={{ once: true }}
+//         transition={{ duration: 0.6 }}
+//         className="text-center mb-16"
+//       >
+//         <div className="flex justify-center mb-6">
+//           <motion.div
+//             animate={{
+//               scale: [1, 1.1, 1],
+//               rotate: [0, 5, -5, 0]
+//             }}
+//             transition={{
+//               duration: 4,
+//               repeat: Infinity,
+//               ease: "easeInOut"
+//             }}
+//           >
+//             <MessageCircleQuestion className="w-16 h-16 text-[#D6A531]" />
+//           </motion.div>
+//         </div>
+//         <h2 className="text-4xl md:text-5xl font-bold text-[#FEF8EF] mb-4">
+//           Frequently Asked Questions
+//         </h2>
+//         <div className="w-24 h-1 bg-gradient-to-r from-[#A41E34] via-[#D6A531] to-[#CC704B] mx-auto mb-8" />
+
+//         {/* Search Section */}
+//         <div className="max-w-xl mx-auto space-y-6">
+//           <div className="relative">
+//             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#FEF8EF]/60" />
+//             <Input
+//               type="text"
+//               placeholder="Search FAQs..."
+//               value={searchQuery}
+//               onChange={(e) => setSearchQuery(e.target.value)}
+//               className="pl-10 bg-white/5 border-[#D6A531]/20 text-[#FEF8EF] placeholder:text-[#FEF8EF]/40 focus:ring-2 focus:ring-[#D6A531]/50"
+//             />
+//           </div>
+
+//           <div className="flex flex-wrap gap-2 justify-center">
+//             {categories.map((category) => (
+//               <Badge
+//                 key={category.id}
+//                 variant={selectedCategory === category.id ? "default" : "secondary"}
+//                 className={`cursor-pointer transition-all duration-300 ${selectedCategory === category.id
+//                     ? 'bg-[#D6A531] hover:bg-[#CC704B] text-[#1A0F2E]'
+//                     : 'bg-white/5 hover:bg-[#D6A531]/20 text-[#FEF8EF]'
+//                   }`}
+//                 onClick={() => setSelectedCategory(category.id)}
+//               >
+//                 {category.label}
+//               </Badge>
+//             ))}
+//           </div>
+//         </div>
+//       </motion.div>
+
+//       {/* FAQ Items */}
+//       <div className="space-y-6">
+//         <AnimatePresence>
+//           {filteredFaqs.map((faq, index) => (
+//             <motion.div
+//               key={index}
+//               initial={{ opacity: 0, y: 20 }}
+//               animate={{ opacity: 1, y: 0 }}
+//               exit={{ opacity: 0, y: -20 }}
+//               transition={{ delay: index * 0.1 }}
+//               className="relative"
+//             >
+//               <motion.div
+//                 className="absolute inset-0 bg-gradient-to-r from-[#A41E34]/10 to-[#D6A531]/10 rounded-lg blur-xl"
+//                 animate={{
+//                   opacity: hoveredIndex === index ? 1 : 0,
+//                   scale: hoveredIndex === index ? 1.02 : 1
+//                 }}
+//                 transition={{ duration: 0.3 }}
+//               />
+//               <motion.div
+//                 className="bg-white/5 backdrop-blur-md rounded-lg overflow-hidden relative border border-[#D6A531]/10"
+//                 animate={{
+//                   scale: hoveredIndex === index ? 1.02 : 1
+//                 }}
+//                 transition={{ duration: 0.3 }}
+//               >
+//                 <button
+//                   onClick={() => setOpenIndex(openIndex === index ? null : index)}
+//                   className="w-full text-left p-6 flex items-center justify-between group"
+//                 >
+//                   <span className="text-lg text-[#FEF8EF] font-medium pr-8 group-hover:text-[#D6A531] transition-colors">
+//                     {faq.question}
+//                   </span>
+//                   <ChevronDown className="w-6 h-6 text-[#D6A531]" />
+//                 </button>
+
+//                 <AnimatePresence>
+//                   {openIndex === index && (
+//                     <motion.div
+//                       initial={{ height: 0, opacity: 0 }}
+//                       animate={{ height: "auto", opacity: 1 }}
+//                       exit={{ height: 0, opacity: 0 }}
+//                       transition={{ duration: 0.3 }}
+//                       className="p-6 pt-0"
+//                     >
+//                       <p className="text-[#FEF8EF]/80">{faq.answer}</p>
+//                       <div className="mt-4">
+//                         <Badge
+//                           variant="outline"
+//                           className="text-[#D6A531] border-[#D6A531]/30"
+//                         >
+//                           {categories.find(c => c.id === faq.category)?.label}
+//                         </Badge>
+//                       </div>
+//                     </motion.div>
+//                   )}
+//                 </AnimatePresence>
+//               </motion.div>
+//             </motion.div>
+//           ))}
+//         </AnimatePresence>
+//       </div>
+
+//       {/* Contact Section */}
+//       <motion.div
+//         initial={{ opacity: 0, y: 20 }}
+//         whileInView={{ opacity: 1, y: 0 }}
+//         viewport={{ once: true }}
+//         transition={{ delay: 0.5 }}
+//         className="mt-16 text-center"
+//       >
+//         <div className="inline-flex items-center space-x-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-[#D6A531]/20">
+//           <Mail className="w-5 h-5 text-[#D6A531]" />
+//           <span className="text-[#FEF8EF]/80">Have more questions?</span>
+//           <a
+//             href="mailto:contact@goonj2025.com"
+//             className="text-[#D6A531] hover:text-[#CC704B] font-medium transition-colors"
+//           >
+//             contact@goonj2025.com
+//           </a>
+//         </div>
+//       </motion.div>
+//     </div>
+
+//     {/* Scroll to Top Button */}
+//     <AnimatePresence>
+//       {showScrollTop && (
+//         <motion.button
+//           initial={{ opacity: 0, scale: 0.8 }}
+//           animate={{ opacity: 1, scale: 1 }}
+//           exit={{ opacity: 0, scale: 0.8 }}
+//           onClick={scrollToTop}
+//           className="fixed bottom-8 right-8 p-2 bg-[#D6A531] text-[#1A0F2E] rounded-full shadow-lg hover:bg-[#CC704B] transition-colors"
+//         >
+//           <ArrowUpCircle className="w-6 h-6" />
+//         </motion.button>
+//       )}
+//     </AnimatePresence>
+
+//     {/* Mouse Trail Effect */}
+//     <motion.div
+//       className="fixed inset-0 pointer-events-none z-50"
+//       animate={{
+//         background: [
+//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)},${parseInt("#D6A531".slice(3, 5), 16)},${parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`,
+//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#A41E34".slice(1, 3), 16)},${parseInt("#A41E34".slice(3, 5), 16)},${parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`
+//         ]
+//       }}
+//       transition={{ duration: 2, repeat: Infinity }}
+//       style={{
+//         '--mouse-x': useTransform(mouseX, v => `${v}px`),
+//         '--mouse-y': useTransform(mouseY, v => `${v}px`)
+//       }}
+//     />
+
+//     {/* Decorative Elements */}
+//     <div className="absolute bottom-0 left-0 w-96 h-96 -translate-x-1/2 translate-y-1/2">
+//       <motion.div
+//         className="absolute inset-0 border-l-2 border-b-2 border-[#D6A531]/20 rounded-full"
+//         animate={{
+//           rotate: 360,
+//           scale: [1, 1.1, 1],
+//           opacity: [0.1, 0.2, 0.1],
+//         }}
+//         transition={{
+//           rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+//           scale: { duration: 4, repeat: Infinity },
+//           opacity: { duration: 4, repeat: Infinity },
+//         }}
+//       />
+//     </div>
+//     <div className="absolute top-0 right-0 w-96 h-96 translate-x-1/2 -translate-y-1/2">
+//       <motion.div
+//         className="absolute inset-0 border-r-2 border-t-2 border-[#A41E34]/20 rounded-full"
+//         animate={{
+//           rotate: -360,
+//           scale: [1, 1.1, 1],
+//           opacity: [0.1, 0.2, 0.1],
+//         }}
+//         transition={{
+//           rotate: { duration: 20, repeat: Infinity, ease: "linear" },
+//           scale: { duration: 4, repeat: Infinity, delay: 2 },
+//           opacity: { duration: 4, repeat: Infinity, delay: 2 },
+//         }}
+//       />
+//     </div>
+
+//     {/* Additional Decorative Elements */}
+//     <div className="absolute top-1/4 left-1/4 w-64 h-64">
+//       <motion.div
+//         className="absolute inset-0 border border-[#CC704B]/10 rounded-full"
+//         animate={{
+//           scale: [1, 1.2, 1],
+//           opacity: [0.1, 0.2, 0.1],
+//         }}
+//         transition={{
+//           duration: 6,
+//           repeat: Infinity,
+//           ease: "easeInOut"
+//         }}
+//       />
+//     </div>
+
+//     {/* Traditional Ornamental Corners */}
+//     <div className="absolute top-0 left-0 w-32 h-32">
+//       <motion.div
+//         className="absolute inset-0"
+//         animate={{
+//           opacity: [0.1, 0.2, 0.1],
+//         }}
+//         transition={{
+//           duration: 4,
+//           repeat: Infinity,
+//           ease: "easeInOut"
+//         }}
+//       >
+//         <svg viewBox="0 0 100 100">
+//           <path
+//             d="M0 0 L100 0 L100 20 C60 20 20 60 20 100 L0 100 Z"
+//             fill="#D6A531"
+//             opacity="0.1"
+//           />
+//         </svg>
+//       </motion.div>
+//     </div>
+//     <div className="absolute top-0 right-0 w-32 h-32">
+//       <motion.div
+//         className="absolute inset-0"
+//         animate={{
+//           opacity: [0.1, 0.2, 0.1],
+//         }}
+//         transition={{
+//           duration: 4,
+//           repeat: Infinity,
+//           ease: "easeInOut"
+//         }}
+//       >
+//         <svg viewBox="0 0 100 100">
+//           <path
+//             d="M0 0 L100 0 L100 100 L80 100 C80 60 40 20 0 20 Z"
+//             fill="#D6A531"
+//             opacity="0.1"
+//           />
+//         </svg>
+//       </motion.div>
+//     </div>
+
+//     {/* Floating Particles Effect */}
+//     <div className="absolute inset-0 pointer-events-none">
+//       {Array.from({ length: 20 }).map((_, i) => (
+//         <motion.div
+//           key={i}
+//           className="absolute w-2 h-2 rounded-full bg-[#D6A531]"
+//           style={{
+//             left: `${Math.random() * 100}%`,
+//             top: `${Math.random() * 100}%`,
+//           }}
+//           animate={{
+//             y: [0, -20, 0],
+//             opacity: [0.1, 0.2, 0.1],
+//           }}
+//           transition={{
+//             duration: 3 + Math.random() * 2,
+//             repeat: Infinity,
+//             delay: Math.random() * 2,
+//           }}
+//         />
+//       ))}
+//     </div>
+
+//     {/* Background Gradient Animation */}
+//     <div
+//       className="absolute inset-0 pointer-events-none"
+//       style={{
+//         background: 'radial-gradient(circle at 50% 50%, rgba(214, 165, 49, 0.03) 0%, rgba(26, 15, 46, 0) 50%)',
+//       }}
+//     >
+//       <motion.div
+//         className="absolute inset-0"
+//         animate={{
+//           background: [
+//             'radial-gradient(circle at 30% 30%, rgba(164, 30, 52, 0.03) 0%, rgba(26, 15, 46, 0) 50%)',
+//             'radial-gradient(circle at 70% 70%, rgba(204, 112, 75, 0.03) 0%, rgba(26, 15, 46, 0) 50%)',
+//           ]
+//         }}
+//         transition={{
+//           duration: 8,
+//           repeat: Infinity,
+//           ease: "easeInOut"
+//         }}
+//       />
+//     </div>
+//   </div>
+// );
