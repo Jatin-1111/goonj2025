@@ -44,25 +44,122 @@ const EventsSection = () => {
     };
 
     return (
-        <div className="bg-[#1A0F2E] py-10 h-[90vh] flex flex-col justify-center w-full">
-            {/* Mandala-inspired Background Pattern */}
-            <motion.div 
-                className="absolute inset-0"
-                animate={{
-                    background: [
-                        'radial-gradient(circle at 20% 30%, rgba(255, 123, 0, 0.08) 0%, transparent 50%)', // Saffron
-                        'radial-gradient(circle at 80% 70%, rgba(0, 200, 83, 0.08) 0%, transparent 50%)' // Green
-                    ]
-                }}
-                transition={{
-                    duration: 10,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                }}
-            />
-            
-            {/* Circuit Pattern Overlay */}
-            <div className="absolute inset-0 opacity-10 bg-[url('/circuit-pattern.png')] bg-repeat" />
+        <div className="bg-[#1A0F2E] py-10 h-[90vh] flex flex-col justify-center w-full relative overflow-hidden">
+            {/* Enhanced Background Layers */}
+            <div className="absolute inset-0 overflow-hidden">
+                {/* Base gradient layer */}
+                <motion.div 
+                    className="absolute inset-0"
+                    animate={{
+                        background: [
+                            'radial-gradient(circle at 10% 30%, rgba(255, 123, 0, 0.05) 0%, transparent 40%), radial-gradient(circle at 90% 70%, rgba(0, 200, 83, 0.05) 0%, transparent 40%)',
+                            'radial-gradient(circle at 90% 30%, rgba(255, 123, 0, 0.05) 0%, transparent 40%), radial-gradient(circle at 10% 70%, rgba(0, 200, 83, 0.05) 0%, transparent 40%)'
+                        ]
+                    }}
+                    transition={{
+                        duration: 15,
+                        repeat: Infinity,
+                        repeatType: "reverse",
+                        ease: "easeInOut"
+                    }}
+                />
+
+                {/* Animated circuit pattern overlays */}
+                <div className="absolute inset-0">
+                    <motion.div 
+                        className="absolute inset-0 bg-[url('/circuit-pattern.png')] bg-repeat opacity-5"
+                        animate={{
+                            scale: [1, 1.1, 1],
+                            opacity: [0.05, 0.08, 0.05]
+                        }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            ease: "easeInOut"
+                        }}
+                    />
+                    <motion.div 
+                        className="absolute inset-0 bg-[url('/circuit-pattern.png')] bg-repeat opacity-5 rotate-45"
+                        animate={{
+                            scale: [1.1, 1, 1.1],
+                            opacity: [0.08, 0.05, 0.08]
+                        }}
+                        transition={{
+                            duration: 10,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            ease: "easeInOut",
+                            delay: 5
+                        }}
+                    />
+                </div>
+
+                {/* Decorative geometric shapes */}
+                <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stopColor="rgba(255,123,0,0.1)"/>
+                            <stop offset="100%" stopColor="rgba(0,200,83,0.1)"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    {/* Animated hexagons */}
+                    <motion.path 
+                        d="M30 40 L45 30 L60 40 L60 60 L45 70 L30 60 Z"
+                        stroke="url(#gradient1)"
+                        fill="none"
+                        strokeWidth="0.5"
+                        initial={{ opacity: 0 }}
+                        animate={{
+                            opacity: [0, 0.3, 0],
+                            rotate: [0, 360],
+                            scale: [0.8, 1.2, 0.8]
+                        }}
+                        transition={{
+                            duration: 15,
+                            repeat: Infinity,
+                            ease: "linear"
+                        }}
+                    />
+                    
+                    {/* More geometric shapes at different positions */}
+                    <motion.circle
+                        cx="80%"
+                        cy="20%"
+                        r="30"
+                        stroke="rgba(255,123,0,0.05)"
+                        fill="none"
+                        strokeWidth="0.5"
+                        animate={{
+                            scale: [1, 1.5, 1],
+                            opacity: [0.1, 0.2, 0.1]
+                        }}
+                        transition={{
+                            duration: 8,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
+                </svg>
+
+                {/* Light beam effects */}
+                <motion.div
+                    className="absolute -inset-[10%] opacity-[0.02]"
+                    animate={{
+                        background: [
+                            'conic-gradient(from 0deg at 50% 50%, transparent 0%, rgba(255,123,0,1) 25%, transparent 50%)',
+                            'conic-gradient(from 360deg at 50% 50%, transparent 0%, rgba(0,200,83,1) 25%, transparent 50%)'
+                        ],
+                        rotate: [0, 360]
+                    }}
+                    transition={{
+                        duration: 20,
+                        repeat: Infinity,
+                        ease: "linear"
+                    }}
+                />
+            </div>
 
             <div className="container mx-auto px-4 mb-12 relative z-10">
                 <motion.div 

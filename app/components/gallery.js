@@ -1,35 +1,55 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+"use client"
+import React, { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
+import { IconArrowLeft, IconArrowRight } from "@tabler/icons-react";
 
 const Gallery = () => {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [active, setActive] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
 
   const images = [
     {
-      src: '/gallery/image1.jpg',
+      src: 'https://images.unsplash.com/photo-1504704911898-68304a7d2807?w=800&auto=format&fit=crop',
       title: 'Cultural Night',
-      description: 'Dance performances at the main stage'
+      description: 'Dance performances at the main stage',
+      quote: 'A mesmerizing evening filled with incredible performances showcasing diverse cultural traditions'
     },
     {
-      src: '/gallery/image2.jpg',
+      src: 'https://images.unsplash.com/photo-1511649475669-e288648b2339?w=800&auto=format&fit=crop',
       title: 'Technical Exhibition',
-      description: 'Students showcasing their innovations'
+      description: 'Students showcasing their innovations',
+      quote: 'Innovative projects and breakthrough technologies demonstrated by talented young minds'
     },
     {
-      src: '/gallery/image3.jpg',
+      src: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&auto=format&fit=crop',
       title: 'Workshop Session',
-      description: 'Interactive learning experience'
+      description: 'Interactive learning experience',
+      quote: 'Engaging workshops that bring together experts and enthusiasts for hands-on learning'
     },
-    // Add more images as needed
   ];
 
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
+  const handleNext = () => {
+    setActive((prev) => (prev + 1) % images.length);
   };
 
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
+  const handlePrev = () => {
+    setActive((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const isActive = (index) => {
+    return index === active;
+  };
+
+  useEffect(() => {
+    if (autoplay) {
+      const interval = setInterval(handleNext, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [autoplay]);
+
+  const randomRotateY = () => {
+    return Math.floor(Math.random() * 21) - 10;
   };
 
   return (
@@ -51,86 +71,150 @@ const Gallery = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mt-4"/>
         </motion.div>
 
-        {/* Gallery Carousel */}
-        <div className="relative">
-          <motion.div
-            key={currentImageIndex}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="relative h-[600px] w-full rounded-xl overflow-hidden"
-          >
-            <Image
-              src={images[currentImageIndex].src}
-              alt={images[currentImageIndex].title}
-              fill
-              className="object-cover"
-            />
-            
-            {/* Caption Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-8">
-              <h3 className="text-2xl font-bold text-white mb-2">
-                {images[currentImageIndex].title}
+        {/* Animated Gallery */}
+        <div className="relative grid grid-cols-1 md:grid-cols-2 gap-20">
+          {/* Image Section */}
+          <div>
+            <div className="relative h-[600px] w-full">
+              <AnimatePresence>
+                {images.map((image, index) => (
+                  <motion.div
+                    key={image.src}
+                    initial={{
+                      opacity: 0,
+                      scale: 0.9,
+                      z: -100,
+                      rotate: randomRotateY(),
+                    }}
+                    animate={{
+                      opacity: isActive(index) ? 1 : 0.7,
+                      scale: isActive(index) ? 1 : 0.95,
+                      z: isActive(index) ? 0 : -100,
+                      rotate: isActive(index) ? 0 : randomRotateY(),
+                      zIndex: isActive(index) ? 999 : images.length + 2 - index,
+                      y: isActive(index) ? [0, -40, 0] : 0,
+                    }}
+                    exit={{
+                      opacity: 0,
+                      scale: 0.9,
+                      z: 100,
+                      rotate: randomRotateY(),
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      ease: "easeInOut",
+                    }}
+                    className="absolute inset-0 origin-bottom"
+                  >
+                    <Image
+                      src={image.src}
+                      alt={image.title}
+                      fill
+                      className="rounded-3xl object-contain"
+                      draggable={false}
+                    />
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          </div>
+
+          {/* Content Section */}
+          <div className="flex justify-between flex-col py-4">
+            <motion.div
+              key={active}
+              initial={{
+                y: 20,
+                opacity: 0,
+              }}
+              animate={{
+                y: 0,
+                opacity: 1,
+              }}
+              exit={{
+                y: -20,
+                opacity: 0,
+              }}
+              transition={{
+                duration: 0.2,
+                ease: "easeInOut",
+              }}
+            >
+              <h3 className="text-3xl font-bold text-white">
+                {images[active].title}
               </h3>
-              <p className="text-gray-200">
-                {images[currentImageIndex].description}
+              <p className="text-lg text-gray-400">
+                {images[active].description}
               </p>
+              <motion.p className="text-xl text-gray-300 mt-8">
+                {images[active].quote.split(" ").map((word, index) => (
+                  <motion.span
+                    key={index}
+                    initial={{
+                      filter: "blur(10px)",
+                      opacity: 0,
+                      y: 5,
+                    }}
+                    animate={{
+                      filter: "blur(0px)",
+                      opacity: 1,
+                      y: 0,
+                    }}
+                    transition={{
+                      duration: 0.2,
+                      ease: "easeInOut",
+                      delay: 0.02 * index,
+                    }}
+                    className="inline-block"
+                  >
+                    {word}&nbsp;
+                  </motion.span>
+                ))}
+              </motion.p>
+            </motion.div>
+
+            {/* Navigation Controls */}
+            <div className="flex gap-4 pt-12 md:pt-0">
+              <button
+                onClick={handlePrev}
+                onMouseEnter={() => setAutoplay(false)}
+                onMouseLeave={() => setAutoplay(true)}
+                className="h-12 w-12 rounded-full bg-gray-800/50 hover:bg-gray-800/70 flex items-center justify-center group/button transition-colors"
+              >
+                <IconArrowLeft
+                  className="h-6 w-6 text-white group-hover/button:rotate-12 transition-transform duration-300"
+                />
+              </button>
+              <button
+                onClick={handleNext}
+                onMouseEnter={() => setAutoplay(false)}
+                onMouseLeave={() => setAutoplay(true)}
+                className="h-12 w-12 rounded-full bg-gray-800/50 hover:bg-gray-800/70 flex items-center justify-center group/button transition-colors"
+              >
+                <IconArrowRight
+                  className="h-6 w-6 text-white group-hover/button:-rotate-12 transition-transform duration-300"
+                />
+              </button>
             </div>
 
-            {/* Navigation Buttons */}
-            <button
-              onClick={prevImage}
-              className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-colors"
-            >
-              ←
-            </button>
-            <button
-              onClick={nextImage}
-              className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-4 rounded-full transition-colors"
-            >
-              →
-            </button>
-          </motion.div>
-
-          {/* Thumbnail Navigation */}
-          <div className="flex justify-center gap-4 mt-6">
-            {images.map((_, index) => (
-              <button
-                key={index}
-                onClick={() => setCurrentImageIndex(index)}
-                className={`w-3 h-3 rounded-full transition-colors ${
-                  index === currentImageIndex ? 'bg-orange-500' : 'bg-gray-500'
-                }`}
-              />
-            ))}
+            {/* Dots Navigation */}
+            <div className="flex justify-center gap-4 mt-8">
+              {images.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => setActive(index)}
+                  onMouseEnter={() => setAutoplay(false)}
+                  onMouseLeave={() => setAutoplay(true)}
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    index === active 
+                      ? 'bg-orange-500 scale-125' 
+                      : 'bg-gray-500 hover:bg-gray-400'
+                  }`}
+                />
+              ))}
+            </div>
           </div>
         </div>
-
-        {/* Grid Gallery Preview */}
-        <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-12"
-        >
-          {images.map((image, index) => (
-            <motion.div
-              key={index}
-              whileHover={{ scale: 1.05 }}
-              className="relative h-40 rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => setCurrentImageIndex(index)}
-            >
-              <Image
-                src={image.src}
-                alt={image.title}
-                fill
-                className="object-cover"
-              />
-              <div className="absolute inset-0 bg-black/30 hover:bg-black/20 transition-colors" />
-            </motion.div>
-          ))}
-        </motion.div>
       </div>
     </div>
   );

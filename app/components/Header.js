@@ -168,10 +168,107 @@ const Header = () => {
         >
             <div className="absolute inset-0 bg-gradient-to-r from-[#2D1810]/50 via-transparent to-[#1F2937]/50" />
 
-            {/* Decorative elements */}
+            {/* Decorative elements with added SVG patterns */}
             <div className="absolute inset-0 overflow-hidden">
+                {/* Existing gradient borders */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500" />
                 <div className="absolute top-1 left-0 w-full h-px bg-gradient-to-r from-orange-300/20 via-green-300/20 to-orange-300/20" />
+
+                {/* SVG Pattern Background */}
+                <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <pattern id="header-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,123,0,0.1)" strokeWidth="0.5" />
+                        </pattern>
+
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+                            <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                    </defs>
+
+                    {/* Background pattern */}
+                    <rect width="100%" height="100%" fill="url(#header-grid)" />
+
+                    {/* Decorative circles */}
+                    <motion.circle
+                        cx="30"
+                        cy="20"
+                        r="3"
+                        fill="none"
+                        stroke="rgba(255,123,0,0.3)"
+                        strokeWidth="1"
+                        filter="url(#glow)"
+                        initial={{ scale: 0 }}
+                        animate={{
+                            scale: [1, 1.5, 1],
+                            opacity: [0.3, 0.7, 0.3],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut"
+                        }}
+                    />
+
+                    <motion.circle
+                        cx="95%"
+                        cy="20"
+                        r="3"
+                        fill="none"
+                        stroke="rgba(34,197,94,0.3)"
+                        strokeWidth="1"
+                        filter="url(#glow)"
+                        initial={{ scale: 0 }}
+                        animate={{
+                            scale: [1, 1.5, 1],
+                            opacity: [0.3, 0.7, 0.3],
+                        }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                            delay: 1
+                        }}
+                    />
+
+                    {/* Decorative lines */}
+                    <motion.path
+                        d="M 40 0 Q 60 20, 80 0"
+                        stroke="rgba(255,123,0,0.1)"
+                        strokeWidth="1"
+                        fill="none"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            ease: "easeInOut"
+                        }}
+                    />
+
+                    <motion.path
+                        d="M 70% 0 Q 85% 20, 100% 0"
+                        stroke="rgba(34,197,94,0.1)"
+                        strokeWidth="1"
+                        fill="none"
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{
+                            duration: 2,
+                            repeat: Infinity,
+                            repeatType: "reverse",
+                            ease: "easeInOut",
+                            delay: 1
+                        }}
+                    />
+                </svg>
+
+                {/* Keep existing animated dots */}
                 <motion.div
                     className="absolute top-2 left-4 w-4 h-4 rounded-full bg-orange-500/30"
                     animate={{

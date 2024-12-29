@@ -320,10 +320,6 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                     </div>
                 </div>
             </section>
-
-            <section className="relative z-10">
-                <EventsSection />
-            </section>
         </main>
     );
 };

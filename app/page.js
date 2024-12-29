@@ -9,6 +9,7 @@ import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
 import Countdown from './components/countdown';
+import EventsSection from './components/Infinitecarousel';
 
 // Memoized CountdownBox to prevent unnecessary re-renders
 // const CountdownBox = memo(({ value, label }) => (
@@ -100,6 +101,11 @@ const Home = () => {
     <main className="relative">
       <section id="hero" className="relative z-40">
         <Hero timeLeft={timeLeft} Countdown={Countdown} />
+      </section>
+
+      {/* Events Carousel Section */}
+      <section id="about" className="relative z-40">
+        <EventsSection />
       </section>
 
       {/* About Section */}
