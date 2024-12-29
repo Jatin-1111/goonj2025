@@ -10,6 +10,7 @@ import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
 import Countdown from './components/countdown';
 import EventsSection from './components/Infinitecarousel';
+import GalleryParallax, { HeroParallax } from './components/gallery2';
 
 // Memoized CountdownBox to prevent unnecessary re-renders
 // const CountdownBox = memo(({ value, label }) => (
