@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Clock, MapPin } from 'lucide-react';
 
 const Timeline = () => {
   const events = [
@@ -119,7 +119,7 @@ const Timeline = () => {
           }}
           transition={{
             duration: 10,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             repeatType: "reverse"
           }}
         />
@@ -237,7 +237,7 @@ const Timeline = () => {
           }}
           transition={{
             duration: 4,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
           }}
         />
       </div>
@@ -250,7 +250,7 @@ const Timeline = () => {
           }}
           transition={{
             duration: 4,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             delay: 2,
           }}
         />

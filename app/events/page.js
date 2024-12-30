@@ -1,19 +1,20 @@
 "use client"
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, MapPin, Clock, Users, Music, Code, Mic, Gamepad, Trophy, InfoIcon } from 'lucide-react';
+import { Calendar, MapPin, Clock, Users, Music, Code, Gamepad, Trophy, InfoIcon } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Separator } from '@/components/ui/separator';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const EventsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    //const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const events = [
         {
@@ -192,7 +193,7 @@ const EventsPage = () => {
                     }}
                     transition={{
                         duration: 4,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         ease: "easeInOut"
                     }}
                 />
@@ -204,7 +205,7 @@ const EventsPage = () => {
                     }}
                     transition={{
                         duration: 4,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         ease: "easeInOut",
                         delay: 2
                     }}
@@ -261,9 +262,10 @@ const EventsPage = () => {
                             >
                                 <Card className="bg-[#1A0F1F]/50 backdrop-blur-sm h-full border-orange-500/20 hover:bg-[#2D1810]/70 transition-colors">
                                     <AspectRatio ratio={16 / 9} className="bg-[#0A0A0F]">
-                                        <img
+                                        <Image
                                             src={event.image}
                                             alt={event.title}
+                                            fill
                                             className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                                         />
                                     </AspectRatio>
@@ -349,7 +351,8 @@ const EventsPage = () => {
                                                                 {/* Image Section with Hover Effect */}
                                                                 <div className="relative group">
                                                                     <AspectRatio ratio={16 / 9} className="bg-[#0A0A0F] rounded-xl overflow-hidden border border-gray-800 shadow-lg">
-                                                                        <img
+                                                                        <Image
+                                                                            fill
                                                                             src={event.image}
                                                                             alt={event.title}
                                                                             className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
@@ -490,7 +493,7 @@ const EventsPage = () => {
                                                             Register Now
                                                             <motion.div
                                                                 animate={{ x: [0, 4, 0] }}
-                                                                transition={{ repeat: Infinity, duration: 1.5 }}
+                                                                transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.5 }}
                                                             >
                                                                 →
                                                             </motion.div>

@@ -48,7 +48,7 @@ const ContactPage = () => {
           }}
           transition={{
             duration: 10,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
             repeatType: "reverse"
           }}
         />
@@ -221,7 +221,7 @@ const ContactPage = () => {
             }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
             }}
           />
         </div>
@@ -234,7 +234,7 @@ const ContactPage = () => {
             }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               delay: 1,
             }}
           />

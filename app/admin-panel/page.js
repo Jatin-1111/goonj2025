@@ -6,11 +6,20 @@ import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { db } from '@/app/firebase';
-import { collection, query, getDocs, orderBy, where, Timestamp, deleteDoc, doc } from 'firebase/firestore';
+import { collection, query, getDocs, orderBy, deleteDoc, doc } from 'firebase/firestore';
 import {
     Download, Filter, Users, CheckCircle2, Clock,
     AlertCircle, Trash2
@@ -601,7 +610,7 @@ const AdminPanel = () => {
                                 <div className="absolute inset-0 bg-gray-900/70 backdrop-blur-sm flex items-center justify-center">
                                     <motion.div
                                         animate={{ rotate: 360 }}
-                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                        transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                                         className="w-8 h-8 border-2 border-orange-300 border-t-transparent rounded-full"
                                     />
                                 </div>

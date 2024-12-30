@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect} from 'react';
 import Hero from './components/Hero';
 import Gallery from './components/gallery';
 import FAQ from './components/faqs';
@@ -8,7 +8,7 @@ import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
 import Countdown from './components/countdown';
 import EventsSection from './components/Infinitecarousel';
-import GalleryParallax, { HeroParallax } from './components/gallery2';
+//import GalleryParallax, { HeroParallax } from './components/gallery2';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -73,7 +73,7 @@ const Home = () => {
   return (
     <main className="relative">
       <section id="hero" className="relative z-40">
-        <Hero timeLeft={timeLeft} Countdown={Countdown} />
+        <Hero timeLeft={timeLeft}/>
       </section>
 
       {/* Events Carousel Section */}

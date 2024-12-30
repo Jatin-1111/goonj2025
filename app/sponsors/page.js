@@ -1,11 +1,12 @@
 "use client"
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { motion} from 'framer-motion';
+import { Card,CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Diamond, Award, Medal, ExternalLink, ArrowRight, Sparkles, Globe, Network, Zap } from 'lucide-react';
+//import { Button } from '@/components/ui/button';
+import { Diamond, Award, Medal} from 'lucide-react';
 import EnhancedCTA from '../components/sponsercta';
+import Image from 'next/image';
 
 
 const SponsorPage = () => {
@@ -118,7 +119,7 @@ const SponsorPage = () => {
                             }}
                             transition={{
                                 duration: 3,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 repeatType: "reverse"
                             }}
                         />
@@ -130,7 +131,7 @@ const SponsorPage = () => {
                             }}
                             transition={{
                                 duration: 3,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 repeatType: "reverse"
                             }}
                         />
@@ -147,7 +148,7 @@ const SponsorPage = () => {
 
                 {/* Enhanced Sponsors Grid */}
                 <div className="space-y-16">
-                    {sponsorTiers.map((tier, index) => (
+                    {sponsorTiers.map((tier) => (
                         <motion.div
                             key={tier.title}
                             variants={itemVariants}
@@ -168,7 +169,7 @@ const SponsorPage = () => {
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                                {tier.sponsors.map((sponsor, sIndex) => (
+                                {tier.sponsors.map((sponsor) => (
                                     <motion.div
                                         key={sponsor.name}
                                         variants={itemVariants}
@@ -179,7 +180,8 @@ const SponsorPage = () => {
                                             <CardContent className="p-8">
                                                 <div className="flex flex-col items-center text-center">
                                                     <div className="mb-6 relative">
-                                                        <img
+                                                        <Image
+                                                            fill
                                                             src={sponsor.logo}
                                                             alt={`${sponsor.name} logo`}
                                                             className="rounded-lg transition-all duration-300 group-hover:brightness-110"
@@ -188,7 +190,7 @@ const SponsorPage = () => {
                                                             className={`absolute inset-0 bg-gradient-to-r ${tier.color} rounded-lg opacity-0 group-hover:opacity-20`}
                                                             initial={false}
                                                             animate={hoveredTier === tier.title ? { scale: [1, 1.02] } : { scale: 1 }}
-                                                            transition={{ duration: 0.5, repeat: hoveredTier === tier.title ? Infinity : 0, repeatType: "reverse" }}
+                                                            transition={{ duration: 0.5, repeat: hoveredTier === tier.title ? Number.POSITIVE_INFINITY : 0, repeatType: "reverse" }}
                                                         />
                                                     </div>
                                                     <h3 className="text-2xl font-bold text-gray-200 mb-3">

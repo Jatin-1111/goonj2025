@@ -1,10 +1,10 @@
 import Image from 'next/image';
 import React from 'react';
 import { motion } from 'framer-motion';
-import EventsSection from './Infinitecarousel';
+//import EventsSection from './Infinitecarousel';
 import Countdown from './countdown';
 
-const Hero = ({ timeLeft, CountdownBox }) => {
+const Hero = ({ timeLeft }) => {
     return (
         <main className="relative bg-[#0D0221] min-h-screen">
             {/* SVG Definitions - Enhanced with more patterns */}
@@ -108,7 +108,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                             }}
                             transition={{
                                 duration: 6,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "easeInOut"
                             }}
                         />
@@ -123,7 +123,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                             }}
                             transition={{
                                 duration: 8,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "easeInOut"
                             }}
                         />
@@ -138,7 +138,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                             }}
                             transition={{
                                 duration: 10,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "easeInOut"
                             }}
                         />
@@ -154,7 +154,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                             }}
                             transition={{
                                 duration: 40,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "linear"
                             }}
                         >
@@ -178,7 +178,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                             }}
                             transition={{
                                 duration: 8,
-                                repeat: Infinity,
+                                repeat: Number.POSITIVE_INFINITY,
                                 ease: "easeInOut"
                             }}
                         >
@@ -208,7 +208,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                                 }}
                                 transition={{
                                     duration: 4,
-                                    repeat: Infinity,
+                                    repeat: Number.POSITIVE_INFINITY,
                                     delay: i * 0.7
                                 }}
                             />
@@ -226,7 +226,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                         }}
                         transition={{
                             duration: 12,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: "reverse"
                         }}
                     />
@@ -266,7 +266,7 @@ const Hero = ({ timeLeft, CountdownBox }) => {
                                 }}
                                 transition={{
                                     duration: 4,
-                                    repeat: Infinity,
+                                    repeat: Number.POSITIVE_INFINITY,
                                     repeatType: "reverse",
                                     ease: "easeInOut"
                                 }}

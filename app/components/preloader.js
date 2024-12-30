@@ -58,7 +58,7 @@ const Preloader = () => {
             animate={{ rotate: 360 }}
             transition={{
               duration: 30,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "linear"
             }}
           >
@@ -80,7 +80,7 @@ const Preloader = () => {
                 }}
                 transition={{
                   duration: 2,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   delay: i * 0.2
                 }}
               />
@@ -111,7 +111,7 @@ const Preloader = () => {
               }}
               transition={{
                 duration: 20,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "linear"
               }}
             >
@@ -159,7 +159,7 @@ const Preloader = () => {
               animate={{ rotate: 360 }}
               transition={{
                 duration: 20,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "linear"
               }}
             >
@@ -209,7 +209,7 @@ const Preloader = () => {
             }}
             transition={{
               duration: 4,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "easeInOut"
             }}
           >
@@ -226,7 +226,7 @@ const Preloader = () => {
                     }}
                     transition={{
                       duration: 2,
-                      repeat: Infinity,
+                      repeat: Number.POSITIVE_INFINITY,
                       delay: i * 0.2
                     }}
                   />
@@ -254,7 +254,7 @@ const Preloader = () => {
             animate={{ width: "100%" }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "linear"
             }}
           />
@@ -270,7 +270,7 @@ const Preloader = () => {
               }}
               transition={{
                 duration: 1.5,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 delay: i * 0.3
               }}
             />
@@ -284,7 +284,7 @@ const Preloader = () => {
             animate={{ opacity: [0.4, 1, 0.4] }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               ease: "easeInOut"
             }}
           >

@@ -30,7 +30,7 @@ const EnhancedCTA = () => {
               }}
               transition={{
                 duration: 8,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "linear"
               }}
             />
@@ -42,7 +42,7 @@ const EnhancedCTA = () => {
               }}
               transition={{
                 duration: 8,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "linear",
                 delay: 4
               }}
@@ -60,7 +60,7 @@ const EnhancedCTA = () => {
                 }}
                 transition={{
                   duration: 4,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   ease: "easeInOut"
                 }}
               >
@@ -75,7 +75,7 @@ const EnhancedCTA = () => {
                 }}
                 transition={{
                   duration: 4,
-                  repeat: Infinity,
+                  repeat: Number.POSITIVE_INFINITY,
                   ease: "easeInOut",
                   delay: 2
                 }}
@@ -101,7 +101,7 @@ const EnhancedCTA = () => {
                     }}
                     transition={{
                       duration: 2,
-                      repeat: Infinity,
+                      repeat: Number.POSITIVE_INFINITY,
                       ease: "easeInOut"
                     }}
                     className="w-full h-full bg-orange-500/20 rounded-full blur-md"
@@ -131,7 +131,7 @@ const EnhancedCTA = () => {
                     }}
                     transition={{
                       duration: 3,
-                      repeat: Infinity,
+                      repeat: Number.POSITIVE_INFINITY,
                       ease: "linear",
                     }}
                   />

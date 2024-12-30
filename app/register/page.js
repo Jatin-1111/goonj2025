@@ -15,6 +15,7 @@ import { db } from '@/app/firebase';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { QrCode, Copy, CheckCircle } from 'lucide-react';
 import { toast } from 'react-toastify';
+import Image from 'next/image';
 
 const RegistrationPage = () => {
     const [formData, setFormData] = useState({
@@ -304,7 +305,8 @@ const RegistrationPage = () => {
                     </DialogHeader>
                     <div className="space-y-6 p-4">
                         <div className="p-4 bg-white rounded-lg mx-auto max-w-[280px] aspect-square">
-                            <img
+                            <Image
+                                fill
                                 src="/qr-code.png" // Add your QR code image
                                 alt="Payment QR Code"
                                 className="w-full h-full object-contain"
@@ -379,7 +381,7 @@ const RegistrationPage = () => {
                                 }}
                                 transition={{
                                     duration: 3,
-                                    repeat: Infinity,
+                                    repeat: Number.POSITIVE_INFINITY,
                                     repeatType: "reverse"
                                 }}
                             />
@@ -644,7 +646,7 @@ const RegistrationPage = () => {
                                 {isSubmitting ? (
                                     <motion.div
                                         animate={{ rotate: 360 }}
-                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                        transition={{ duration: 1, repeat: Number.POSITIVE_INFINITY, ease: "linear" }}
                                         className="w-5 h-5 border-2 border-white border-t-transparent rounded-full mx-auto"
                                     />
                                 ) : (
@@ -728,7 +730,7 @@ const RegistrationPage = () => {
                         }}
                         transition={{
                             duration: 3,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: "reverse"
                         }}
                     >
@@ -790,7 +792,7 @@ const RegistrationPage = () => {
                         }}
                         transition={{
                             duration: 3,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: "reverse",
                             delay: 1
                         }}

@@ -58,25 +58,25 @@ const Footer = () => {
   );
 
   // Wave scale animation based on scroll
-  const waveScaleY = useSpring(
-    useTransform(scrollYProgress, [0.7, 0.9], [0.5, 1]),
-    { stiffness: 100, damping: 30 }
-  );
+  //const waveScaleY = useSpring(
+  //  useTransform(scrollYProgress, [0.7, 0.9], [0.5, 1]),
+  //  { stiffness: 100, damping: 30 }
+  //);
 
   const contentY = useSpring(
     useTransform(scrollYProgress, [0.7, 0.9], [30, 0]),
     { stiffness: 100, damping: 30 }
   );
 
-  const contentScale = useSpring(
-    useTransform(scrollYProgress, [0.7, 0.9], [0.95, 1]),
-    { stiffness: 100, damping: 30 }
-  );
+  //const contentScale = useSpring(
+  //  useTransform(scrollYProgress, [0.7, 0.9], [0.95, 1]),
+  //  { stiffness: 100, damping: 30 }
+  //);
 
-  const contentOpacity = useSpring(
-    useTransform(scrollYProgress, [0.7, 0.9], [0.5, 1]),
-    { stiffness: 100, damping: 30 }
-  );
+  //const contentOpacity = useSpring(
+  //  useTransform(scrollYProgress, [0.7, 0.9], [0.5, 1]),
+  //  { stiffness: 100, damping: 30 }
+  //);
 
   return (
     <motion.footer
@@ -91,7 +91,7 @@ const Footer = () => {
         <motion.div
           className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500"
           animate={{ opacity: [0.5, 1, 0.5] }}
-          transition={{ duration: 3, repeat: Infinity }}
+          transition={{ duration: 3, repeat: Number.POSITIVE_INFINITY }}
         />
         <div className="absolute top-2 left-0 w-full h-px bg-gradient-to-r from-orange-300/20 via-green-300/20 to-orange-300/20" />
 
@@ -138,8 +138,8 @@ const Footer = () => {
                 x: [-20, 0, -20]
               }}
               transition={{
-                pathLength: { duration: 2, repeat: Infinity },
-                x: { duration: 8, repeat: Infinity, ease: "easeInOut" }
+                pathLength: { duration: 2, repeat: Number.POSITIVE_INFINITY },
+                x: { duration: 8, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
               }}
             />
 
@@ -157,8 +157,8 @@ const Footer = () => {
                 x: [0, -20, 0]
               }}
               transition={{
-                pathLength: { duration: 2.5, repeat: Infinity },
-                x: { duration: 10, repeat: Infinity, ease: "easeInOut" }
+                pathLength: { duration: 2.5, repeat: Number.POSITIVE_INFINITY },
+                x: { duration: 10, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
               }}
             />
 
@@ -176,8 +176,8 @@ const Footer = () => {
                 x: [-10, 10, -10]
               }}
               transition={{
-                pathLength: { duration: 3, repeat: Infinity },
-                x: { duration: 6, repeat: Infinity, ease: "easeInOut" }
+                pathLength: { duration: 3, repeat: Number.POSITIVE_INFINITY },
+                x: { duration: 6, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }
               }}
             />
           </g>
@@ -228,7 +228,7 @@ const Footer = () => {
               }}
               transition={{
                 duration: 2,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "easeInOut"
               }}
             />
@@ -247,7 +247,7 @@ const Footer = () => {
               }}
               transition={{
                 duration: 2,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "easeInOut",
                 delay: 1
               }}
@@ -266,7 +266,7 @@ const Footer = () => {
             animate={{ pathLength: 1 }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               repeatType: "reverse",
               ease: "easeInOut"
             }}
@@ -282,7 +282,7 @@ const Footer = () => {
             animate={{ pathLength: 1 }}
             transition={{
               duration: 2,
-              repeat: Infinity,
+              repeat: Number.POSITIVE_INFINITY,
               repeatType: "reverse",
               ease: "easeInOut",
               delay: 1
@@ -297,7 +297,7 @@ const Footer = () => {
             scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2],
           }}
-          transition={{ duration: 4, repeat: Infinity }}
+          transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY }}
         />
         <motion.div
           className="absolute bottom-0 right-0 w-32 h-32 border-r-2 border-b-2 border-green-500/20"
@@ -305,7 +305,7 @@ const Footer = () => {
             scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2],
           }}
-          transition={{ duration: 4, repeat: Infinity, delay: 2 }}
+          transition={{ duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 2 }}
         />
       </div>
 

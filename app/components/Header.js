@@ -68,7 +68,7 @@ const Header = () => {
                 },
                 filter: {
                     duration: 1.5,
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse",
                     ease: "easeInOut"
                 }
@@ -151,7 +151,7 @@ const Header = () => {
                 }}
                 transition={{
                     duration: 3,
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse",
                 }}
             />
@@ -209,7 +209,7 @@ const Header = () => {
                         }}
                         transition={{
                             duration: 2,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut"
                         }}
                     />
@@ -229,7 +229,7 @@ const Header = () => {
                         }}
                         transition={{
                             duration: 2,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             ease: "easeInOut",
                             delay: 1
                         }}
@@ -245,7 +245,7 @@ const Header = () => {
                         animate={{ pathLength: 1 }}
                         transition={{
                             duration: 2,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: "reverse",
                             ease: "easeInOut"
                         }}
@@ -260,7 +260,7 @@ const Header = () => {
                         animate={{ pathLength: 1 }}
                         transition={{
                             duration: 2,
-                            repeat: Infinity,
+                            repeat: Number.POSITIVE_INFINITY,
                             repeatType: "reverse",
                             ease: "easeInOut",
                             delay: 1
@@ -277,7 +277,7 @@ const Header = () => {
                     }}
                     transition={{
                         duration: 2,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                     }}
                 />
                 <motion.div
@@ -288,14 +288,14 @@ const Header = () => {
                     }}
                     transition={{
                         duration: 2,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         delay: 1,
                     }}
                 />
             </div>
 
             <nav className="relative flex items-center justify-between px-4 sm:px-6 lg:px-8 h-full max-w-7xl mx-auto">
-                <div className="hidden md:block">
+                <div className="hidden lg:block">
                     <Link href="https://uiet.puchd.ac.in/">
                         <Logo
                             src="/UIET_logo.png"
@@ -327,7 +327,7 @@ const Header = () => {
                     <NavItems items={secondaryNavItems} />
                 </motion.ul>
 
-                <div className="hidden md:block">
+                <div className="hidden lg:block">
                     <Link href="https://puchd.ac.in/">
                         <Logo
                             src="/pu-logo.png"

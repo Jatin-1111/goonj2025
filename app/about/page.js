@@ -89,7 +89,7 @@ const AboutUs = () => {
                 }}
                 transition={{
                     duration: 10,
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse"
                 }}
             />
@@ -159,7 +159,7 @@ const AboutUs = () => {
                                                 }}
                                                 transition={{
                                                     duration: 8,
-                                                    repeat: Infinity,
+                                                    repeat: Number.POSITIVE_INFINITY,
                                                     repeatType: "reverse",
                                                 }}
                                             />

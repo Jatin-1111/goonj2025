@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useAnimation, useAnimationControls } from 'framer-motion';
+import { motion, useAnimationControls } from 'framer-motion';
 import Image from 'next/image';
 
 const CulturalBackground = () => {
@@ -66,7 +66,7 @@ const CulturalBackground = () => {
                 }}
                 transition={{
                     duration: 5,
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse"
                 }}
             />
@@ -81,7 +81,7 @@ const CulturalBackground = () => {
                     }}
                     transition={{
                         duration: 3,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         repeatType: "reverse"
                     }}
                 >
@@ -103,7 +103,7 @@ const CulturalBackground = () => {
                     }}
                     transition={{
                         duration: 3,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         repeatType: "reverse",
                         delay: 1.5
                     }}
@@ -124,7 +124,7 @@ const CulturalBackground = () => {
                     }}
                     transition={{
                         duration: 6,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         repeatType: "reverse"
                     }}
                 >
@@ -146,7 +146,7 @@ const CulturalBackground = () => {
                     }}
                     transition={{
                         duration: 6,
-                        repeat: Infinity,
+                        repeat: Number.POSITIVE_INFINITY,
                         repeatType: "reverse",
                         delay: 3
                     }}
@@ -171,7 +171,7 @@ const CulturalBackground = () => {
                     rotate: {
                         duration: 20,
                     },
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse"
                 }}
             >
@@ -204,7 +204,7 @@ const CulturalBackground = () => {
                     rotate: {
                         duration: 20,
                     },
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse",
                     delay: 4
                 }}
@@ -234,7 +234,7 @@ const CulturalBackground = () => {
                 }}
                 transition={{
                     duration: 10,
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: "reverse"
                 }}
             >
@@ -295,7 +295,7 @@ const EventsSection = () => {
                 transition: {
                     duration: 30,
                     ease: 'linear',
-                    repeat: Infinity,
+                    repeat: Number.POSITIVE_INFINITY,
                     repeatType: 'loop',
                     repeatDelay: 0,
                     from: -containerWidth,
@@ -317,7 +317,7 @@ const EventsSection = () => {
             transition: {
                 duration: 30,
                 ease: 'linear',
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 repeatType: 'loop',
                 repeatDelay: 0,
             }
@@ -359,7 +359,7 @@ const EventsSection = () => {
                     initial={{ x: -containerWidth }}
                 >
                     <motion.div
-                        className="flex gap-6 md:gap-8"
+                        className="flex gap-6 md:gap-8 overflow-y-scroll"
                     >
                         {duplicatedEvents.map((event, index) => (
                             <motion.div
@@ -389,7 +389,7 @@ const EventsSection = () => {
                                             }}
                                             transition={{
                                                 duration: 2,
-                                                repeat: Infinity,
+                                                repeat: Number.POSITIVE_INFINITY,
                                                 repeatType: "reverse"
                                             }}
                                         />

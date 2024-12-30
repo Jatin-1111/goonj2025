@@ -1,10 +1,10 @@
 "use client"
 import React, { useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
-import { ChevronDown, MessageCircleQuestion, Mail, Search, Filter, ArrowUpCircle } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useTransform} from 'framer-motion';
+import { ChevronDown, MessageCircleQuestion, Mail, Search, ArrowUpCircle } from 'lucide-react';
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+//import { Button } from "@/components/ui/button";
+//import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 
 const FAQ = () => {
@@ -79,11 +79,11 @@ const FAQ = () => {
     return matchesSearch && matchesCategory;
   });
 
-  const handleMouseMove = (event) => {
-    const rect = event.currentTarget.getBoundingClientRect();
-    mouseX.set(event.clientX - rect.left);
-    mouseY.set(event.clientY - rect.top);
-  };
+  //const handleMouseMove = (event) => {
+  //  const rect = event.currentTarget.getBoundingClientRect();
+  //  mouseX.set(event.clientX - rect.left);
+  //  mouseY.set(event.clientY - rect.top);
+  //};
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -240,11 +240,11 @@ const FAQ = () => {
         className="absolute inset-0 pointer-events-none"
         animate={{
           background: [
-            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)}, ${parseInt("#D6A531".slice(3, 5), 16)}, ${parseInt("#D6A531".slice(5, 7), 16)}, 0.1), transparent 80%)`,
-            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#CC704B".slice(1, 3), 16)}, ${parseInt("#CC704B".slice(3, 5), 16)}, ${parseInt("#CC704B".slice(5, 7), 16)}, 0.1), transparent 80%)`,
+            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#D6A531".slice(1, 3), 16)}, ${Number.parseInt("#D6A531".slice(3, 5), 16)}, ${Number.parseInt("#D6A531".slice(5, 7), 16)}, 0.1), transparent 80%)`,
+            `radial-gradient(600px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#CC704B".slice(1, 3), 16)}, ${Number.parseInt("#CC704B".slice(3, 5), 16)}, ${Number.parseInt("#CC704B".slice(5, 7), 16)}, 0.1), transparent 80%)`,
           ]
         }}
-        transition={{ duration: 10, repeat: Infinity }}
+        transition={{ duration: 10, repeat: Number.POSITIVE_INFINITY }}
         style={{
           '--mouse-x': useTransform(mouseX, v => `${v}px`),
           '--mouse-y': useTransform(mouseY, v => `${v}px`),
@@ -268,7 +268,7 @@ const FAQ = () => {
               }}
               transition={{
                 duration: 4,
-                repeat: Infinity,
+                repeat: Number.POSITIVE_INFINITY,
                 ease: "easeInOut"
               }}
             >
@@ -415,9 +415,9 @@ const FAQ = () => {
             opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 4, repeat: Infinity },
-            opacity: { duration: 4, repeat: Infinity },
+            rotate: { duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+            scale: { duration: 4, repeat: Number.POSITIVE_INFINITY },
+            opacity: { duration: 4, repeat: Number.POSITIVE_INFINITY },
           }}
         />
       </div>
@@ -430,9 +430,9 @@ const FAQ = () => {
             opacity: [0.2, 0.4, 0.2],
           }}
           transition={{
-            rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-            scale: { duration: 4, repeat: Infinity, delay: 2 },
-            opacity: { duration: 4, repeat: Infinity, delay: 2 },
+            rotate: { duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+            scale: { duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 2 },
+            opacity: { duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 2 },
           }}
         />
       </div>
@@ -442,11 +442,11 @@ const FAQ = () => {
         className="fixed inset-0 pointer-events-none z-50"
         animate={{
           background: [
-            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#A41E34".slice(1, 3), 16)},${parseInt("#A41E34".slice(3, 5), 16)},${parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`,
-            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)},${parseInt("#D6A531".slice(3, 5), 16)},${parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`
+            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#A41E34".slice(1, 3), 16)},${Number.parseInt("#A41E34".slice(3, 5), 16)},${Number.parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`,
+            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#D6A531".slice(1, 3), 16)},${Number.parseInt("#D6A531".slice(3, 5), 16)},${Number.parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`
           ]
         }}
-        transition={{ duration: 2, repeat: Infinity }}
+        transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
         style={{
           '--mouse-x': useTransform(mouseX, v => `${v}px`),
           '--mouse-y': useTransform(mouseY, v => `${v}px`)
@@ -564,7 +564,7 @@ export default FAQ;
 //             }}
 //             transition={{
 //               duration: 4,
-//               repeat: Infinity,
+//               repeat: Number.POSITIVE_INFINITY,
 //               ease: "easeInOut"
 //             }}
 //           >
@@ -712,11 +712,11 @@ export default FAQ;
 //       className="fixed inset-0 pointer-events-none z-50"
 //       animate={{
 //         background: [
-//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#D6A531".slice(1, 3), 16)},${parseInt("#D6A531".slice(3, 5), 16)},${parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`,
-//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${parseInt("#A41E34".slice(1, 3), 16)},${parseInt("#A41E34".slice(3, 5), 16)},${parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`
+//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#D6A531".slice(1, 3), 16)},${Number.parseInt("#D6A531".slice(3, 5), 16)},${Number.parseInt("#D6A531".slice(5, 7), 16)},0.15), transparent)`,
+//           `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(${Number.parseInt("#A41E34".slice(1, 3), 16)},${Number.parseInt("#A41E34".slice(3, 5), 16)},${Number.parseInt("#A41E34".slice(5, 7), 16)},0.15), transparent)`
 //         ]
 //       }}
-//       transition={{ duration: 2, repeat: Infinity }}
+//       transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
 //       style={{
 //         '--mouse-x': useTransform(mouseX, v => `${v}px`),
 //         '--mouse-y': useTransform(mouseY, v => `${v}px`)
@@ -733,9 +733,9 @@ export default FAQ;
 //           opacity: [0.1, 0.2, 0.1],
 //         }}
 //         transition={{
-//           rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-//           scale: { duration: 4, repeat: Infinity },
-//           opacity: { duration: 4, repeat: Infinity },
+//           rotate: { duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+//           scale: { duration: 4, repeat: Number.POSITIVE_INFINITY },
+//           opacity: { duration: 4, repeat: Number.POSITIVE_INFINITY },
 //         }}
 //       />
 //     </div>
@@ -748,9 +748,9 @@ export default FAQ;
 //           opacity: [0.1, 0.2, 0.1],
 //         }}
 //         transition={{
-//           rotate: { duration: 20, repeat: Infinity, ease: "linear" },
-//           scale: { duration: 4, repeat: Infinity, delay: 2 },
-//           opacity: { duration: 4, repeat: Infinity, delay: 2 },
+//           rotate: { duration: 20, repeat: Number.POSITIVE_INFINITY, ease: "linear" },
+//           scale: { duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 2 },
+//           opacity: { duration: 4, repeat: Number.POSITIVE_INFINITY, delay: 2 },
 //         }}
 //       />
 //     </div>
@@ -765,7 +765,7 @@ export default FAQ;
 //         }}
 //         transition={{
 //           duration: 6,
-//           repeat: Infinity,
+//           repeat: Number.POSITIVE_INFINITY,
 //           ease: "easeInOut"
 //         }}
 //       />
@@ -780,7 +780,7 @@ export default FAQ;
 //         }}
 //         transition={{
 //           duration: 4,
-//           repeat: Infinity,
+//           repeat: Number.POSITIVE_INFINITY,
 //           ease: "easeInOut"
 //         }}
 //       >
@@ -801,7 +801,7 @@ export default FAQ;
 //         }}
 //         transition={{
 //           duration: 4,
-//           repeat: Infinity,
+//           repeat: Number.POSITIVE_INFINITY,
 //           ease: "easeInOut"
 //         }}
 //       >
@@ -831,7 +831,7 @@ export default FAQ;
 //           }}
 //           transition={{
 //             duration: 3 + Math.random() * 2,
-//             repeat: Infinity,
+//             repeat: Number.POSITIVE_INFINITY,
 //             delay: Math.random() * 2,
 //           }}
 //         />
@@ -855,7 +855,7 @@ export default FAQ;
 //         }}
 //         transition={{
 //           duration: 8,
-//           repeat: Infinity,
+//           repeat: Number.POSITIVE_INFINITY,
 //           ease: "easeInOut"
 //         }}
 //       />

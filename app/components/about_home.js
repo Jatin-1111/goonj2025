@@ -15,7 +15,7 @@ const AboutSection = () => {
           }}
           transition={{
             duration: 8,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
           }}
         />
         <motion.div
@@ -26,7 +26,7 @@ const AboutSection = () => {
           }}
           transition={{
             duration: 8,
-            repeat: Infinity,
+            repeat: Number.POSITIVE_INFINITY,
           }}
         />
       </div>
