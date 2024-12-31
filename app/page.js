@@ -8,7 +8,6 @@ import AboutSection from './components/about_home';
 import EventTimeline from './components/glimpse-timeline';
 import Countdown from './components/countdown';
 import EventsSection from './components/Infinitecarousel';
-import GalleryParallax, { HeroParallax } from './components/gallery2';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -66,9 +65,9 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
-  if (loading) {
-    return <Preloader />;
-  }
+  // if (loading) {
+  //   return <Preloader />;
+  // }
 
   return (
     <main className="relative">
@@ -90,6 +89,9 @@ const Home = () => {
       <section id="gallery" className="relative z-40">
         <Gallery />
       </section>
+      {/* <section id="gallery" className="relative z-40">
+        <MidIndiaSection />
+      </section> */}
 
       {/* Glimpse Timeline Section */}
       <section id="timeline" className="relative z-40">

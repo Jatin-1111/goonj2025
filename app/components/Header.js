@@ -104,12 +104,12 @@ const Header = () => {
         hidden: { y: "-100%", opacity: 0 }
     }
 
-    const NavItems = ({ items, className = "", itemClassName = "" }) => (
+    const NavItems = ({ items }) => (
         <>
             {items.map((item, index) => (
                 <Link href={item.href} key={item.label}>
                     <motion.li
-                        className={`cursor-pointer relative ${itemClassName} text-base sm:text-lg font-sanskrit`}
+                        className={`cursor-pointer relative text-base sm:text-lg font-sanskrit`}
                         variants={navItemVariants}
                         whileHover="hover"
                         custom={index}
