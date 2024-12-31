@@ -11,7 +11,7 @@ import EventsSection from './components/Infinitecarousel';
 //import GalleryParallax, { HeroParallax } from './components/gallery2';
 
 const Home = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -21,12 +21,12 @@ const Home = () => {
     weeks: 0
   });
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setLoading(false);
-    }, 2000);
-    return () => clearTimeout(timer);
-  }, []);
+  //useEffect(() => {
+  //  const timer = setTimeout(() => {
+  //    setLoading(false);
+  //  }, 2000);
+  //  return () => clearTimeout(timer);
+  //}, []);
 
   useEffect(() => {
     const targetDate = new Date('2025-02-19T00:00:00');

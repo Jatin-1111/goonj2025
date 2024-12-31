@@ -349,7 +349,7 @@ const EventsSection = () => {
 
             <div
                 ref={containerRef}
-                className="w-full py-4 mx-auto overflow-hidden relative z-10"
+                className="w-full py-4 mx-auto overflow-scroll relative z-10"
             >
                 <motion.div
                     className="carousel-container relative"
@@ -359,7 +359,7 @@ const EventsSection = () => {
                     initial={{ x: -containerWidth }}
                 >
                     <motion.div
-                        className="flex gap-6 md:gap-8 overflow-y-scroll"
+                        className="flex gap-6 md:gap-8"
                     >
                         {duplicatedEvents.map((event, index) => (
                             <motion.div
