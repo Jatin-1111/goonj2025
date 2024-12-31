@@ -89,7 +89,7 @@ const TimelineEvent = ({
         viewport={{ once: true, margin: "-100px" }}
         className={`w-full p-4 md:p-6 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 
           hover:bg-white/10 transition-all duration-300 
-          ease-out hover:shadow-lg hover:shadow-cyan-500/10 ${isExpanded && "md:max-w-lg max-md:max-w-sm"}`}
+          ease-out hover:shadow-lg hover:shadow-cyan-500/10 ${isExpanded && "md:max-w-lg max-md:max-w-xs"}`}
       >
         <div className="mb-2">
           <div className="flex items-center space-x-4 group">
