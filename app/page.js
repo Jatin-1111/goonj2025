@@ -5,9 +5,9 @@ import Gallery from './components/gallery';
 import FAQ from './components/faqs';
 import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
-import EventTimeline from './components/glimpse-timeline';
 import Countdown from './components/countdown';
 import EventsSection from './components/Events-carousel';
+import GlimpseTimeline from './components/glimpse-timeline';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -92,7 +92,7 @@ const Home = () => {
 
       {/* Glimpse Timeline Section */}
       <section id="timeline" className="relative z-40">
-        <EventTimeline />
+        <GlimpseTimeline />
       </section>
 
       {/* FAQ Section */}

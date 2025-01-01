@@ -1,8 +1,8 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Calendar, Clock, MapPin } from 'lucide-react';
+import { Clock, MapPin } from 'lucide-react';
 
-const Timeline = () => {
+const EventTimeline = () => {
   const events = [
     {
       date: 'Day 1 - February 19, 2025',
@@ -141,7 +141,7 @@ const Timeline = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mt-4"/>
         </motion.div>
 
-        {/* Timeline Content */}
+        {/* EventTimeline Content */}
         <div className="space-y-12">
           {events.map((day, dayIndex) => (
             <motion.div
@@ -259,4 +259,4 @@ const Timeline = () => {
   );
 };
 
-export default Timeline;
+export default EventTimeline;
