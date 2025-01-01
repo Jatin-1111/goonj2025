@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Diamond, Award, Medal, ExternalLink, ArrowRight, Sparkles, Globe, Network, Zap } from 'lucide-react';
 import EnhancedCTA from '../components/sponsercta';
+import Image from 'next/image';
 
 
 const SponsorPage = () => {
@@ -179,9 +180,10 @@ const SponsorPage = () => {
                                             <CardContent className="p-8">
                                                 <div className="flex flex-col items-center text-center">
                                                     <div className="mb-6 relative">
-                                                        <img
+                                                        <Image
                                                             src={sponsor.logo}
                                                             alt={`${sponsor.name} logo`}
+                                                            fill
                                                             className="rounded-lg transition-all duration-300 group-hover:brightness-110"
                                                         />
                                                         <motion.div

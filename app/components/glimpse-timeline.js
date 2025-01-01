@@ -9,7 +9,7 @@ import {
   ChevronDown
 } from 'lucide-react';
 
-const TimelineEvent = ({ year, title, description, highlights, achievements, icon: Icon, position }) => {
+const TimelineEvent = ({title, description, highlights, achievements, icon: Icon, position }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const cardVariants = {
@@ -166,7 +166,7 @@ const TimelineEvent = ({ year, title, description, highlights, achievements, ico
   );
 };
 
-const EventTimeline = () => {
+const GlimpseTimeline = () => {
   const ref = useRef(null);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -357,4 +357,4 @@ const EventTimeline = () => {
   );
 };
 
-export default EventTimeline;
+export default GlimpseTimeline;
