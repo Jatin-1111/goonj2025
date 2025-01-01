@@ -37,44 +37,80 @@ const Header = () => {
             scale: 0,
             opacity: 0,
             y: 50,
-            rotateY: 180
+            rotateY: 180,
+            rotateX: -30
         },
         animate: {
             scale: 1,
             opacity: 1,
             y: 0,
             rotateY: 0,
+            rotateX: 0,
             transition: {
-                duration: 0.7,
+                duration: 1,
                 type: "spring",
-                stiffness: 200,
-                damping: 10,
-                mass: 0.8
+                stiffness: 150,
+                damping: 12,
+                mass: 1,
+                staggerChildren: 0.1,
+                delayChildren: 0.2
             }
         },
         hover: {
-            scale: 1.15,
-            rotateY: [0, 360],
+            scale: [1, 1.12, 1.08, 1.12],
+            rotateY: [0, 25, -25, 0],
+            rotateZ: [0, -5, 5, 0],
+            y: [0, -10, -8, -10],
             filter: [
-                "brightness(1) drop-shadow(0 0 0.5rem rgba(255,123,0,0.2))",
-                "brightness(1.3) drop-shadow(0 0 1rem rgba(0,128,0,0.5))",
-                "brightness(1) drop-shadow(0 0 0.5rem rgba(255,123,0,0.2))"
+                "brightness(1) drop-shadow(0 0 1rem rgba(255,123,0,0.3)) hue-rotate(0deg)",
+                "brightness(1.3) drop-shadow(0 0 2rem rgba(0,255,255,0.5)) hue-rotate(45deg)",
+                "brightness(1.2) drop-shadow(0 0 1.75rem rgba(255,215,0,0.4)) hue-rotate(-45deg)",
+                "brightness(1) drop-shadow(0 0 1rem rgba(255,123,0,0.3)) hue-rotate(0deg)"
             ],
             transition: {
-                duration: 1.5,
+                duration: 3,
+                times: [0, 0.33, 0.66, 1],
                 rotateY: {
-                    duration: 1.5,
-                    ease: "easeInOut"
+                    duration: 3,
+                    ease: [0.6, 0.01, -0.05, 0.95],
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                },
+                rotateZ: {
+                    duration: 2,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatType: "mirror"
+                },
+                y: {
+                    duration: 2,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatType: "mirror"
+                },
+                scale: {
+                    duration: 2,
+                    ease: "easeInOut",
+                    repeat: Infinity,
+                    repeatType: "mirror"
                 },
                 filter: {
-                    duration: 1.5,
+                    duration: 4,
                     repeat: Infinity,
                     repeatType: "reverse",
                     ease: "easeInOut"
                 }
             }
+        },
+        tap: {
+            scale: 0.95,
+            rotateY: [0, -15, 0],
+            transition: {
+                duration: 0.3,
+                ease: "easeOut"
+            }
         }
-    }
+    };
 
     const navItemVariants = {
         initial: { y: -20, opacity: 0 },
@@ -133,6 +169,7 @@ const Header = () => {
             initial="initial"
             animate="animate"
             whileHover="hover"
+            whileTap="tap"
             className={`relative ${className}`}
         >
             <Image
@@ -168,133 +205,6 @@ const Header = () => {
             transition={{ duration: 0.3 }}
         >
             <div className="absolute inset-0 bg-gradient-to-r from-[#2D1810]/50 via-transparent to-[#1F2937]/50" />
-
-            {/* Decorative elements with added SVG patterns */}
-            <div className="absolute inset-0 overflow-hidden">
-                {/* Existing gradient borders */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500" />
-                <div className="absolute top-1 left-0 w-full h-px bg-gradient-to-r from-orange-300/20 via-green-300/20 to-orange-300/20" />
-
-                {/* SVG Pattern Background */}
-                <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <pattern id="header-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,123,0,0.1)" strokeWidth="0.5" />
-                        </pattern>
-
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                            <feMerge>
-                                <feMergeNode in="coloredBlur" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
-
-                    {/* Background pattern */}
-                    <rect width="100%" height="100%" fill="url(#header-grid)" />
-
-                    {/* Decorative circles */}
-                    <motion.circle
-                        cx="30"
-                        cy="20"
-                        r="3"
-                        fill="none"
-                        stroke="rgba(255,123,0,0.3)"
-                        strokeWidth="1"
-                        filter="url(#glow)"
-                        initial={{ scale: 0 }}
-                        animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.3, 0.7, 0.3],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut"
-                        }}
-                    />
-
-                    <motion.circle
-                        cx="95%"
-                        cy="20"
-                        r="3"
-                        fill="none"
-                        stroke="rgba(34,197,94,0.3)"
-                        strokeWidth="1"
-                        filter="url(#glow)"
-                        initial={{ scale: 0 }}
-                        animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.3, 0.7, 0.3],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                            delay: 1
-                        }}
-                    />
-
-                    {/* Decorative lines */}
-                    <motion.path
-                        d="M 40 0 Q 60 20, 80 0"
-                        stroke="rgba(255,123,0,0.1)"
-                        strokeWidth="1"
-                        fill="none"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatType: "reverse",
-                            ease: "easeInOut"
-                        }}
-                    />
-
-                    <motion.path
-                        d="M 70% 0 Q 85% 20, 100% 0"
-                        stroke="rgba(34,197,94,0.1)"
-                        strokeWidth="1"
-                        fill="none"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{
-                            duration: 2,
-                            repeat: Infinity,
-                            repeatType: "reverse",
-                            ease: "easeInOut",
-                            delay: 1
-                        }}
-                    />
-                </svg>
-
-                {/* Keep existing animated dots */}
-                <motion.div
-                    className="absolute top-2 left-4 w-4 h-4 rounded-full bg-orange-500/30"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                    }}
-                />
-                <motion.div
-                    className="absolute top-2 right-4 w-4 h-4 rounded-full bg-green-500/30"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                        delay: 1,
-                    }}
-                />
-            </div>
-
             <nav className="relative flex items-center justify-between px-4 sm:px-6 lg:px-8 h-full max-w-7xl mx-auto">
                 <div className="hidden md:block">
                     <Link href="https://uiet.puchd.ac.in/">

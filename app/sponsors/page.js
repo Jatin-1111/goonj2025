@@ -1,12 +1,11 @@
 "use client"
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Diamond, Award, Medal, ExternalLink, ArrowRight, Sparkles, Globe, Network, Zap } from 'lucide-react';
-import EnhancedCTA from '../components/sponsercta';
+import { Diamond, Award, Medal } from 'lucide-react';
 import Image from 'next/image';
+import SponserCTA from '../components/sponsercta';
 
 
 const SponsorPage = () => {
@@ -213,7 +212,7 @@ const SponsorPage = () => {
                 </div>
 
                 {/* Enhanced CTA Section */}
-                <EnhancedCTA />
+                <SponserCTA />
             </motion.div>
         </div>
     );
