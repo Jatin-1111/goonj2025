@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import LenisProvider from "./components/providers/leni-provider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,7 +25,9 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-grow bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
-          {children}
+          <LenisProvider>
+            {children}
+          </LenisProvider>
         </main>
         <Footer />
       </body>

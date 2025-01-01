@@ -147,16 +147,16 @@ const EventsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0D0221] py-20 text-gray-200 overflow-x-hidden">
-            {/* Hero Section */}
+        <div className="min-h-screen bg-[#0D0221] text-gray-200 overflow-x-hidden">
+            {/* Hero Section - Adjusted padding to account for header */}
             <motion.div
-                className="relative bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] text-white py-12 sm:py-16 backdrop-blur-sm"
+                className="relative pt-24 sm:pt-28 bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] text-white pb-12 sm:pb-16"
                 initial="hidden"
                 animate="visible"
                 variants={heroVariants}
             >
                 <div className="absolute inset-0 bg-gradient-to-r from-orange-500/10 to-cyan-500/10" />
-                <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10">
+                <div className="max-w-5xl mx-auto px-4 sm:px-6 text-center relative z-10 mt-8 sm:mt-12">
                     <motion.h1
                         className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-cyan-400"
                         initial={{ opacity: 0, y: -20 }}
@@ -185,7 +185,7 @@ const EventsPage = () => {
 
                 {/* Decorative Elements */}
                 <motion.div
-                    className="absolute top-0 left-0 w-32 h-32 border-l-2 border-t-2 border-orange-500/20"
+                    className="absolute top-24 sm:top-28 left-0 w-32 h-32 border-l-2 border-t-2 border-orange-500/20"
                     animate={{
                         scale: [1, 1.1, 1],
                         opacity: [0.2, 0.4, 0.2],
@@ -212,15 +212,15 @@ const EventsPage = () => {
             </motion.div>
 
             {/* Main Content */}
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
                 {/* Category Tabs */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="overflow-x-auto"
+                    className="sticky top-24 sm:top-28 z-40 bg-[#0D0221]/80 backdrop-blur-sm py-2"
                 >
-                    <Tabs defaultValue="all" className="mb-8 sm:mb-12">
+                    <Tabs defaultValue="all" className="mb-6 sm:mb-8">
                         <TabsList className="flex justify-center w-full bg-[#1A0F1F]/50 backdrop-blur-sm">
                             {categories.map(category => (
                                 <TabsTrigger
@@ -239,7 +239,7 @@ const EventsPage = () => {
 
                 {/* Events Grid */}
                 <motion.div
-                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8 mt-4"
                     variants={containerVariants}
                     initial="hidden"
                     animate="visible"
@@ -511,7 +511,7 @@ const EventsPage = () => {
 
             {/* Floating Registration Button */}
             <motion.div
-                className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8"
+                className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-40"
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 1 }}
@@ -519,7 +519,7 @@ const EventsPage = () => {
                 <Link href="/register">
                     <Button
                         size="lg"
-                        className="hidden md:inline-flex bg-gradient-to-r from-orange-500/80 to-cyan-500/80 text-white shadow-lg hover:shadow-xl hover:from-orange-400/80 hover:to-cyan-400/80 transition-all relative z-50 backdrop-blur-sm"
+                        className="hidden md:inline-flex bg-gradient-to-r from-orange-500/80 to-cyan-500/80 text-white shadow-lg hover:shadow-xl hover:from-orange-400/80 hover:to-cyan-400/80 transition-all backdrop-blur-sm"
                     >
                         Register for Goonj 2025
                     </Button>

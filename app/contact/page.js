@@ -33,7 +33,7 @@ const ContactPage = () => {
   );
 
   return (
-    <main className="relative bg-[#0D0221] py-48 flex flex-col justify-center">
+    <main className="relative bg-[#0D0221] py-48 min-h-screen flex flex-col justify-center">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] opacity-50" />
       <div className="absolute inset-0">
