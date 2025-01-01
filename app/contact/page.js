@@ -33,7 +33,7 @@ const ContactPage = () => {
   );
 
   return (
-    <main className="relative bg-[#0D0221] min-h-screen py-44">
+    <main className="relative bg-[#0D0221] py-48 flex flex-col justify-center">
       {/* Background Elements */}
       <div className="absolute inset-0 bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] opacity-50" />
       <div className="absolute inset-0">
@@ -95,7 +95,7 @@ const ContactPage = () => {
                   placeholder="Your Name"
                   className={inputClasses}
                   value={formState.name}
-                  onChange={(e) => setFormState({...formState, name: e.target.value})}
+                  onChange={(e) => setFormState({ ...formState, name: e.target.value })}
                 />
               </div>
               <div>
@@ -104,7 +104,7 @@ const ContactPage = () => {
                   placeholder="Your Email"
                   className={inputClasses}
                   value={formState.email}
-                  onChange={(e) => setFormState({...formState, email: e.target.value})}
+                  onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                 />
               </div>
               <div>
@@ -113,7 +113,7 @@ const ContactPage = () => {
                   placeholder="Subject"
                   className={inputClasses}
                   value={formState.subject}
-                  onChange={(e) => setFormState({...formState, subject: e.target.value})}
+                  onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
                 />
               </div>
               <div>
@@ -122,7 +122,7 @@ const ContactPage = () => {
                   rows="4"
                   className={inputClasses}
                   value={formState.message}
-                  onChange={(e) => setFormState({...formState, message: e.target.value})}
+                  onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                 />
               </div>
               <motion.button
@@ -134,7 +134,7 @@ const ContactPage = () => {
                 Send Message
               </motion.button>
             </motion.form>
-            
+
             {/* Contact Info */}
             <div className="space-y-6">
               <motion.div
@@ -174,35 +174,35 @@ const ContactPage = () => {
                 className="bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-orange-500/20"
               >
                 <h3 className="text-xl text-white font-semibold mb-4">Connect With Us</h3>
-                <motion.div 
+                <motion.div
                   className="flex gap-4 flex-wrap"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.7 }}
                 >
-                  <SocialIcon 
-                    icon={Instagram} 
-                    href="https://instagram.com/goonj" 
+                  <SocialIcon
+                    icon={Instagram}
+                    href="https://instagram.com/goonj"
                     label="Follow us on Instagram"
                   />
-                  <SocialIcon 
-                    icon={Facebook} 
-                    href="https://facebook.com/goonj" 
+                  <SocialIcon
+                    icon={Facebook}
+                    href="https://facebook.com/goonj"
                     label="Like us on Facebook"
                   />
-                  <SocialIcon 
-                    icon={Twitter} 
-                    href="https://twitter.com/goonj" 
+                  <SocialIcon
+                    icon={Twitter}
+                    href="https://twitter.com/goonj"
                     label="Follow us on Twitter"
                   />
-                  <SocialIcon 
-                    icon={Linkedin} 
-                    href="https://linkedin.com/company/goonj" 
+                  <SocialIcon
+                    icon={Linkedin}
+                    href="https://linkedin.com/company/goonj"
                     label="Connect with us on LinkedIn"
                   />
-                  <SocialIcon 
-                    icon={Youtube} 
-                    href="https://youtube.com/goonj" 
+                  <SocialIcon
+                    icon={Youtube}
+                    href="https://youtube.com/goonj"
                     label="Subscribe to our YouTube channel"
                   />
                 </motion.div>

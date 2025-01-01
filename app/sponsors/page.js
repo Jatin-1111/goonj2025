@@ -70,7 +70,7 @@ const SponsorPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40 overflow-x-hidden relative">
+        <div className="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-44 overflow-x-hidden relative">
             {/* SVG Background Pattern */}
             <div className="fixed inset-0 pointer-events-none opacity-30">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">

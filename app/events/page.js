@@ -10,10 +10,10 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import { Separator } from '@/components/ui/separator';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 import Link from 'next/link';
+import Image from 'next/image';
 
 const EventsPage = () => {
     const [selectedCategory, setSelectedCategory] = useState('all');
-    const [isDialogOpen, setIsDialogOpen] = useState(false);
 
     const events = [
         {
@@ -147,7 +147,7 @@ const EventsPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-[#0D0221] pt-24 text-gray-200 overflow-x-hidden">
+        <div className="min-h-screen bg-[#0D0221] py-20 text-gray-200 overflow-x-hidden">
             {/* Hero Section */}
             <motion.div
                 className="relative bg-gradient-to-b from-[#0D0221] via-[#1A0F1F] to-[#0D0221] text-white py-12 sm:py-16 backdrop-blur-sm"
@@ -261,9 +261,10 @@ const EventsPage = () => {
                             >
                                 <Card className="bg-[#1A0F1F]/50 backdrop-blur-sm h-full border-orange-500/20 hover:bg-[#2D1810]/70 transition-colors">
                                     <AspectRatio ratio={16 / 9} className="bg-[#0A0A0F]">
-                                        <img
+                                        <Image
                                             src={event.image}
                                             alt={event.title}
+                                            fill
                                             className="object-cover w-full h-full hover:scale-105 transition-transform duration-300"
                                         />
                                     </AspectRatio>
@@ -349,9 +350,10 @@ const EventsPage = () => {
                                                                 {/* Image Section with Hover Effect */}
                                                                 <div className="relative group">
                                                                     <AspectRatio ratio={16 / 9} className="bg-[#0A0A0F] rounded-xl overflow-hidden border border-gray-800 shadow-lg">
-                                                                        <img
+                                                                        <Image
                                                                             src={event.image}
                                                                             alt={event.title}
+                                                                            fill
                                                                             className="object-cover w-full h-full transition-transform duration-700 group-hover:scale-105"
                                                                         />
                                                                         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

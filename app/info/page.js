@@ -5,9 +5,9 @@ import Timeline from '../components/event-timeline'
 const Info = () => {
   return (
     <div>
-        <section id="timeline" className="relative z-40">
+      <section id="timeline" className="relative z-40">
         <Timeline />
-      </section>      
+      </section>
     </div>
   )
 }

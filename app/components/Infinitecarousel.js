@@ -325,7 +325,7 @@ const EventsSection = () => {
     };
 
     return (
-        <div className="relative bg-[#1A0F2E] py-10 h-[100vh] flex flex-col justify-center w-full overflow-hidden">
+        <div className="relative bg-[#1A0F2E] py-10 flex flex-col justify-center w-full overflow-hidden">
             {/* Add the Cultural Background Component */}
             <CulturalBackground />
 

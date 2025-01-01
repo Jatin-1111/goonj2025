@@ -106,7 +106,7 @@ const Timeline = () => {
   ];
 
   return (
-    <div className="bg-[#0D0221] py-36 relative overflow-hidden">
+    <div className="bg-[#0D0221] py-40 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
         <motion.div

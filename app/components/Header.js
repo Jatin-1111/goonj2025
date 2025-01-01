@@ -140,6 +140,7 @@ const Header = () => {
                 fill
                 style={{ objectFit: "contain" }}
                 alt={alt}
+                priority
                 className="relative z-10"
                 sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 100px"
             />

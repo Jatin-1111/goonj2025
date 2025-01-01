@@ -65,7 +65,7 @@ const Gallery = () => {
   }, [autoplay, handleNext]);
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-[#3e2c23] to-[#121212] overflow-hidden">
+    <div className="relative bg-gradient-to-b from-[#3e2c23] to-[#121212] overflow-hidden">
       {/* Parallax Background */}
       <motion.div
         className="absolute inset-0 w-full h-full opacity-20 pointer-events-none"
