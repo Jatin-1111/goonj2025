@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import Image from 'next/image';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 const EventsSection = () => {
     const [duplicatedEvents, setDuplicatedEvents] = useState([]);
     const [containerWidth, setContainerWidth] = useState(0);
     const containerRef = useRef(null);
     const controls = useAnimationControls();
+    const currentPositionRef = useRef(-containerWidth);
+    const animationDuration = 30;
 
     const events = [
         { title: 'Bhangra Wars', image: '/newEvents/bhangra wars.jpg' },
@@ -17,7 +20,6 @@ const EventsSection = () => {
         { title: 'Coding Contest', image: '/events/coding.png' },
     ];
 
-    // Calculate sizes and duplicate events for smooth infinite scroll
     useEffect(() => {
         const handleResize = () => {
             if (containerRef.current) {
@@ -25,7 +27,6 @@ const EventsSection = () => {
             }
         };
 
-        // Create three sets of events for smooth infinite scroll
         const tripleEvents = [...events, ...events, ...events];
         setDuplicatedEvents(tripleEvents);
 
@@ -35,41 +36,60 @@ const EventsSection = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    // Initialize and manage the animation
+    const startAnimation = (startPosition = -containerWidth, immediate = false) => {
+        currentPositionRef.current = startPosition;
+        const endPosition = -containerWidth * 2;
+        const distance = Math.abs(endPosition - startPosition);
+        const fullDistance = containerWidth;
+        const remainingDuration = immediate ? animationDuration : (distance / fullDistance) * animationDuration;
+
+        controls.start({
+            x: endPosition,
+            transition: {
+                duration: remainingDuration,
+                ease: 'linear',
+                repeat: Infinity,
+                repeatType: 'loop',
+                repeatDelay: 0,
+                from: startPosition,
+                onUpdate: (latest) => {
+                    currentPositionRef.current = latest;
+                },
+            }
+        });
+    };
+
     useEffect(() => {
         if (!containerWidth) return;
-
-        const startAnimation = () => {
-            controls.start({
-                x: -containerWidth * 2,
-                transition: {
-                    duration: 30,
-                    ease: 'linear',
-                    repeat: Infinity,
-                    repeatType: 'loop',
-                    repeatDelay: 0,
-                    from: -containerWidth,
-                }
-            });
-        };
-
-        startAnimation();
-    }, [containerWidth, controls]);
+        startAnimation(-containerWidth, true);
+    }, [containerWidth]);
 
     const handleHoverStart = () => {
         controls.stop();
     };
 
     const handleHoverEnd = () => {
-        // Restart the animation from the current position
+        startAnimation(currentPositionRef.current);
+    };
+
+    const handleNavigation = (direction) => {
+        controls.stop();
+        
+        const itemWidth = containerWidth / events.length;
+        const newPosition = direction === 'next' 
+            ? currentPositionRef.current - itemWidth 
+            : currentPositionRef.current + itemWidth;
+        
+        currentPositionRef.current = newPosition;
+
         controls.start({
-            x: -containerWidth * 2,
-            transition: {
-                duration: 30,
-                ease: 'linear',
-                repeat: Infinity,
-                repeatType: 'loop',
-                repeatDelay: 0,
+            x: newPosition,
+            transition: { 
+                duration: 0.5, 
+                ease: 'easeInOut',
+                onComplete: () => {
+                    startAnimation(newPosition);
+                }
             }
         });
     };
@@ -105,9 +125,7 @@ const EventsSection = () => {
                     animate={controls}
                     initial={{ x: -containerWidth }}
                 >
-                    <motion.div
-                        className="flex gap-6 md:gap-8"
-                    >
+                    <motion.div className="flex gap-6 md:gap-8">
                         {duplicatedEvents.map((event, index) => (
                             <motion.div
                                 key={`${event.title}-${index}`}
@@ -163,6 +181,25 @@ const EventsSection = () => {
                         ))}
                     </motion.div>
                 </motion.div>
+            </div>
+
+            <div className="flex justify-center gap-6 mt-8">
+                <motion.button
+                    className="flex items-center justify-center w-12 h-12 rounded-full bg-[#2A1F3D] text-white hover:bg-orange-500 transition-colors duration-300"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleNavigation('prev')}
+                >
+                    <ChevronLeft className="w-6 h-6" />
+                </motion.button>
+                <motion.button
+                    className="flex items-center justify-center w-12 h-12 rounded-full bg-[#2A1F3D] text-white hover:bg-orange-500 transition-colors duration-300"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => handleNavigation('next')}
+                >
+                    <ChevronRight className="w-6 h-6" />
+                </motion.button>
             </div>
         </div>
     );
