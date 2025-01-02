@@ -34,6 +34,7 @@ const Timeline = ({ timelineEvents }) => {
 };
 
 const TimelineEvent = ({
+  year,
   title,
   description,
   highlights,
@@ -177,20 +178,24 @@ const TimelineEvent = ({
             </motion.div>
           )}
         </AnimatePresence>
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className={`${position % 2 === 0 ? "md:mr-auto" : "md:ml-auto"} flex items-center space-x-2 text-cyan-500 hover:text-cyan-400 transition-colors mt-4`}
-        >
-          <span className="text-sm md:text-base">
-            {isExpanded ? "Collapse" : "Explore"}
-          </span>
-          <motion.div
-            animate={{ rotate: isExpanded ? 180 : 0 }}
-            transition={{ duration: 0.3 }}
+        <div className="flex flex-row justify-between items-baseline">
+          {position % 2 !== 0 && year}
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`${position % 2 === 0 ? "md:mr-auto" : "md:ml-auto"} flex items-center space-x-2 text-cyan-500 hover:text-cyan-400 transition-colors mt-4`}
           >
-            <ChevronDown className="w-4 h-4" />
-          </motion.div>
-        </button>
+            <span className="text-sm md:text-base">
+              {isExpanded ? "Collapse" : "Explore"}
+            </span>
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </button>
+          <span className="h-min">{position % 2 === 0 && year}</span>
+        </div>
       </motion.div>
     </div>
   );
