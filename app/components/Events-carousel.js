@@ -72,28 +72,6 @@ const EventsSection = () => {
         startAnimation(currentPositionRef.current);
     };
 
-    const handleNavigation = (direction) => {
-        controls.stop();
-        
-        const itemWidth = containerWidth / events.length;
-        const newPosition = direction === 'next' 
-            ? currentPositionRef.current - itemWidth 
-            : currentPositionRef.current + itemWidth;
-        
-        currentPositionRef.current = newPosition;
-
-        controls.start({
-            x: newPosition,
-            transition: { 
-                duration: 0.5, 
-                ease: 'easeInOut',
-                onComplete: () => {
-                    startAnimation(newPosition);
-                }
-            }
-        });
-    };
-
     return (
         <div className="relative bg-[#1A0F2E] py-10 flex flex-col justify-center w-full overflow-hidden">
             <div className="container mx-auto px-4 mb-12 relative z-10">
@@ -181,25 +159,6 @@ const EventsSection = () => {
                         ))}
                     </motion.div>
                 </motion.div>
-            </div>
-
-            <div className="flex justify-center gap-6 mt-8">
-                <motion.button
-                    className="flex items-center justify-center w-12 h-12 rounded-full bg-[#2A1F3D] text-white hover:bg-orange-500 transition-colors duration-300"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleNavigation('prev')}
-                >
-                    <ChevronLeft className="w-6 h-6" />
-                </motion.button>
-                <motion.button
-                    className="flex items-center justify-center w-12 h-12 rounded-full bg-[#2A1F3D] text-white hover:bg-orange-500 transition-colors duration-300"
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => handleNavigation('next')}
-                >
-                    <ChevronRight className="w-6 h-6" />
-                </motion.button>
             </div>
         </div>
     );
