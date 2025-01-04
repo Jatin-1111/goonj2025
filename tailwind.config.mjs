@@ -1,11 +1,10 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
 	darkMode: ["class"],
 	content: [
 		'./pages/**/*.{ts,tsx,js,jsx}',
 		'./components/**/*.{ts,tsx,js,jsx}',
 		'./app/**/*.{ts,tsx,js,jsx}',
-		'./src/**/*.{ts,tsx,js,jsx}',
 	],
 	prefix: "",
 	theme: {
@@ -48,6 +47,10 @@ module.exports = {
 			colors: {}
 		}
 	},
-	plugins: [require("tailwindcss-animate"), require('tailwind-scrollbar'),require('daisyui'),],
-
+	plugins: [
+		// Change this part
+		require("tailwindcss-animate"),
+		require('tailwind-scrollbar'),
+    require('daisyui')
+	],
 }

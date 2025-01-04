@@ -1,13 +1,11 @@
 "use client"
 import React, { useState } from 'react';
-import { motion} from 'framer-motion';
-import { Card,CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
+import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-//import { Button } from '@/components/ui/button';
-import { Diamond, Award, Medal} from 'lucide-react';
-import EnhancedCTA from '../components/sponsercta';
+import { Diamond, Award, Medal } from 'lucide-react';
 import Image from 'next/image';
-
+import SponserCTA from '../components/sponsercta';
 
 const SponsorPage = () => {
     const [hoveredTier, setHoveredTier] = useState(null);
@@ -71,7 +69,7 @@ const SponsorPage = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-40 overflow-x-hidden relative">
+        <div className="bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 py-44 overflow-x-hidden min-h-screen flex justify-center items-center relative">
             {/* SVG Background Pattern */}
             <div className="fixed inset-0 pointer-events-none opacity-30">
                 <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
@@ -181,9 +179,9 @@ const SponsorPage = () => {
                                                 <div className="flex flex-col items-center text-center">
                                                     <div className="mb-6 relative">
                                                         <Image
-                                                            fill
                                                             src={sponsor.logo}
                                                             alt={`${sponsor.name} logo`}
+                                                            fill
                                                             className="rounded-lg transition-all duration-300 group-hover:brightness-110"
                                                         />
                                                         <motion.div
@@ -213,7 +211,7 @@ const SponsorPage = () => {
                 </div>
 
                 {/* Enhanced CTA Section */}
-                <EnhancedCTA />
+                <SponserCTA />
             </motion.div>
         </div>
     );

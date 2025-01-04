@@ -173,7 +173,7 @@ const TimelineEvent = ({
   );
 };
 
-const EventTimeline = () => {
+const GlimpseTimeline = () => {
   const ref = useRef(null);
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
@@ -419,4 +419,4 @@ const EventTimeline = () => {
   //);
 };
 
-export default EventTimeline;
+export default GlimpseTimeline;

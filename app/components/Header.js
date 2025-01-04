@@ -1,299 +1,343 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Cpu, Code, Radio, Zap, Cog, TestTube } from 'lucide-react'
+import { motion, AnimatePresence, useScroll, useMotionValue } from 'framer-motion'
+import gsap from 'gsap'
 
 const Header = () => {
-    const [hidden, setHidden] = useState(false)
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+    const headerRef = useRef(null)
     const { scrollY } = useScroll()
+    const isDevelopment = process.env.NEXT_PUBLIC_ENV === "development";
 
-    const primaryNavItems = [
-        { label: 'About Us', href: '/about' },
-        { label: 'Events', href: '/events' },
-        { label: 'Star Night', href: '/star-night' }
-    ];
-
-    const secondaryNavItems = [
-        { label: 'Info', href: '/info' },
-        { label: 'Contact', href: '/contact' },
-        { label: 'Sponsors', href: '/sponsors' }
-    ];
-
-    useMotionValueEvent(scrollY, "change", (latest) => {
-        const previous = scrollY.getPrevious()
-        if (latest > previous && latest > 150) {
-            setHidden(true)
-            setMobileMenuOpen(false)
-        } else {
-            setHidden(false)
-        }
-    })
-
-    const logoVariants = {
-        initial: {
-            scale: 0,
-            opacity: 0,
-            y: 50,
-            rotateY: 180
-        },
-        animate: {
-            scale: 1,
-            opacity: 1,
-            y: 0,
-            rotateY: 0,
-            transition: {
-                duration: 0.7,
-                type: "spring",
-                stiffness: 200,
-                damping: 10,
-                mass: 0.8
+    // Branch-specific icon animations
+    const iconVariants = {
+        cse: {
+            animate: {
+                rotate: [0, 360],
+                scale: [1, 1.2, 1],
+                transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "linear"
+                }
             }
         },
-        hover: {
-            scale: 1.15,
-            rotateY: [0, 360],
-            filter: [
-                "brightness(1) drop-shadow(0 0 0.5rem rgba(255,123,0,0.2))",
-                "brightness(1.3) drop-shadow(0 0 1rem rgba(0,128,0,0.5))",
-                "brightness(1) drop-shadow(0 0 0.5rem rgba(255,123,0,0.2))"
-            ],
-            transition: {
-                duration: 1.5,
-                rotateY: {
-                    duration: 1.5,
-                    ease: "easeInOut"
-                },
-                filter: {
+        it: {
+            animate: {
+                y: [-5, 5],
+                scale: [1, 1.1, 1],
+                transition: {
                     duration: 1.5,
                     repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "reverse",
+                    yoyo: true
+                }
+            }
+        },
+        ece: {
+            animate: {
+                scale: [1, 1.2, 1],
+                opacity: [1, 0.6, 1],
+                transition: {
+                    duration: 1.8,
+                    repeat: Infinity
+                }
+            }
+        },
+        electrical: {
+            animate: {
+                scale: [1, 1.15, 1],
+                filter: ["brightness(1)", "brightness(1.5)", "brightness(1)"],
+                transition: {
+                    duration: 1.2,
+                    repeat: Infinity
+                }
+            }
+        },
+        mechanical: {
+            animate: {
+                rotate: [0, 180],
+                scale: [1, 1.1, 1],
+                transition: {
+                    duration: 2,
+                    repeat: Infinity,
                     ease: "easeInOut"
+                }
+            }
+        },
+        biotech: {
+            animate: {
+                scale: [1, 1.2, 1],
+                y: [-3, 3],
+                transition: {
+                    duration: 1.5,
+                    repeat: Infinity,
+                    yoyo: true
                 }
             }
         }
     }
 
-    const navItemVariants = {
-        initial: { y: -20, opacity: 0 },
-        animate: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                duration: 0.5,
-                type: "spring",
-                stiffness: 200
-            }
+    // Navigation items with branch-specific hover effects
+    const navItems = [
+        {
+            label: 'About Us',
+            href: '/about',
+            icon: Cpu,
+            branch: 'cse',
         },
-        hover: {
-            scale: 1.1,
-            color: "#FF7B00",
-            textShadow: "0 0 8px rgba(255,123,0,0.5)",
-            transition: {
-                duration: 0.2,
-                type: "spring",
-                stiffness: 300
+        {
+            label: 'Events',
+            href: '/events',
+            icon: Code,
+            branch: 'it',
+        },
+        {
+            label: 'Star Night',
+            href: '/star-night',
+            icon: Radio,
+            branch: 'ece',
+        },
+        {
+            label: 'Info',
+            href: '/info',
+            icon: Zap,
+            branch: 'electrical',
+        },
+        {
+            label: 'Contact',
+            href: '/contact',
+            icon: Cog,
+            branch: 'mechanical',
+        },
+        {
+            label: 'Sponsors',
+            href: '/sponsors',
+            icon: TestTube,
+            branch: 'biotech',
+        }
+    ]
+
+    // Enhanced NavItem component with branch-specific animations
+    const NavItem = ({ item }) => {
+        const [isHovered, setIsHovered] = useState(false)
+        const itemRef = useRef(null)
+        const IconComponent = item.icon
+
+        useEffect(() => {
+            if (isHovered) {
+                const ctx = gsap.context(() => {
+                    // Branch-specific GSAP animations
+                    switch (item.branch) {
+                        case 'cse':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #00ff00',
+                                duration: 0.3
+                            })
+                            break
+                        case 'it':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #0066ff',
+                                duration: 0.3
+                            })
+                            break
+                        case 'ece':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #ff3300',
+                                duration: 0.3
+                            })
+                            break
+                        case 'electrical':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #ffff00',
+                                duration: 0.3
+                            })
+                            break
+                        case 'mechanical':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #cc33ff',
+                                duration: 0.3
+                            })
+                            break
+                        case 'biotech':
+                            gsap.to(itemRef.current, {
+                                boxShadow: '0 0 15px #00ffcc',
+                                duration: 0.3
+                            })
+                            break
+                    }
+                }, itemRef)
+
+                return () => ctx.revert()
+            }
+        }, [isHovered, item.branch])
+
+        return (
+            <motion.div
+                ref={itemRef}
+                className="relative group cursor-pointer rounded-lg p-2"
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+            >
+                <Link href={item.href}>
+                    <div className="flex items-center gap-2">
+                        <motion.div
+                            variants={iconVariants[item.branch]}
+                            animate={isHovered ? "animate" : ""}
+                        >
+                            <IconComponent className="w-5 h-5 text-orange-50" />
+                        </motion.div>
+                        <span className="text-orange-50 text-lg font-sanskrit">
+                            {item.label}
+                        </span>
+                    </div>
+                </Link>
+            </motion.div>
+        )
+    }
+
+    // Rest of your existing components (Logo, MenuButton) remain the same
+    const Logo = ({ src, alt, className }) => {
+        const [isHovered, setIsHovered] = useState(false)
+
+        const glowVariants = {
+            rest: {
+                scale: 0.8,
+                opacity: 0,
+                filter: "blur(8px)"
+            },
+            hover: {
+                scale: [1.2, 1.5, 1.2],
+                opacity: [0.4, 0.6, 0.4],
+                filter: "blur(15px)",
+                transition: {
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                }
             }
         }
-    }
 
-    const headerVariants = {
-        visible: { y: 0, opacity: 1 },
-        hidden: { y: "-100%", opacity: 0 }
-    }
+        const imageVariants = {
+            rest: {
+                scale: 1,
+                rotate: 0
+            },
+            hover: {
+                scale: 1.1,
+                rotate: [0, 5, -5, 0],
+                transition: {
+                    rotate: {
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "easeInOut"
+                    },
+                    scale: {
+                        duration: 0.3,
+                        type: "spring",
+                        stiffness: 300,
+                        damping: 10
+                    }
+                }
+            }
+        }
 
-    const NavItems = ({ items, className = "", itemClassName = "" }) => (
-        <>
-            {items.map((item, index) => (
-                <Link href={item.href} key={item.label}>
-                    <motion.li
-                        className={`cursor-pointer relative ${itemClassName} text-base sm:text-lg font-sanskrit`}
-                        variants={navItemVariants}
-                        whileHover="hover"
-                        custom={index}
-                    >
-                        {item.label}
-                        <motion.div
-                            className="absolute -bottom-1 left-0 w-full h-0.5 bg-orange-500"
-                            initial={{ scaleX: 0 }}
-                            whileHover={{ scaleX: 1 }}
-                            transition={{ duration: 0.2 }}
-                        />
-                    </motion.li>
-                </Link>
-            ))}
-        </>
-    )
-
-    const Logo = ({ src, alt, className }) => (
-        <motion.div
-            variants={logoVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
-            className={`relative ${className}`}
-        >
-            <Image
-                src={src}
-                fill
-                style={{ objectFit: "contain" }}
-                alt={alt}
-                className="relative z-10"
-                sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 100px"
-            />
+        return (
             <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-orange-500/30 to-green-600/30 rounded-full blur-lg"
-                animate={{
-                    scale: [1, 1.2, 1],
-                    rotate: [0, 180, 360],
-                }}
+                className={`relative ${className}`}
+                onHoverStart={() => setIsHovered(true)}
+                onHoverEnd={() => setIsHovered(false)}
+                initial="rest"
+                animate={isHovered ? "hover" : "rest"}
+            >
+                <motion.div
+                    className="relative z-10 w-full h-full"
+                    variants={imageVariants}
+                >
+                    <Image
+                        src={src}
+                        fill
+                        style={{ objectFit: "contain" }}
+                        alt={alt}
+                        priority
+                        sizes="(max-width: 768px) 60px, (max-width: 1024px) 80px, 100px"
+                    />
+                </motion.div>
+
+                <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-orange-500/30 via-yellow-500/30 to-orange-500/30 rounded-full"
+                    variants={glowVariants}
+                />
+
+                <AnimatePresence>
+                    {isHovered && (
+                        <>
+                            {[...Array(6)].map((_, i) => (
+                                <motion.div
+                                    key={i}
+                                    className="absolute w-2 h-2 bg-orange-400/40 rounded-full"
+                                    initial={{
+                                        scale: 0,
+                                        x: "-50%",
+                                        y: "-50%",
+                                        opacity: 0
+                                    }}
+                                    animate={{
+                                        scale: [0, 1, 0],
+                                        x: [0, (i % 2 ? 50 : -50) * Math.random()],
+                                        y: [-20, -100 * Math.random()],
+                                        opacity: [0, 1, 0],
+                                    }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{
+                                        duration: 1 + Math.random(),
+                                        repeat: Infinity,
+                                        delay: i * 0.2
+                                    }}
+                                    style={{
+                                        left: "50%",
+                                        top: "50%"
+                                    }}
+                                />
+                            ))}
+                        </>
+                    )}
+                </AnimatePresence>
+            </motion.div>
+        )
+    }
+
+    const MenuButton = ({ isOpen, onClick }) => (
+        <motion.button
+            className="lg:hidden relative text-orange-50 p-2"
+            onClick={onClick}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+        >
+            <motion.div
+                className="absolute inset-0 bg-orange-500/20 rounded-full"
+                initial={{ scale: 0 }}
+                whileHover={{ scale: 1.5, opacity: [0, 0.5, 0] }}
                 transition={{
-                    duration: 3,
                     repeat: Number.POSITIVE_INFINITY,
-                    repeatType: "reverse",
+                    repeat: Infinity,
+                    ease: "easeInOut"
                 }}
             />
-        </motion.div>
+            {isOpen ? <X size={24} /> : <Menu size={24} />}
+        </motion.button>
     )
 
     return (
         <motion.header
-            className="fixed w-full bg-[#1A0F1F]/90 backdrop-blur-sm z-50 h-24 sm:h-28"
-            variants={headerVariants}
-            initial="visible"
-            animate={hidden ? "hidden" : "visible"}
-            transition={{ duration: 0.3 }}
+            ref={headerRef}
+            className="fixed w-full z-50 h-24 sm:h-28"
         >
-            <div className="absolute inset-0 bg-gradient-to-r from-[#2D1810]/50 via-transparent to-[#1F2937]/50" />
-
-            {/* Decorative elements with added SVG patterns */}
-            <div className="absolute inset-0 overflow-hidden">
-                {/* Existing gradient borders */}
-                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-500 via-green-500 to-orange-500" />
-                <div className="absolute top-1 left-0 w-full h-px bg-gradient-to-r from-orange-300/20 via-green-300/20 to-orange-300/20" />
-
-                {/* SVG Pattern Background */}
-                <svg className="absolute inset-0 w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                    <defs>
-                        <pattern id="header-grid" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-                            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(255,123,0,0.1)" strokeWidth="0.5" />
-                        </pattern>
-
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="2" result="coloredBlur" />
-                            <feMerge>
-                                <feMergeNode in="coloredBlur" />
-                                <feMergeNode in="SourceGraphic" />
-                            </feMerge>
-                        </filter>
-                    </defs>
-
-                    {/* Background pattern */}
-                    <rect width="100%" height="100%" fill="url(#header-grid)" />
-
-                    {/* Decorative circles */}
-                    <motion.circle
-                        cx="30"
-                        cy="20"
-                        r="3"
-                        fill="none"
-                        stroke="rgba(255,123,0,0.3)"
-                        strokeWidth="1"
-                        filter="url(#glow)"
-                        initial={{ scale: 0 }}
-                        animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.3, 0.7, 0.3],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut"
-                        }}
-                    />
-
-                    <motion.circle
-                        cx="95%"
-                        cy="20"
-                        r="3"
-                        fill="none"
-                        stroke="rgba(34,197,94,0.3)"
-                        strokeWidth="1"
-                        filter="url(#glow)"
-                        initial={{ scale: 0 }}
-                        animate={{
-                            scale: [1, 1.5, 1],
-                            opacity: [0.3, 0.7, 0.3],
-                        }}
-                        transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            ease: "easeInOut",
-                            delay: 1
-                        }}
-                    />
-
-                    {/* Decorative lines */}
-                    <motion.path
-                        d="M 40 0 Q 60 20, 80 0"
-                        stroke="rgba(255,123,0,0.1)"
-                        strokeWidth="1"
-                        fill="none"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: "reverse",
-                            ease: "easeInOut"
-                        }}
-                    />
-
-                    <motion.path
-                        d="M 70% 0 Q 85% 20, 100% 0"
-                        stroke="rgba(34,197,94,0.1)"
-                        strokeWidth="1"
-                        fill="none"
-                        initial={{ pathLength: 0 }}
-                        animate={{ pathLength: 1 }}
-                        transition={{
-                            duration: 2,
-                            repeat: Number.POSITIVE_INFINITY,
-                            repeatType: "reverse",
-                            ease: "easeInOut",
-                            delay: 1
-                        }}
-                    />
-                </svg>
-
-                {/* Keep existing animated dots */}
-                <motion.div
-                    className="absolute top-2 left-4 w-4 h-4 rounded-full bg-orange-500/30"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                    }}
-                />
-                <motion.div
-                    className="absolute top-2 right-4 w-4 h-4 rounded-full bg-green-500/30"
-                    animate={{
-                        scale: [1, 1.2, 1],
-                        opacity: [0.3, 0.6, 0.3],
-                    }}
-                    transition={{
-                        duration: 2,
-                        repeat: Number.POSITIVE_INFINITY,
-                        delay: 1,
-                    }}
-                />
-            </div>
-
+            <motion.div className={`absolute inset-0 ${isDevelopment ? "bg-blue-700" : "bg-[#1A0F1F]/90"} backdrop-blur-sm`}>
+                <div className="absolute inset-0 bg-gradient-to-r from-[#2D1810]/50 via-transparent to-[#1F2937]/50" />
+            </motion.div>
             <nav className="relative flex items-center justify-between px-4 sm:px-6 lg:px-8 h-full max-w-7xl mx-auto">
                 <div className="hidden lg:block">
                     <Link href="https://uiet.puchd.ac.in/">
@@ -305,13 +349,12 @@ const Header = () => {
                     </Link>
                 </div>
 
-                <motion.ul
-                    className="hidden lg:flex gap-4 xl:gap-8 text-orange-50"
-                    initial="initial"
-                    animate="animate"
-                >
-                    <NavItems items={primaryNavItems} />
-                </motion.ul>
+                <div className="hidden lg:flex gap-6">
+                    {navItems.slice(0, 3).map(item => (
+                        <NavItem key={item.label} item={item} />
+                    ))}
+                </div>
+
                 <Link href="/">
                     <Logo
                         src="/goonj.jpg"
@@ -319,13 +362,12 @@ const Header = () => {
                         className="w-16 h-16 sm:w-20 sm:h-20"
                     />
                 </Link>
-                <motion.ul
-                    className="hidden lg:flex gap-4 xl:gap-8 text-orange-50"
-                    initial="initial"
-                    animate="animate"
-                >
-                    <NavItems items={secondaryNavItems} />
-                </motion.ul>
+
+                <div className="hidden lg:flex gap-6">
+                    {navItems.slice(3).map(item => (
+                        <NavItem key={item.label} item={item} />
+                    ))}
+                </div>
 
                 <div className="hidden lg:block">
                     <Link href="https://puchd.ac.in/">
@@ -337,51 +379,55 @@ const Header = () => {
                     </Link>
                 </div>
 
-                <motion.button
-                    className="lg:hidden text-orange-50 p-2"
-                    whileTap={{ scale: 0.9 }}
+                <MenuButton
+                    isOpen={mobileMenuOpen}
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                >
-                    {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-                </motion.button>
+                />
             </nav>
 
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
                         className="lg:hidden absolute top-full left-0 right-0 bg-[#1A0F1F]/95 backdrop-blur-lg shadow-lg"
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: "auto" }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3 }}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{
+                            type: "spring",
+                            damping: 20,
+                            stiffness: 200
+                        }}
                     >
-                        <motion.ul
-                            className="flex flex-col px-4 py-4 space-y-4 text-orange-50"
-                            initial="initial"
-                            animate="animate"
+                        <motion.div
+                            className="flex flex-col px-4 py-4 space-y-4"
+                            initial="closed"
+                            animate="open"
+                            exit="closed"
                             variants={{
-                                animate: {
+                                open: {
                                     transition: { staggerChildren: 0.1 }
+                                },
+                                closed: {
+                                    transition: { staggerChildren: 0.05, staggerDirection: -1 }
                                 }
                             }}
                         >
-                            {[...primaryNavItems, ...secondaryNavItems].map((item) => (
-                                <Link href={item.href} key={item.label}>
-                                    <motion.li
-                                        variants={navItemVariants}
-                                        className="border-b border-orange-900/30 pb-2"
-                                        whileHover={{ x: 10, color: "#FF7B00" }}
-                                        onClick={() => setMobileMenuOpen(false)}
-                                    >
-                                        {item.label}
-                                    </motion.li>
-                                </Link>
+                            {navItems.map(item => (
+                                <motion.div
+                                    key={item.label}
+                                    variants={{
+                                        open: { x: 0, opacity: 1 },
+                                        closed: { x: -20, opacity: 0 }
+                                    }}
+                                >
+                                    <NavItem item={item} />
+                                </motion.div>
                             ))}
-                        </motion.ul>
+                        </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
-        </motion.header>
+        </motion.header >
     )
 }
 

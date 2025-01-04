@@ -71,7 +71,7 @@ const AboutUs = () => {
     };
 
     return (
-        <div className="bg-[#1A0F2E] min-h-screen w-full overflow-hidden">
+        <div className="bg-[#1A0F2E] overflow-hidden">
             {/* Indo-Tech Background Effects */}
             <div className="fixed inset-0 bg-gradient-to-b from-[#1A0F2E] via-[#2A1F3D] to-[#1A0F2E] opacity-50" />
             
@@ -147,6 +147,7 @@ const AboutUs = () => {
                                             <Image
                                                 src={section.image}
                                                 fill
+                                                priority
                                                 alt={section.title}
                                                 className="object-contain relative z-10"
                                                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
