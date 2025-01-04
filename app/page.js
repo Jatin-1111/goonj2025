@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect, memo } from 'react';
 import Hero from './components/Hero';
-import Gallery from './components/gallery';
 import FAQ from './components/faqs';
 import Preloader from './components/preloader';
 import AboutSection from './components/about_home';
@@ -10,6 +9,7 @@ import EventsSection from './components/Events-carousel';
 import GlimpseTimeline from './components/glimpse-timeline';
 import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowUpCircle } from 'lucide-react';
+import BentoGallery from './components/gallery';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -108,7 +108,7 @@ const Home = () => {
 
       {/* Gallery Section */}
       <section id="gallery" className="relative z-40">
-        <Gallery />
+        <BentoGallery />
       </section>
 
       {/* Glimpse Timeline Section */}

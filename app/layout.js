@@ -25,9 +25,9 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
         <Header />
         <main className="flex-grow bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950">
-          {/* <LenisProvider> */}
-          {children}
-          {/* </LenisProvider> */}
+          <LenisProvider>
+            {children}
+          </LenisProvider>
         </main>
         <Footer />
       </body>
