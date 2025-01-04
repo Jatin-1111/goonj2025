@@ -24,7 +24,7 @@ const EventsSection = () => {
     const symbolRef = useRef(null);
 
     const events = [
-        { title: 'Bhangra Wars', image: '/newEvents/bhangra wars.jpg' },
+        { title: 'Bhangra Wars', image: '/bgIMG3.png' },
         { title: 'Cultural Night', image: '/events/cultural.png' },
         { title: 'Robotics Challenge', image: '/events/robotics.png' },
         { title: 'Hackathon', image: '/events/hackathon.png' },
@@ -183,7 +183,7 @@ const EventsSection = () => {
             <div className="hidden md:block">
                 <div
                     ref={containerRef}
-                    className="w-full py-4 mx-auto overflow-hidden relative z-10"
+                    className="w-full py-16 mx-auto overflow-hidden relative z-10"
                 >
                     <motion.div
                         className="carousel-container relative"

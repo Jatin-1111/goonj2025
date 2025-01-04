@@ -27,7 +27,7 @@ const EventsPage = () => {
             prizePool: "₹20,000",
             teamSize: "1-2 members",
             registrationFee: "₹200",
-            image: "/events/codewars.jpg",
+            image: "/bgIMG3.png",
             rules: [
                 "Individual or team of 2 members",
                 "Multiple programming languages supported",
@@ -48,7 +48,7 @@ const EventsPage = () => {
             prizePool: "₹30,000",
             teamSize: "4-8 members",
             registrationFee: "₹500 per band",
-            image: "/events/battle-bands.jpg",
+            image: "/bgIMG3.png",
             rules: [
                 "Minimum 4, maximum 8 members per band",
                 "20 minutes performance time",
@@ -69,7 +69,7 @@ const EventsPage = () => {
             prizePool: "₹15,000",
             teamSize: "Varies by game",
             registrationFee: "₹250",
-            image: "/events/gaming.jpg",
+            image: "/bgIMG3.png",
             rules: [
                 "Bring your own peripherals",
                 "Tournament structure depends on participants",

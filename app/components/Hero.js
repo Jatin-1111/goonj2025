@@ -179,22 +179,7 @@ const Hero = ({ timeLeft }) => {
                     </motion.div>
 
                     {/* Countdown section */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 }}
-                        className="w-full max-w-4xl px-4"
-                    >
-                        <motion.h2
-                            className="text-2xl md:text-4xl text-white text-center mb-10 font-light tracking-wider"
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            transition={{ delay: 0.7 }}
-                        >
-                            <span className="text-orange-300">Coming Soon</span> - February 19th, 2025
-                        </motion.h2>
-                        <Countdown timeLeft={timeLeft} />
-                    </motion.div>
+                    <Countdown />
 
                     {/* Description */}
                     <div className="max-w-4xl space-y-8 px-4" ref={ref}>

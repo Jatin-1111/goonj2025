@@ -1,114 +1,130 @@
+"use client"
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight, Play, Pause } from 'lucide-react';
 import gsap from 'gsap';
 
-// Register GSAP plugins on client-side only to avoid SSR issues
+// Safe GSAP registration
 if (typeof window !== 'undefined') {
   gsap.registerPlugin();
 }
 
-// Sample gallery images data
-// In production, this would typically come from an API or CMS
+// Update gallery images to use local paths instead of external URLs
 const galleryImages = [
   {
-    src: 'https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?w=800&auto=format&fit=crop',
+    src: '/gallery/image1.jpg',
     alt: 'Artistic mountain landscape at sunset'
   },
   {
-    src: 'https://images.unsplash.com/photo-1682686581551-867e0b208bd1?w=800&auto=format&fit=crop',
+    src: '/gallery/image2.jpg',
     alt: 'Urban cityscape with modern architecture'
   },
   {
-    src: 'https://images.unsplash.com/photo-1682695796497-31a44224d6d6?w=800&auto=format&fit=crop',
+    src: '/gallery/image3.jpg',
     alt: 'Minimalist architectural detail'
   },
   {
-    src: 'https://images.unsplash.com/photo-1682695797221-8164ff1fafc9?w=800&auto=format&fit=crop',
+    src: '/gallery/image4.jpg',
     alt: 'Abstract light patterns'
   }
 ];
 
-// Helper function to generate rotation values for the card stack effect
-// Creates an alternating pattern of rotations for visual interest
 const generateRotation = (index) => [-6, -3, 0, 3, 6][index % 5];
 
 const Gallery = () => {
-  // State management
-  const [active, setActive] = useState(0);              // Currently active slide index
-  const [autoplay, setAutoplay] = useState(true);       // Autoplay toggle
-  const [isDragging, setIsDragging] = useState(false);  // Track drag state
-  const [startX, setStartX] = useState(0);              // Starting X position for drag
+  const [mounted, setMounted] = useState(false);
+  const [active, setActive] = useState(0);
+  const [autoplay, setAutoplay] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
 
-  // Refs for DOM manipulation
-  const containerRef = useRef(null);                    // Container element reference
-  const slideRefs = useRef([]);                         // Array of slide element references
+  const containerRef = useRef(null);
+  const slideRefs = useRef([]);
+  const animationRef = useRef(null);
 
-  // Animate cards when transitioning between slides
+  // Handle mounting state
+  useEffect(() => {
+    setMounted(true);
+    return () => {
+      if (animationRef.current) {
+        animationRef.current.kill();
+      }
+    };
+  }, []);
+
   const animateCards = useCallback((direction = 1) => {
+    if (!mounted) return;
+
+    // Kill any existing animation
+    if (animationRef.current) {
+      animationRef.current.kill();
+    }
+
     const timeline = gsap.timeline();
     const nextIndex = (active + direction + galleryImages.length) % galleryImages.length;
 
-    // Animate each card in the stack
     galleryImages.forEach((_, index) => {
       const element = slideRefs.current[index];
+      if (!element) return;
+
       const isActive = index === active;
       const isNext = index === nextIndex;
-      // Calculate z-index to ensure proper stacking order
       const zIndex = isNext ? 999 : galleryImages.length - Math.abs(index - nextIndex);
 
-      // Animate position and appearance of each card
       timeline.to(element, {
-        opacity: isNext ? 1 : 0.7,           // Active card is fully opaque
-        scale: isNext ? 1 : 0.95,            // Active card is full size
-        rotation: isNext ? 0 : generateRotation(index), // Apply rotation for stack effect
+        opacity: isNext ? 1 : 0.7,
+        scale: isNext ? 1 : 0.95,
+        rotation: isNext ? 0 : generateRotation(index),
         zIndex,
         duration: 0.6,
-        ease: 'power2.inOut'
+        ease: 'power2.inOut',
+        onComplete: () => {
+          if (isNext) {
+            setActive(nextIndex);
+          }
+        }
       }, 0);
     });
 
-    // Update active slide after animation
-    timeline.then(() => setActive(nextIndex));
-  }, [active]);
+    animationRef.current = timeline;
+  }, [active, mounted]);
 
-  // Navigation handlers
   const handleNext = useCallback(() => {
+    if (isDragging) return;
     animateCards(1);
-  }, [animateCards]);
+  }, [animateCards, isDragging]);
 
   const handlePrev = useCallback(() => {
+    if (isDragging) return;
     animateCards(-1);
-  }, [animateCards]);
+  }, [animateCards, isDragging]);
 
-  // Touch and mouse event handlers for drag functionality
-  const handleDragStart = (e) => {
+  const handleDragStart = useCallback((e) => {
     setIsDragging(true);
-    setStartX(e.clientX || e.touches?.[0].clientX);
-  };
+    setStartX(e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0));
+  }, []);
 
-  const handleDragEnd = (e) => {
+  const handleDragEnd = useCallback((e) => {
     if (!isDragging) return;
 
-    const endX = e.clientX || e.changedTouches?.[0].clientX;
+    const endX = e.clientX || (e.changedTouches && e.changedTouches[0] ? e.changedTouches[0].clientX : 0);
     const deltaX = endX - startX;
 
-    // Trigger slide change if drag distance is sufficient
     if (Math.abs(deltaX) > 100) {
-      if (deltaX > 0) {
-        handlePrev();
-      } else {
-        handleNext();
-      }
+      deltaX > 0 ? handlePrev() : handleNext();
     }
 
     setIsDragging(false);
-  };
+  }, [isDragging, startX, handleNext, handlePrev]);
 
-  // Initialize card positions and properties on mount
+  // Initialize cards
   useEffect(() => {
+    if (!mounted) return;
+
     galleryImages.forEach((_, index) => {
       const element = slideRefs.current[index];
+      if (!element) return;
+
       const isActive = index === active;
       const zIndex = isActive ? 999 : galleryImages.length - Math.abs(index - active);
 
@@ -119,28 +135,34 @@ const Gallery = () => {
         zIndex
       });
     });
-  }, []);
+  }, [mounted, active]);
 
-  // Handle autoplay functionality
+  // Autoplay handler
   useEffect(() => {
-    if (!autoplay) return;
+    if (!autoplay || !mounted) return;
+    
     const interval = setInterval(handleNext, 5000);
-    return () => clearInterval(interval); // Cleanup on unmount or autoplay change
-  }, [autoplay, handleNext]);
+    return () => clearInterval(interval);
+  }, [autoplay, handleNext, mounted]);
+
+  // Early return while not mounted
+  if (!mounted) {
+    return <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-950" />;
+  }
 
   return (
     <div className="relative bg-gradient-to-b from-gray-900 to-gray-950 min-h-screen">
       <div className="relative z-10 min-h-screen flex items-center">
         <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Gallery Header */}
           <div className="py-10">
             <h2 className="text-4xl flex justify-center font-bold text-white mb-4">Gallery</h2>
             <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto" />
           </div>
 
-          {/* Gallery Container */}
-          <div ref={containerRef} className="relative h-[60vh] w-full max-w-4xl mx-auto">
-            {/* Image Cards */}
+          <div 
+            ref={containerRef} 
+            className="relative h-[60vh] w-full max-w-4xl mx-auto"
+          >
             {galleryImages.map((image, index) => (
               <div
                 key={index}
@@ -157,6 +179,7 @@ const Gallery = () => {
                     src={image.src}
                     alt={image.alt}
                     fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 80vw, 70vw"
                     className="object-cover"
                     priority={index === active}
                     draggable={false}
@@ -166,9 +189,7 @@ const Gallery = () => {
             ))}
           </div>
 
-          {/* Navigation Controls */}
           <div className="flex items-center justify-center gap-4 mt-8">
-            {/* Previous Button */}
             <button
               onClick={handlePrev}
               onMouseEnter={() => setAutoplay(false)}
@@ -178,18 +199,16 @@ const Gallery = () => {
               <ChevronLeft className="h-6 w-6 text-white group-hover:rotate-12 transition-transform duration-300" />
             </button>
 
-            {/* Play/Pause Button */}
             <button
               onClick={() => setAutoplay(!autoplay)}
               className="h-12 w-12 rounded-full bg-gray-800/50 hover:bg-gray-800/70 flex items-center justify-center transition-colors"
             >
-              {autoplay ?
-                <Pause className="h-6 w-6 text-white" /> :
+              {autoplay ? 
+                <Pause className="h-6 w-6 text-white" /> : 
                 <Play className="h-6 w-6 text-white" />
               }
             </button>
 
-            {/* Next Button */}
             <button
               onClick={handleNext}
               onMouseEnter={() => setAutoplay(false)}
