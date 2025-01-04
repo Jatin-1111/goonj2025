@@ -3,14 +3,47 @@ import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Menu, X, Cpu, Code, Radio, Zap, Cog, TestTube } from 'lucide-react'
-import { motion, AnimatePresence, useScroll, useMotionValue } from 'framer-motion'
+import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import gsap from 'gsap'
+import { usePathname } from 'next/navigation'
 
 const Header = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
     const headerRef = useRef(null)
+    const mobileMenuRef = useRef(null)
     const { scrollY } = useScroll()
-    const isDevelopment = process.env.NEXT_PUBLIC_ENV === "development";
+    const isDevelopment = process.env.NEXT_PUBLIC_ENV === "development"
+    const pathname = usePathname()
+
+    useEffect(() => {
+        setMobileMenuOpen(false)
+    }, [pathname])
+
+    // Effect to handle clicking outside of mobile menu
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (!mobileMenuOpen) return;
+
+            const menuButton = document.querySelector('[aria-label="Toggle menu"]');
+
+            if (
+                mobileMenuRef.current &&
+                !mobileMenuRef.current.contains(event.target) &&
+                menuButton &&
+                !menuButton.contains(event.target)
+            ) {
+                setMobileMenuOpen(false);
+            }
+        };
+
+        // Add event listener when menu is open
+        document.addEventListener('mousedown', handleClickOutside);
+
+        // Cleanup
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, [mobileMenuOpen]);
 
     // Branch-specific icon animations
     const iconVariants = {
@@ -180,6 +213,7 @@ const Header = () => {
                 className="relative group cursor-pointer rounded-lg p-2"
                 onHoverStart={() => setIsHovered(true)}
                 onHoverEnd={() => setIsHovered(false)}
+                onClick={() => setMobileMenuOpen(false)}
             >
                 <Link href={item.href}>
                     <div className="flex items-center gap-2">
@@ -315,6 +349,7 @@ const Header = () => {
             onClick={onClick}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
+            aria-label="Toggle menu"
         >
             <motion.div
                 className="absolute inset-0 bg-orange-500/20 rounded-full"
@@ -328,7 +363,7 @@ const Header = () => {
             />
             {isOpen ? <X size={24} /> : <Menu size={24} />}
         </motion.button>
-    )
+    );
 
     return (
         <motion.header
@@ -389,6 +424,7 @@ const Header = () => {
             <AnimatePresence>
                 {mobileMenuOpen && (
                     <motion.div
+                        ref={mobileMenuRef}  // Add the ref here
                         className="lg:hidden absolute top-full left-0 right-0 bg-[#1A0F1F]/95 backdrop-blur-lg shadow-lg"
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
