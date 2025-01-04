@@ -14,12 +14,6 @@ const FAQ = () => {
   const [showScrollTop, setShowScrollTop] = useState(false);   // Controls scroll-to-top button
   const [isMounted, setIsMounted] = useState(false);          // Handles client-side rendering
 
-  // Mouse trail effect setup
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-  const transformedX = useTransform(mouseX, v => `${v}px`);
-  const transformedY = useTransform(mouseY, v => `${v}px`);
-
   // FAQ data structure
   const faqs = [
     {
@@ -109,26 +103,6 @@ const FAQ = () => {
       return () => window.removeEventListener('keydown', handleKeyDown);
     }
   }, []);
-
-  // Mouse movement tracker for trail effect
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleMouseMove = (e) => {
-        mouseX.set(e.clientX);
-        mouseY.set(e.clientY);
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-      return () => window.removeEventListener('mousemove', handleMouseMove);
-    }
-  }, [mouseX, mouseY]);
-
-  // Utility function for scroll-to-top
-  const scrollToTop = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-  };
 
   // Wait for client-side rendering
   if (!isMounted) {
@@ -275,37 +249,6 @@ const FAQ = () => {
           </div>
         </motion.div>
       </div>
-
-      {/* Scroll to Top Button */}
-      <AnimatePresence>
-        {showScrollTop && (
-          <motion.button
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            onClick={scrollToTop}
-            className="fixed bottom-8 right-8 p-2 bg-[#D6A531] text-[#1A0F2E] rounded-full shadow-lg hover:bg-[#CC704B] transition-colors"
-          >
-            <ArrowUpCircle className="w-6 h-6" />
-          </motion.button>
-        )}
-      </AnimatePresence>
-
-      {/* Mouse Trail Effect */}
-      <motion.div
-        className="fixed inset-0 pointer-events-none z-50"
-        animate={{
-          background: [
-            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(214,165,49,0.15), transparent)`,
-            `radial-gradient(20px at var(--mouse-x) var(--mouse-y), rgba(164,30,52,0.15), transparent)`
-          ]
-        }}
-        transition={{ duration: 2, repeat: Infinity }}
-        style={{
-          '--mouse-x': transformedX,
-          '--mouse-y': transformedY
-        }}
-      />
     </div>
   );
 };
