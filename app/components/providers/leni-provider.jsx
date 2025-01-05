@@ -16,7 +16,7 @@ export default function LenisProvider({ children }) {
     });
 
     lenis.on("scroll", (e) => {
-      console.log(e);
+      //console.log(e);
     });
 
     function raf(time) {
