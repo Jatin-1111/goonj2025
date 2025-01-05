@@ -1,22 +1,25 @@
 "use client";
-import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useScroll } from 'framer-motion';
-import {
-  CircuitBoard,
-  Cpu,
-  QrCode,
-  Hexagon,
-  ChevronDown
-} from 'lucide-react';
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence, useScroll } from "framer-motion";
+import { CircuitBoard, Cpu, QrCode, Hexagon, ChevronDown } from "lucide-react";
+import Timeline from "./Timeline";
 
-const TimelineEvent = ({title, description, highlights, achievements, icon: Icon, position }) => {
+const TimelineEvent = ({
+  year,
+  title,
+  description,
+  highlights,
+  achievements,
+  icon: Icon,
+  position,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const cardVariants = {
     hidden: {
       opacity: 0,
       x: position % 2 === 0 ? -50 : 50,
-      y: 20
+      y: 20,
     },
     visible: {
       opacity: 1,
@@ -24,9 +27,9 @@ const TimelineEvent = ({title, description, highlights, achievements, icon: Icon
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const contentVariants = {
@@ -34,24 +37,24 @@ const TimelineEvent = ({title, description, highlights, achievements, icon: Icon
       opacity: 0,
       height: 0,
       transition: {
-        duration: 0.2
-      }
+        duration: 0.2,
+      },
     },
     visible: {
       opacity: 1,
       height: "auto",
       transition: {
         duration: 0.3,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   return (
     <div
       className={`relative w-full flex
-        ${position % 2 === 0 ? 'md:justify-start' : 'md:justify-end'}
-        justify-start
+      ${position % 2 === 0 ? "md:justify-start" : "md:justify-end"}
+      justify-start
       `}
     >
       <motion.div
@@ -60,10 +63,10 @@ const TimelineEvent = ({title, description, highlights, achievements, icon: Icon
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         className={`w-full md:w-[45%] p-4 md:p-6 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 
-          hover:bg-white/10 transition-all duration-300 ease-out
-          hover:shadow-lg hover:shadow-cyan-500/10
-          ${position % 2 === 0 ? 'md:mr-auto' : 'md:ml-auto'}
-        `}
+      hover:bg-white/10 transition-all duration-300 ease-out
+      hover:shadow-lg hover:shadow-cyan-500/10
+      ${position % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}
+      `}
       >
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-2 md:space-y-0">
           <div className="flex items-center space-x-4 group">
@@ -80,7 +83,9 @@ const TimelineEvent = ({title, description, highlights, achievements, icon: Icon
             onClick={() => setIsExpanded(!isExpanded)}
             className="flex items-center space-x-2 text-cyan-500 hover:text-cyan-400 transition-colors"
           >
-            <span className="text-sm md:text-base">{isExpanded ? 'Collapse' : 'Explore'}</span>
+            <span className="text-sm md:text-base">
+              {isExpanded ? "Collapse" : "Explore"}
+            </span>
             <motion.div
               animate={{ rotate: isExpanded ? 180 : 0 }}
               transition={{ duration: 0.3 }}
@@ -99,7 +104,9 @@ const TimelineEvent = ({title, description, highlights, achievements, icon: Icon
               exit="hidden"
               className="space-y-4 overflow-hidden"
             >
-              <p className="text-sm md:text-base text-gray-300 leading-relaxed">{description}</p>
+              <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+                {description}
+              </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {/* Highlights Section */}
@@ -171,7 +178,7 @@ const GlimpseTimeline = () => {
   const containerRef = useRef(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
-    offset: ["start end", "end start"]
+    offset: ["start end", "end start"],
   });
 
   const titleVariants = {
@@ -181,90 +188,96 @@ const GlimpseTimeline = () => {
       y: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut"
-      }
-    }
+        ease: "easeOut",
+      },
+    },
   };
 
   const timelineEvents = [
     {
       year: 2020,
       title: "Digital Inception",
-      description: "In the wake of global challenges, Goonj emerged as a beacon of digital innovation, transforming the traditional tech fest into a virtual experience that connected minds across boundaries.",
+      description:
+        "In the wake of global challenges, Goonj emerged as a beacon of digital innovation, transforming the traditional tech fest into a virtual experience that connected minds across boundaries.",
       highlights: [
         "First fully online tech fest",
         "100+ virtual participants",
-        "Innovative digital networking platforms"
+        "Innovative digital networking platforms",
       ],
       achievements: [
         "Developed proprietary virtual event platform",
         "Successful international collaborations",
-        "Recognized for digital innovation"
+        "Recognized for digital innovation",
       ],
-      icon: QrCode
+      icon: QrCode,
     },
     {
       year: 2021,
       title: "Hybrid Revolution",
-      description: "Breaking barriers between physical and digital realms, we pioneered a hybrid event model that redefined technological and cultural engagement.",
+      description:
+        "Breaking barriers between physical and digital realms, we pioneered a hybrid event model that redefined technological and cultural engagement.",
       highlights: [
         "Hybrid event format introduced",
         "International speaker series",
-        "Expanded digital infrastructure"
+        "Expanded digital infrastructure",
       ],
       achievements: [
         "Implemented AR/VR technologies",
         "Expanded global participant base",
-        "Developed adaptive event technologies"
+        "Developed adaptive event technologies",
       ],
-      icon: CircuitBoard
+      icon: CircuitBoard,
     },
     {
       year: 2022,
       title: "Tech Cultural Fusion",
-      description: "A transformative year where cutting-edge technology met traditional cultural narratives, creating a unique ecosystem of innovation and heritage.",
+      description:
+        "A transformative year where cutting-edge technology met traditional cultural narratives, creating a unique ecosystem of innovation and heritage.",
       highlights: [
         "AI-powered cultural workshops",
         "500+ participants",
-        "Innovative tech competitions"
+        "Innovative tech competitions",
       ],
       achievements: [
         "Launched AI-driven cultural insights platform",
         "Created cross-cultural tech initiatives",
-        "Expanded international partnerships"
+        "Expanded international partnerships",
       ],
-      icon: Cpu
+      icon: Cpu,
     },
     {
       year: 2023,
       title: "Global Connected",
-      description: "Reaching unprecedented heights with global collaborations, groundbreaking technological showcases, and a vision that transcends traditional boundaries.",
+      description:
+        "Reaching unprecedented heights with global collaborations, groundbreaking technological showcases, and a vision that transcends traditional boundaries.",
       highlights: [
         "International university partnerships",
         "Advanced AR/VR experiences",
-        "Sustainability tech innovations"
+        "Sustainability tech innovations",
       ],
       achievements: [
         "Global innovation summit",
         "Sustainable technology showcase",
-        "Quantum computing workshops"
+        "Quantum computing workshops",
       ],
-      icon: Hexagon
-    }
+      icon: Hexagon,
+    },
   ];
-  
   return (
     <div
       ref={containerRef}
       className="bg-[#0D0221] py-16 md:py-36 relative overflow-hidden"
     >
-      {/* Enhanced Background Effects */}
+      {/* Background hover ball following mouse */}
       <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,...')] opacity-5"></div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10" ref={ref}>
+      <div
+        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        ref={ref}
+      >
         {/* Section Title */}
         <motion.div
           variants={titleVariants}
@@ -297,64 +310,11 @@ const GlimpseTimeline = () => {
           />
         </motion.div>
 
-        {/* Timeline Container */}
-        <div className="relative">
-          {/* Enhanced Timeline Lines */}
-          <motion.div
-            className="hidden md:block absolute left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 h-full origin-top"
-            style={{
-              scaleY: scrollYProgress,
-              filter: "blur(0.5px)"
-            }}
-          />
-
-          <motion.div
-            className="md:hidden absolute left-4 w-1 bg-gradient-to-b from-cyan-500/0 via-cyan-500/50 to-cyan-500/0 h-full origin-top"
-            style={{
-              scaleY: scrollYProgress,
-              filter: "blur(0.5px)"
-            }}
-          />
-
-          {/* Enhanced Year Markers */}
-          <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-1 h-full">
-            {timelineEvents.map((event, index) => (
-              <motion.div
-                key={event.year}
-                className="absolute w-8 md:w-10 h-8 md:h-10 rounded-full flex items-center justify-center transition-all duration-500"
-                style={{
-                  top: `${(index + 0.5) * (100 / timelineEvents.length)}%`,
-                  transform: 'translate(-50%, -50%)',
-                }}
-                whileInView={{
-                  scale: [0.8, 1.2, 1],
-                  opacity: [0.5, 1]
-                }}
-                viewport={{ once: true }}
-              >
-                <div className="absolute w-full h-full rounded-full bg-cyan-500/20 animate-ping" />
-                <div className="absolute w-full h-full rounded-full bg-cyan-500/30" />
-                <span className="relative text-white font-bold text-xs md:text-sm">
-                  {event.year}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Timeline Events */}
-          <div className="space-y-8 md:space-y-16 pt-8 pb-16 pl-12 md:pl-0">
-            {timelineEvents.map((event, index) => (
-              <TimelineEvent
-                key={event.year}
-                {...event}
-                position={index}
-              />
-            ))}
-          </div>
-        </div>
+        <Timeline timelineEvents={timelineEvents} />
       </div>
     </div>
   );
 };
 
 export default GlimpseTimeline;
+
