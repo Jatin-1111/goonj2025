@@ -246,26 +246,6 @@ const BentoGallery = () => {
                     />
                 </motion.div>
 
-                {/* Auto-scroll toggle button */}
-                <div className="flex justify-center mb-6">
-                    <button
-                        onClick={() => setAutoScrollEnabled(!autoScrollEnabled)}
-                        className="flex items-center gap-2 px-4 py-2 rounded-full bg-orange-500/10 hover:bg-orange-500/20 transition-colors duration-300 text-orange-100/80"
-                    >
-                        {autoScrollEnabled ? (
-                            <>
-                                <Pause className="w-4 h-4" />
-                                <span>Pause Auto-scroll</span>
-                            </>
-                        ) : (
-                            <>
-                                <Play className="w-4 h-4" />
-                                <span>Resume Auto-scroll</span>
-                            </>
-                        )}
-                    </button>
-                </div>
-
                 {/* Gallery */}
                 <motion.div
                     ref={scrollRef}
