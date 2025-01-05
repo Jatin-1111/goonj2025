@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import Image from "next/image";
-import { cn } from "@/lib/utils";
 import ReactDOM from 'react-dom';
 
 const EventModal = ({ isOpen, onClose, event }) => {
