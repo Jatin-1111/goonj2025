@@ -2,7 +2,11 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import Image from "next/image";
-import EventModal from "./EventModal";
+import dynamic from 'next/dynamic';
+
+const EventModal = dynamic(() => import('./EventModal'), {
+    ssr: false
+})
 
 const EventCard = ({ event, index }) => {
     const [transform, setTransform] = useState("translate(-50%,-50%) rotateX(0deg)");
