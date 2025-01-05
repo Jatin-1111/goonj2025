@@ -1,7 +1,7 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import EventCard from './Event-carousel-utility';
+import EventCard from './EventCard';
 
 const NavigationButton = ({ direction, onClick }) => (
     <motion.button
