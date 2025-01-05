@@ -346,7 +346,7 @@ const BentoGallery = () => {
                 >
                     <p className="text-sm">
                         {autoScrollEnabled ?
-                            "Drag to pause auto-scroll" :
+                            "Scroll Horizontally" :
                             "Manual scroll mode - Click resume for auto-scroll"
                         }
                     </p>
