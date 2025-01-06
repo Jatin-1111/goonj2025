@@ -1,4 +1,3 @@
-"use client"
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, MessageCircleQuestion, Mail, Search } from 'lucide-react';
@@ -9,7 +8,28 @@ const FAQ = () => {
   const [openIndex, setOpenIndex] = useState(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
+  const [paths, setPaths] = useState([]);
   const [isMounted, setIsMounted] = useState(false);
+
+  // Generate mandala paths for the background pattern
+  useEffect(() => {
+    const generatePaths = () => {
+      return Array(12).fill(null).map((_, i) => {
+        const angle = (i * 30 * Math.PI) / 180;
+        return {
+          key: i,
+          d: `M100,100 
+              c${30 * Math.cos(angle)},${30 * Math.sin(angle)} 
+               ${60 * Math.cos(angle)},${60 * Math.sin(angle)} 
+               ${80 * Math.cos(angle)},${80 * Math.sin(angle)}`
+        };
+      });
+    };
+    setPaths(generatePaths());
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
 
   // FAQ data structure
   const faqs = [
@@ -42,10 +62,9 @@ const FAQ = () => {
       question: "Are there any prizes for the winners?",
       answer: "Yes, winners of various competitions will receive exciting prizes, including cash rewards, certificates, and sponsored gifts. The total prize pool for Goonj 2025 will be announced soon.",
       category: "prizes"
-    },
+    }
   ];
 
-  // Category definitions for filtering
   const categories = [
     { id: 'all', label: 'All' },
     { id: 'general', label: 'General' },
@@ -53,14 +72,8 @@ const FAQ = () => {
     { id: 'registration', label: 'Registration' },
     { id: 'events', label: 'Events' },
     { id: 'eligibility', label: 'Eligibility' },
-    { id: 'prizes', label: 'Prizes' },
+    { id: 'prizes', label: 'Prizes' }
   ];
-
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  if (!isMounted) return null;
 
   const filteredFaqs = faqs.filter(faq => {
     const matchesSearch = faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -70,12 +83,7 @@ const FAQ = () => {
   });
 
   return (
-    <div className="bg-[#0D0221] py-20 relative overflow-hidden min-h-screen">
-      {/* Gradient Background */}
-      <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]" />
-      </div>
-
+    <div className="relative min-h-screen bg-gradient-to-b from-[#0D0221] via-[#150634] to-[#0D0221] py-20">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <motion.div
@@ -90,22 +98,22 @@ const FAQ = () => {
             whileHover={{ scale: 1.1 }}
             transition={{ type: "spring", stiffness: 300 }}
           >
-            <div className="p-4 rounded-lg bg-orange-500/10">
-              <MessageCircleQuestion className="w-12 h-12 text-orange-500" />
+            <div className="p-4 rounded-lg bg-orange-400/10">
+              <MessageCircleQuestion className="w-12 h-12 text-orange-400" />
             </div>
           </motion.div>
 
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
+          <h2 className="text-4xl md:text-6xl font-bold text-orange-50 tracking-tight mb-4">
             Frequently Asked Questions
           </h2>
           <motion.div
             initial={{ scaleX: 0 }}
             animate={{ scaleX: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mb-8 rounded"
+            className="w-24 h-1 bg-gradient-to-r from-orange-400 to-cyan-400 mx-auto mb-8 rounded"
           />
 
-          {/* Search Section */}
+          {/* Search and Categories */}
           <div className="max-w-xl mx-auto space-y-6">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -113,14 +121,14 @@ const FAQ = () => {
               transition={{ delay: 0.2 }}
               className="relative"
             >
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-500" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-400" />
               <Input
                 type="text"
                 placeholder="Search FAQs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white/5 border-cyan-500/20 text-white placeholder:text-gray-400 
-                  focus:ring-2 focus:ring-cyan-500/50 hover:border-cyan-500/40 transition-all duration-300"
+                className="pl-10 bg-white/5 border-cyan-400/20 text-orange-50 placeholder:text-gray-400 
+                  focus:ring-2 focus:ring-cyan-400/50 hover:border-cyan-400/40 transition-all duration-300"
               />
             </motion.div>
 
@@ -140,8 +148,8 @@ const FAQ = () => {
                   <Badge
                     variant={selectedCategory === category.id ? "default" : "secondary"}
                     className={`cursor-pointer transition-all duration-300 ${selectedCategory === category.id
-                      ? 'bg-cyan-500 hover:bg-cyan-400 text-white'
-                      : 'bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border-cyan-500/20'
+                      ? 'bg-cyan-400 hover:bg-cyan-300 text-[#0D0221]'
+                      : 'bg-white/5 hover:bg-white/10 text-orange-50 hover:text-white border-cyan-400/20'
                       }`}
                     onClick={() => setSelectedCategory(category.id)}
                   >
@@ -163,12 +171,11 @@ const FAQ = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-100px" }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="relative"
               >
                 <motion.div
                   whileHover={{ scale: 1.02 }}
-                  className="w-full p-6 bg-white/5 rounded-lg border border-cyan-500/20
-                    hover:bg-white/10 hover:border-cyan-500/40 transition-all duration-300"
+                  className="w-full p-6 bg-white/5 rounded-lg border border-cyan-400/20
+                    hover:bg-white/10 hover:border-cyan-400/40 transition-all duration-300"
                 >
                   <button
                     onClick={() => setOpenIndex(openIndex === index ? null : index)}
@@ -177,11 +184,11 @@ const FAQ = () => {
                     <div className="flex items-center space-x-4">
                       <motion.div
                         whileHover={{ scale: 1.1 }}
-                        className="p-2 rounded-lg bg-orange-500/10"
+                        className="p-2 rounded-lg bg-orange-400/10"
                       >
-                        <MessageCircleQuestion className="text-orange-500 w-6 h-6" />
+                        <MessageCircleQuestion className="text-orange-400 w-6 h-6" />
                       </motion.div>
-                      <span className="text-xl font-semibold text-white group-hover:text-orange-500 transition-colors duration-300">
+                      <span className="text-xl font-semibold text-orange-50 group-hover:text-orange-400 transition-colors duration-300">
                         {faq.question}
                       </span>
                     </div>
@@ -189,7 +196,7 @@ const FAQ = () => {
                       animate={{ rotate: openIndex === index ? 180 : 0 }}
                       transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
                     >
-                      <ChevronDown className="w-6 h-6 text-cyan-500" />
+                      <ChevronDown className="w-6 h-6 text-cyan-400" />
                     </motion.div>
                   </button>
 
@@ -208,10 +215,10 @@ const FAQ = () => {
                           transition={{ delay: 0.2 }}
                         >
                           <div className="flex items-center mb-3">
-                            <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-purple-500 rounded mr-2" />
-                            <h4 className="text-lg font-semibold text-cyan-500">Answer</h4>
+                            <div className="w-1 h-4 bg-gradient-to-b from-cyan-400 to-orange-400 rounded mr-2" />
+                            <h4 className="text-lg font-semibold text-cyan-400">Answer</h4>
                           </div>
-                          <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                          <p className="text-orange-100/90 leading-relaxed">{faq.answer}</p>
                         </motion.div>
 
                         <motion.div
@@ -220,10 +227,7 @@ const FAQ = () => {
                           transition={{ delay: 0.3 }}
                           className="pt-4"
                         >
-                          <Badge
-                            variant="outline"
-                            className="text-purple-500 border-purple-500/30 bg-purple-500/10"
-                          >
+                          <Badge className="text-orange-400 border-orange-400/30 bg-orange-400/10">
                             {categories.find(c => c.id === faq.category)?.label}
                           </Badge>
                         </motion.div>
@@ -247,15 +251,15 @@ const FAQ = () => {
           <motion.div
             whileHover={{ scale: 1.05 }}
             className="inline-flex items-center space-x-3 bg-white/5 px-6 py-3 rounded-lg 
-              border border-cyan-500/20 hover:border-cyan-500/40 transition-all duration-300"
+              border border-cyan-400/20 hover:border-cyan-400/40 transition-all duration-300"
           >
-            <div className="p-2 rounded-lg bg-orange-500/10">
-              <Mail className="w-5 h-5 text-orange-500" />
+            <div className="p-2 rounded-lg bg-orange-400/10">
+              <Mail className="w-5 h-5 text-orange-400" />
             </div>
-            <span className="text-gray-300">Have more questions?</span>
+            <span className="text-orange-100/90">Have more questions?</span>
             <a
               href="mailto:contact@goonj2025.com"
-              className="text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
+              className="text-cyan-400 hover:text-cyan-300 font-medium transition-colors"
             >
               contact@goonj2025.com
             </a>
