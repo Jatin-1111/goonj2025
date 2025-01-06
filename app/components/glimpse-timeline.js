@@ -271,7 +271,7 @@ const GlimpseTimeline = () => {
 
   useEffect(() => {
     gsap.registerPlugin(MotionPathPlugin, ScrollTrigger);
-    let animation = gsap.to(".box", {
+    const animation = gsap.to(".box", {
       duration: 2,
       ease: "none",
       motionPath: {
@@ -289,7 +289,6 @@ const GlimpseTimeline = () => {
     });
     setInterval(() => {
       const rawPath = MotionPathPlugin.getRawPath(".path");
-      //MotionPathPlugin.cacheRawPathMeasurements(rawPath);
       let point = MotionPathPlugin.getPositionOnPath(rawPath, animation.progress(), true);
       console.log(point);
       setProgress(animation.progress());
@@ -378,148 +377,5 @@ const GlimpseTimeline = () => {
     </div>
   );
 };
-
-//const GlimpseTimeline = () => {
-//  const ref = useRef(null);
-//  const containerRef = useRef(null);
-//  const { scrollYProgress } = useScroll({
-//    target: containerRef,
-//    offset: ["start end", "end start"],
-//  });
-//
-//  const titleVariants = {
-//    hidden: { opacity: 0, y: 20 },
-//    visible: {
-//      opacity: 1,
-//      y: 0,
-//      transition: {
-//        duration: 0.8,
-//        ease: "easeOut",
-//      },
-//    },
-//  };
-//
-//  const timelineEvents = [
-//    {
-//      year: 2020,
-//      title: "Digital Inception",
-//      description:
-//        "In the wake of global challenges, Goonj emerged as a beacon of digital innovation, transforming the traditional tech fest into a virtual experience that connected minds across boundaries.",
-//      highlights: [
-//        "First fully online tech fest",
-//        "100+ virtual participants",
-//        "Innovative digital networking platforms",
-//      ],
-//      achievements: [
-//        "Developed proprietary virtual event platform",
-//        "Successful international collaborations",
-//        "Recognized for digital innovation",
-//      ],
-//      icon: QrCode,
-//    },
-//    {
-//      year: 2021,
-//      title: "Hybrid Revolution",
-//      description:
-//        "Breaking barriers between physical and digital realms, we pioneered a hybrid event model that redefined technological and cultural engagement.",
-//      highlights: [
-//        "Hybrid event format introduced",
-//        "International speaker series",
-//        "Expanded digital infrastructure",
-//      ],
-//      achievements: [
-//        "Implemented AR/VR technologies",
-//        "Expanded global participant base",
-//        "Developed adaptive event technologies",
-//      ],
-//      icon: CircuitBoard,
-//    },
-//    {
-//      year: 2022,
-//      title: "Tech Cultural Fusion",
-//      description:
-//        "A transformative year where cutting-edge technology met traditional cultural narratives, creating a unique ecosystem of innovation and heritage.",
-//      highlights: [
-//        "AI-powered cultural workshops",
-//        "500+ participants",
-//        "Innovative tech competitions",
-//      ],
-//      achievements: [
-//        "Launched AI-driven cultural insights platform",
-//        "Created cross-cultural tech initiatives",
-//        "Expanded international partnerships",
-//      ],
-//      icon: Cpu,
-//    },
-//    {
-//      year: 2023,
-//      title: "Global Connected",
-//      description:
-//        "Reaching unprecedented heights with global collaborations, groundbreaking technological showcases, and a vision that transcends traditional boundaries.",
-//      highlights: [
-//        "International university partnerships",
-//        "Advanced AR/VR experiences",
-//        "Sustainability tech innovations",
-//      ],
-//      achievements: [
-//        "Global innovation summit",
-//        "Sustainable technology showcase",
-//        "Quantum computing workshops",
-//      ],
-//      icon: Hexagon,
-//    },
-//  ];
-//  return (
-//    <div
-//      ref={containerRef}
-//      className="bg-[#0D0221] py-16 md:py-36 relative overflow-hidden"
-//    >
-//      {/* Background hover ball following mouse */}
-//      <div className="absolute inset-0 opacity-20 pointer-events-none overflow-hidden">
-//        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]"></div>
-//        <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,...')] opacity-5"></div>
-//      </div>
-//
-//      <div
-//        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
-//        ref={ref}
-//      >
-//        {/* Section Title */}
-//        <motion.div
-//          variants={titleVariants}
-//          initial="hidden"
-//          whileInView="visible"
-//          viewport={{ once: true }}
-//          className="text-center mb-8 md:mb-16"
-//        >
-//          <motion.h2
-//            initial={{ opacity: 0, y: 20 }}
-//            animate={{ opacity: 1, y: 0 }}
-//            transition={{ duration: 0.6 }}
-//            className="text-3xl md:text-5xl font-bold text-white mb-2 md:mb-4"
-//          >
-//            Our Journey Through Years
-//          </motion.h2>
-//          <motion.p
-//            initial={{ opacity: 0 }}
-//            animate={{ opacity: 1 }}
-//            transition={{ duration: 0.6, delay: 0.2 }}
-//            className="text-lg md:text-xl text-gray-300"
-//          >
-//            The Evolution of DigitalDharma
-//          </motion.p>
-//          <motion.div
-//            initial={{ scaleX: 0 }}
-//            animate={{ scaleX: 1 }}
-//            transition={{ duration: 0.8, delay: 0.4 }}
-//            className="w-16 md:w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mt-4"
-//          />
-//        </motion.div>
-//
-//          <Timeline timelineEvents={timelineEvents} />
-//      </div>
-//    </div>
-//  );
-//};
 
 export default GlimpseTimeline;
