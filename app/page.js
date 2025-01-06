@@ -86,9 +86,9 @@ const Home = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // if (loading) {
-  //   return <Preloader />;
-  // }
+  if (loading) {
+    return <Preloader />;
+  }
 
   return (
     <main className="relative">

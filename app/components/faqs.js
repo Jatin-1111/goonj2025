@@ -1,18 +1,15 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence, useMotionValue, useTransform } from 'framer-motion';
-import { ChevronDown, MessageCircleQuestion, Mail, Search, ArrowUpCircle } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, MessageCircleQuestion, Mail, Search } from 'lucide-react';
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 
 const FAQ = () => {
-  // Component state management
-  const [openIndex, setOpenIndex] = useState(null);            // Controls FAQ item expansion
-  const [hoveredIndex, setHoveredIndex] = useState(null);      // Tracks hovered FAQ item
-  const [searchQuery, setSearchQuery] = useState('');          // Search input value
-  const [selectedCategory, setSelectedCategory] = useState('all');  // Selected filter category
-  const [showScrollTop, setShowScrollTop] = useState(false);   // Controls scroll-to-top button
-  const [isMounted, setIsMounted] = useState(false);          // Handles client-side rendering
+  const [openIndex, setOpenIndex] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [isMounted, setIsMounted] = useState(false);
 
   // FAQ data structure
   const faqs = [
@@ -59,7 +56,12 @@ const FAQ = () => {
     { id: 'prizes', label: 'Prizes' },
   ];
 
-  // Filter FAQs based on search query and selected category
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
+
   const filteredFaqs = faqs.filter(faq => {
     const matchesSearch = faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
       faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
@@ -67,50 +69,13 @@ const FAQ = () => {
     return matchesSearch && matchesCategory;
   });
 
-  // Client-side initialization
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  // Scroll handler for showing/hiding scroll-to-top button
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleScroll = () => {
-        setShowScrollTop(window.scrollY > 300);
-      };
-
-      window.addEventListener('scroll', handleScroll);
-      return () => window.removeEventListener('scroll', handleScroll);
-    }
-  }, []);
-
-  // Keyboard shortcuts handler
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const handleKeyDown = (event) => {
-        if (event.key === '/') {
-          event.preventDefault();
-          document.querySelector('input[type="text"]')?.focus();
-        }
-        if (event.key === 'Escape') {
-          setSearchQuery('');
-          setSelectedCategory('all');
-          document.querySelector('input[type="text"]')?.blur();
-        }
-      };
-
-      window.addEventListener('keydown', handleKeyDown);
-      return () => window.removeEventListener('keydown', handleKeyDown);
-    }
-  }, []);
-
-  // Wait for client-side rendering
-  if (!isMounted) {
-    return null;
-  }
-
   return (
-    <div className="bg-[#1A0F2E] py-20 relative overflow-hidden min-h-screen">
+    <div className="bg-[#0D0221] py-20 relative overflow-hidden min-h-screen">
+      {/* Gradient Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]" />
+      </div>
+
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         {/* Header Section */}
         <motion.div
@@ -120,106 +85,148 @@ const FAQ = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <div className="flex justify-center mb-6">
-            <motion.div
-              animate={{
-                scale: [1, 1.1, 1],
-                rotate: [0, 5, -5, 0]
-              }}
-              transition={{
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            >
-              <MessageCircleQuestion className="w-16 h-16 text-[#D6A531]" />
-            </motion.div>
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold text-[#FEF8EF] mb-4">
+          <motion.div
+            className="flex justify-center mb-6"
+            whileHover={{ scale: 1.1 }}
+            transition={{ type: "spring", stiffness: 300 }}
+          >
+            <div className="p-4 rounded-lg bg-orange-500/10">
+              <MessageCircleQuestion className="w-12 h-12 text-orange-500" />
+            </div>
+          </motion.div>
+
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Frequently Asked Questions
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-[#A41E34] via-[#D6A531] to-[#CC704B] mx-auto mb-8" />
+          <motion.div
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mb-8 rounded"
+          />
 
           {/* Search Section */}
           <div className="max-w-xl mx-auto space-y-6">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-[#FEF8EF]/60" />
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="relative"
+            >
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-cyan-500" />
               <Input
                 type="text"
                 placeholder="Search FAQs..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 bg-white/5 border-[#D6A531]/20 text-[#FEF8EF] placeholder:text-[#FEF8EF]/40 focus:ring-2 focus:ring-[#D6A531]/50"
+                className="pl-10 bg-white/5 border-cyan-500/20 text-white placeholder:text-gray-400 
+                  focus:ring-2 focus:ring-cyan-500/50 hover:border-cyan-500/40 transition-all duration-300"
               />
-            </div>
+            </motion.div>
 
-            <div className="flex flex-wrap gap-2 justify-center">
-              {categories.map((category) => (
-                <Badge
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              className="flex flex-wrap gap-2 justify-center"
+            >
+              {categories.map((category, index) => (
+                <motion.div
                   key={category.id}
-                  variant={selectedCategory === category.id ? "default" : "secondary"}
-                  className={`cursor-pointer transition-all duration-300 ${selectedCategory === category.id
-                    ? 'bg-[#D6A531] hover:bg-[#CC704B] text-[#1A0F2E]'
-                    : 'bg-white/5 hover:bg-[#D6A531]/20 text-[#FEF8EF]'
-                    }`}
-                  onClick={() => setSelectedCategory(category.id)}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 + 0.4 }}
                 >
-                  {category.label}
-                </Badge>
+                  <Badge
+                    variant={selectedCategory === category.id ? "default" : "secondary"}
+                    className={`cursor-pointer transition-all duration-300 ${selectedCategory === category.id
+                      ? 'bg-cyan-500 hover:bg-cyan-400 text-white'
+                      : 'bg-white/5 hover:bg-white/10 text-gray-300 hover:text-white border-cyan-500/20'
+                      }`}
+                    onClick={() => setSelectedCategory(category.id)}
+                  >
+                    {category.label}
+                  </Badge>
+                </motion.div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </motion.div>
 
         {/* FAQ Items */}
         <div className="space-y-6">
-          <AnimatePresence>
+          <AnimatePresence mode="wait">
             {filteredFaqs.map((faq, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ delay: index * 0.1 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
                 className="relative"
               >
                 <motion.div
-                  className="bg-white/5 backdrop-blur-md rounded-lg overflow-hidden relative border border-[#D6A531]/10"
-                  animate={{
-                    scale: hoveredIndex === index ? 1.02 : 1
-                  }}
-                  transition={{ duration: 0.3 }}
+                  whileHover={{ scale: 1.02 }}
+                  className="w-full p-6 bg-white/5 rounded-lg border border-cyan-500/20
+                    hover:bg-white/10 hover:border-cyan-500/40 transition-all duration-300"
                 >
                   <button
                     onClick={() => setOpenIndex(openIndex === index ? null : index)}
-                    className="w-full text-left p-6 flex items-center justify-between group"
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(null)}
+                    className="w-full text-left flex items-center justify-between group"
                   >
-                    <span className="text-lg text-[#FEF8EF] font-medium pr-8 group-hover:text-[#D6A531] transition-colors">
-                      {faq.question}
-                    </span>
-                    <ChevronDown className="w-6 h-6 text-[#D6A531]" />
+                    <div className="flex items-center space-x-4">
+                      <motion.div
+                        whileHover={{ scale: 1.1 }}
+                        className="p-2 rounded-lg bg-orange-500/10"
+                      >
+                        <MessageCircleQuestion className="text-orange-500 w-6 h-6" />
+                      </motion.div>
+                      <span className="text-xl font-semibold text-white group-hover:text-orange-500 transition-colors duration-300">
+                        {faq.question}
+                      </span>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: openIndex === index ? 180 : 0 }}
+                      transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+                    >
+                      <ChevronDown className="w-6 h-6 text-cyan-500" />
+                    </motion.div>
                   </button>
 
                   <AnimatePresence>
                     {openIndex === index && (
                       <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3 }}
-                        className="p-6 pt-0"
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        exit={{ opacity: 0, height: 0 }}
+                        transition={{ duration: 0.3, type: "spring", stiffness: 200 }}
+                        className="mt-6 space-y-4"
                       >
-                        <p className="text-[#FEF8EF]/80">{faq.answer}</p>
-                        <div className="mt-4">
+                        <motion.div
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                        >
+                          <div className="flex items-center mb-3">
+                            <div className="w-1 h-4 bg-gradient-to-b from-cyan-500 to-purple-500 rounded mr-2" />
+                            <h4 className="text-lg font-semibold text-cyan-500">Answer</h4>
+                          </div>
+                          <p className="text-gray-300 leading-relaxed">{faq.answer}</p>
+                        </motion.div>
+
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 }}
+                          className="pt-4"
+                        >
                           <Badge
                             variant="outline"
-                            className="text-[#D6A531] border-[#D6A531]/30"
+                            className="text-purple-500 border-purple-500/30 bg-purple-500/10"
                           >
                             {categories.find(c => c.id === faq.category)?.label}
                           </Badge>
-                        </div>
+                        </motion.div>
                       </motion.div>
                     )}
                   </AnimatePresence>
@@ -237,16 +244,22 @@ const FAQ = () => {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <div className="inline-flex items-center space-x-3 bg-white/5 backdrop-blur-md px-6 py-3 rounded-full border border-[#D6A531]/20">
-            <Mail className="w-5 h-5 text-[#D6A531]" />
-            <span className="text-[#FEF8EF]/80">Have more questions?</span>
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            className="inline-flex items-center space-x-3 bg-white/5 px-6 py-3 rounded-lg 
+              border border-cyan-500/20 hover:border-cyan-500/40 transition-all duration-300"
+          >
+            <div className="p-2 rounded-lg bg-orange-500/10">
+              <Mail className="w-5 h-5 text-orange-500" />
+            </div>
+            <span className="text-gray-300">Have more questions?</span>
             <a
               href="mailto:contact@goonj2025.com"
-              className="text-[#D6A531] hover:text-[#CC704B] font-medium transition-colors"
+              className="text-cyan-500 hover:text-cyan-400 font-medium transition-colors"
             >
               contact@goonj2025.com
             </a>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </div>

@@ -1,44 +1,124 @@
 "use client"
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import EventCard from './EventCard';
+import { events } from './Event-card-utility';
+import { useInView } from 'react-intersection-observer';
 
-const NavigationButton = ({ direction, onClick }) => (
+const NavigationButton = ({ direction, onClick, isDisabled }) => (
     <motion.button
         onClick={onClick}
-        className="group p-4 rounded-xl bg-black/20 backdrop-blur-sm hover:bg-black/40 transition-all duration-300 pointer-events-auto border border-white/10"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        className={`group p-4 rounded-xl backdrop-blur-sm transition-all duration-300 pointer-events-auto border
+            ${isDisabled
+                ? 'bg-black/10 border-cyan-400/20'
+                : 'bg-black/20 border-cyan-400/30 hover:border-cyan-400/50'}`}
+        whileHover={!isDisabled ? { scale: 1.1 } : {}}
+        whileTap={!isDisabled ? { scale: 0.95 } : {}}
     >
         <div className="relative w-8 h-8 flex items-center justify-center">
             {direction === 'prev' ? (
-                // Previous Arrow
                 <>
                     <motion.div
-                        className="absolute w-6 h-px bg-white rotate-45 origin-left"
+                        className={`absolute w-6 h-px ${isDisabled ? 'bg-cyan-400/30' : 'bg-cyan-400'} rotate-45 origin-left`}
                         whileHover={{ width: '1.75rem' }}
                     />
                     <motion.div
-                        className="absolute w-6 h-px bg-white -rotate-45 origin-left"
+                        className={`absolute w-6 h-px ${isDisabled ? 'bg-cyan-400/30' : 'bg-cyan-400'} -rotate-45 origin-left`}
                         whileHover={{ width: '1.75rem' }}
                     />
                 </>
             ) : (
-                // Next Arrow
                 <>
                     <motion.div
-                        className="absolute w-6 h-px bg-white rotate-45 origin-right"
+                        className={`absolute w-6 h-px ${isDisabled ? 'bg-cyan-400/30' : 'bg-cyan-400'} rotate-45 origin-right`}
                         whileHover={{ width: '1.75rem' }}
                     />
                     <motion.div
-                        className="absolute w-6 h-px bg-white -rotate-45 origin-right"
+                        className={`absolute w-6 h-px ${isDisabled ? 'bg-cyan-400/30' : 'bg-cyan-400'} -rotate-45 origin-right`}
                         whileHover={{ width: '1.75rem' }}
                     />
                 </>
             )}
+            <motion.div
+                className="absolute inset-0 rounded-full opacity-0 group-hover:opacity-100"
+                style={{
+                    background: `radial-gradient(circle at center, ${isDisabled ? 'rgba(34,211,238,0.1)' : 'rgba(34,211,238,0.2)'} 0%, transparent 70%)`
+                }}
+                transition={{ duration: 0.3 }}
+            />
         </div>
     </motion.button>
 );
+
+const TechPattern = () => (
+    <svg className="absolute inset-0 w-full h-full opacity-20">
+        <defs>
+            <pattern id="circuitPattern" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
+                <g fill="none" stroke="rgba(0,255,255,0.07)" strokeWidth="0.5">
+                    <path d="M10,40 h80 M40,10 v80" />
+                    <path d="M10,70 h30 M70,70 h20" />
+                    <path d="M25,25 l30,30 M75,25 l-30,30" />
+                    <circle cx="40" cy="40" r="2" />
+                    <circle cx="10" cy="40" r="1.5" />
+                    <circle cx="70" cy="70" r="1.5" />
+                    <text x="65" y="35" fontSize="4" fill="rgba(0,255,255,0.07)">1010</text>
+                    <text x="25" y="65" fontSize="4" fill="rgba(0,255,255,0.07)">0101</text>
+                </g>
+            </pattern>
+        </defs>
+        <motion.rect
+            width="100%"
+            height="100%"
+            fill="url(#circuitPattern)"
+            animate={{
+                opacity: [0.2, 0.4, 0.2],
+                scale: [1, 1.05, 1]
+            }}
+            transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+            }}
+        />
+    </svg>
+);
+
+const FloatingElements = () => {
+    const floatingElements = useMemo(() => {
+        return Array(6).fill(null).map((_, i) => ({
+            left: `${(i * 20) % 100}%`,
+            top: `${(i * 15 + 10) % 100}%`,
+            duration: 4 + (i % 3),
+            delay: i * 0.5
+        }));
+    }, []);
+
+    return (
+        <div className="absolute inset-0 pointer-events-none">
+            {floatingElements.map((element, i) => (
+                <motion.div
+                    key={`tech-element-${i}`}
+                    className="absolute"
+                    style={{
+                        left: element.left,
+                        top: element.top
+                    }}
+                    animate={{
+                        y: [0, -20, 0],
+                        opacity: [0.2, 0.5, 0.2]
+                    }}
+                    transition={{
+                        duration: element.duration,
+                        repeat: Infinity,
+                        delay: element.delay
+                    }}
+                >
+                    <div className="w-4 h-4 border border-cyan-400/20 rounded-full" />
+                </motion.div>
+            ))}
+        </div>
+    );
+};
 
 const MobileView = ({ events }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -211,242 +291,14 @@ const DesktopView = ({ events }) => {
     );
 };
 
-// Sample Events Data
-const events = [
-    {
-        title: 'Tech Innovation Summit',
-        image: '/events/tech-summit.png',
-        date: '2024-04-15',
-        time: '9:00 AM',
-        venue: 'Main Convention Center',
-        description: 'Join industry leaders and innovators for a day of cutting-edge technology discussions, demonstrations, and networking opportunities.',
-        capacity: '1000 attendees',
-        gallery: {
-            grid: [
-                { id: 1, image: '/events/tech-summit-1.png', title: 'Keynote Speech', size: 'large' },
-                { id: 2, image: '/events/tech-summit-2.png', title: 'Innovation Showcase', size: 'medium' },
-                { id: 3, image: '/events/tech-summit-3.png', title: 'Panel Discussion', size: 'small' },
-                { id: 4, image: '/events/tech-summit-4.png', title: 'Networking Session', size: 'small' }
-            ],
-            highlights: [
-                '25+ industry speakers',
-                'Interactive tech demos',
-                'Startup showcase',
-                'Networking lunch included'
-            ]
-        }
-    },
-    {
-        title: 'Global Food Festival',
-        image: '/events/food-fest.png',
-        date: '2024-04-18',
-        time: '11:00 AM',
-        venue: 'City Square Park',
-        description: 'Experience a culinary journey around the world with dishes from over 30 countries, live cooking demonstrations, and cultural performances.',
-        capacity: '5000 attendees',
-        gallery: {
-            grid: [
-                { id: 1, image: '/events/food-fest-1.png', title: 'Chef Showcase', size: 'large' },
-                { id: 2, image: '/events/food-fest-2.png', title: 'Food Stalls', size: 'medium' },
-                { id: 3, image: '/events/food-fest-3.png', title: 'Cooking Demo', size: 'small' },
-                { id: 4, image: '/events/food-fest-4.png', title: 'Cultural Show', size: 'small' }
-            ],
-            highlights: [
-                '30+ international cuisines',
-                'Celebrity chef appearances',
-                'Live cooking competitions',
-                'Cultural performances'
-            ]
-        }
-    },
-    {
-        title: 'Art & Design Expo',
-        image: '/events/art-expo.png',
-        date: '2024-04-20',
-        time: '10:00 AM',
-        venue: 'Metropolitan Gallery',
-        description: 'Discover contemporary art and design from emerging and established artists, featuring installations, workshops, and live demonstrations.',
-        capacity: '800 attendees',
-        gallery: {
-            grid: [
-                { id: 1, image: '/events/art-expo-1.png', title: 'Gallery Exhibition', size: 'large' },
-                { id: 2, image: '/events/art-expo-2.png', title: 'Artist Workshop', size: 'medium' },
-                { id: 3, image: '/events/art-expo-3.png', title: 'Live Painting', size: 'small' },
-                { id: 4, image: '/events/art-expo-4.png', title: 'Installation View', size: 'small' }
-            ],
-            highlights: [
-                '50+ artists featured',
-                'Interactive workshops',
-                'Live art creation',
-                'Artist meet & greet'
-            ]
-        }
-    },
-    {
-        title: 'Music Festival',
-        image: '/events/music-fest.png',
-        date: '2024-04-22',
-        time: '4:00 PM',
-        venue: 'Riverside Arena',
-        description: 'A multi-genre music festival featuring top artists, emerging talent, and interactive music experiences across multiple stages.',
-        capacity: '10000 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/music-fest-${i + 1}.png`,
-                title: ['Main Stage', 'Artist Performance', 'Crowd View', 'Night Show'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                '20+ live performances',
-                'Multiple genre stages',
-                'Food and beverage village',
-                'VIP experiences available'
-            ]
-        }
-    },
-    {
-        title: 'Sports Championship',
-        image: '/events/sports-champ.png',
-        date: '2024-04-25',
-        time: '1:00 PM',
-        venue: 'Central Stadium',
-        description: 'Elite athletes compete in multiple sports disciplines, featuring qualifying rounds, finals, and medal ceremonies.',
-        capacity: '15000 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/sports-${i + 1}.png`,
-                title: ['Opening Ceremony', 'Track Events', 'Swimming Finals', 'Awards'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                '12 sports disciplines',
-                'International athletes',
-                'Live broadcasting',
-                'Medal ceremonies'
-            ]
-        }
-    },
-    {
-        title: 'Business Summit',
-        image: '/events/business-summit.png',
-        date: '2024-04-28',
-        time: '8:30 AM',
-        venue: 'Grand Hotel Conference Center',
-        description: 'Connect with industry leaders, explore business opportunities, and gain insights into future market trends.',
-        capacity: '600 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/business-${i + 1}.png`,
-                title: ['Keynote Session', 'Panel Discussion', 'Networking Event', 'Workshop'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                'Industry keynotes',
-                'Networking sessions',
-                'Investment opportunities',
-                'Business matchmaking'
-            ]
-        }
-    },
-    {
-        title: 'Fashion Week',
-        image: '/events/fashion-week.png',
-        date: '2024-05-01',
-        time: '7:00 PM',
-        venue: 'Fashion Pavilion',
-        description: 'Experience the latest in fashion with runway shows, designer showcases, and industry networking events.',
-        capacity: '1200 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/fashion-${i + 1}.png`,
-                title: ['Runway Show', 'Designer Collection', 'Backstage Prep', 'VIP Lounge'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                '30+ designer shows',
-                'Celebrity appearances',
-                'Pop-up boutiques',
-                'After-parties'
-            ]
-        }
-    },
-    {
-        title: 'Gaming Convention',
-        image: '/events/gaming-con.png',
-        date: '2024-05-04',
-        time: '10:00 AM',
-        venue: 'Tech Center',
-        description: 'Immerse yourself in the world of gaming with tournaments, demos, cosplay contests, and industry panels.',
-        capacity: '3000 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/gaming-${i + 1}.png`,
-                title: ['Tournament Arena', 'Cosplay Contest', 'VR Experience', 'Developer Panel'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                'Pro tournaments',
-                'Game previews',
-                'Cosplay competition',
-                'Developer meetups'
-            ]
-        }
-    },
-    {
-        title: 'Science Fair',
-        image: '/events/science-fair.png',
-        date: '2024-05-07',
-        time: '9:00 AM',
-        venue: 'Science Museum',
-        description: 'Explore innovative projects, interactive exhibits, and cutting-edge research presentations from young scientists.',
-        capacity: '2000 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/science-${i + 1}.png`,
-                title: ['Project Display', 'Live Experiment', 'Awards Ceremony', 'Workshop'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                '100+ projects',
-                'Live demonstrations',
-                'Expert judges',
-                'Innovation awards'
-            ]
-        }
-    },
-    {
-        title: 'Film Festival',
-        image: '/events/film-fest.png',
-        date: '2024-05-10',
-        time: '6:00 PM',
-        venue: 'Cinema Complex',
-        description: 'Celebrate independent cinema with film screenings, director Q&As, and industry workshops.',
-        capacity: '1500 attendees',
-        gallery: {
-            grid: Array(4).fill().map((_, i) => ({
-                id: i + 1,
-                image: `/events/film-${i + 1}.png`,
-                title: ['Premiere Night', 'Director Talk', 'Red Carpet', 'Screening Room'][i],
-                size: ['large', 'medium', 'small', 'small'][i]
-            })),
-            highlights: [
-                '50+ film screenings',
-                'Director Q&As',
-                'Industry panels',
-                'Awards ceremony'
-            ]
-        }
-    }
-];
+// MobileView and DesktopView components remain largely the same, just updated with the new theme classes
 
 const EventsSection = () => {
     const [isMobile, setIsMobile] = useState(false);
+    const [ref, inView] = useInView({
+        triggerOnce: true,
+        threshold: 0.1
+    });
 
     useEffect(() => {
         const handleResize = () => {
@@ -459,27 +311,86 @@ const EventsSection = () => {
     }, []);
 
     return (
-        <div className="relative bg-[#1A0F2E] flex flex-col justify-center min-h-screen w-full overflow-hidden">
+        <div className="relative flex flex-col justify-center min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#0D0221] via-[#150634] to-[#0D0221]">
+            {/* Background Elements */}
+            <TechPattern />
+            <FloatingElements />
+
+            {/* Corner Accents */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none">
+                {[0, 1, 2, 3].map((i) => (
+                    <motion.path
+                        key={`corner-${i}`}
+                        d={`M${i < 2 ? 0 : '100%'},${i % 2 === 0 ? 0 : '100%'} 
+                           ${i < 2 ? 'h' : 'h-'}100 ${i % 2 === 0 ? 'v' : 'v-'}100`}
+                        stroke={i % 2 === 0 ? 'rgba(255,165,0,0.2)' : 'rgba(0,255,255,0.2)'}
+                        strokeWidth="1.5"
+                        fill="none"
+                        animate={{
+                            opacity: [0.2, 0.4, 0.2],
+                            pathLength: [0, 1, 0],
+                            strokeWidth: [1, 2, 1]
+                        }}
+                        transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            delay: i * 0.7
+                        }}
+                    />
+                ))}
+            </svg>
+
             {/* Header Section */}
-            <div className="container mx-auto px-4 mb-8 sm:mb-12 relative z-10">
-                <motion.div
-                    className="text-center"
-                    initial={{ opacity: 0, y: -20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                >
-                    <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2">
-                        Past Events
-                    </h2>
-                    <div className="flex items-center justify-center gap-2 sm:gap-4">
-                        <div className="h-px w-12 sm:w-20 bg-gradient-to-r from-orange-500 to-transparent" />
-                        <div className="text-orange-500 text-xl sm:text-2xl">❈</div>
-                        <div className="h-px w-12 sm:w-20 bg-gradient-to-l from-orange-500 to-transparent" />
-                    </div>
-                </motion.div>
+            <div className="container mx-auto px-4 mb-8 sm:mb-12 relative z-10" ref={ref}>
+                <AnimatePresence>
+                    {inView && (
+                        <motion.div
+                            className="text-center"
+                            initial={{ opacity: 0, y: -20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
+                        >
+                            <motion.h2
+                                className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-2"
+                                animate={{
+                                    textShadow: [
+                                        "0 0 8px rgba(34,211,238,0.3)",
+                                        "0 0 16px rgba(34,211,238,0.3)",
+                                        "0 0 8px rgba(34,211,238,0.3)"
+                                    ]
+                                }}
+                                transition={{ duration: 2, repeat: Infinity }}
+                            >
+                                Past Events
+                            </motion.h2>
+                            <div className="flex items-center justify-center gap-2 sm:gap-4">
+                                <motion.div
+                                    className="h-px w-12 sm:w-20 bg-gradient-to-r from-cyan-400 to-transparent"
+                                    animate={{ scaleX: [1, 1.2, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                />
+                                <motion.div
+                                    className="text-cyan-400 text-xl sm:text-2xl"
+                                    animate={{
+                                        rotate: [0, 360],
+                                        scale: [1, 1.2, 1]
+                                    }}
+                                    transition={{ duration: 4, repeat: Infinity }}
+                                >
+                                    ❈
+                                </motion.div>
+                                <motion.div
+                                    className="h-px w-12 sm:w-20 bg-gradient-to-l from-cyan-400 to-transparent"
+                                    animate={{ scaleX: [1, 1.2, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                />
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
             </div>
 
-            {/* Conditional Rendering based on screen size */}
+            {/* Events Display */}
             {isMobile ? (
                 <MobileView events={events} />
             ) : (
