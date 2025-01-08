@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Battery, Clock, Cpu, MapPin, Radio, Zap } from 'lucide-react';
+import { Clock, MapPin } from 'lucide-react';
 
 const EventTimeline = () => {
   const events = [
@@ -105,56 +105,16 @@ const EventTimeline = () => {
     }
   ];
 
-  // Circuit line animation component
-  const CircuitLine = ({ className = "" }) => (
-    <div className={`absolute ${className}`}>
-      <motion.div
-        className="h-px bg-yellow-500/30"
-        initial={{ scaleX: 0 }}
-        animate={{ scaleX: 1 }}
-        transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
-      />
-      <motion.div
-        className="w-2 h-2 rounded-full bg-yellow-500/50 absolute -right-1 -top-1"
-        animate={{
-          scale: [1, 1.5, 1],
-          opacity: [0.5, 1, 0.5],
-        }}
-        transition={{ duration: 1.5, repeat: Infinity }}
-      />
-    </div>
-  );
-
   return (
-    <div className="bg-[#1a1a2e] py-40 relative overflow-hidden">
-      {/* Circuit Pattern Background */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 grid grid-cols-12 gap-4">
-          {Array.from({ length: 144 }).map((_, i) => (
-            <motion.div
-              key={i}
-              className="border border-yellow-500/20"
-              animate={{
-                opacity: [0.3, 0.6, 0.3],
-              }}
-              transition={{
-                duration: 2,
-                delay: i * 0.01,
-                repeat: Infinity,
-              }}
-            />
-          ))}
-        </div>
-      </div>
-
-      {/* Power Flow Effect */}
+    <div className="bg-[#0D0221] py-40 relative overflow-hidden">
+      {/* Background Effects */}
       <div className="absolute inset-0">
         <motion.div
           className="absolute inset-0"
           animate={{
             background: [
-              'radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%)',
-              'radial-gradient(circle at 80% 70%, rgba(0, 191, 255, 0.05) 0%, transparent 50%)'
+              'radial-gradient(circle at 20% 30%, rgba(255, 165, 0, 0.05) 0%, transparent 50%)',
+              'radial-gradient(circle at 80% 70%, rgba(0, 255, 255, 0.05) 0%, transparent 50%)'
             ]
           }}
           transition={{
@@ -166,37 +126,22 @@ const EventTimeline = () => {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Section Title with Electrical Theme */}
+        {/* Section Title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16 relative"
+          className="text-center mb-16"
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-            <motion.div
-              className="w-32 h-32 rounded-full bg-yellow-500/5"
-              animate={{
-                scale: [1, 1.2, 1],
-                opacity: [0.5, 0.8, 0.5],
-              }}
-              transition={{
-                duration: 3,
-                repeat: Infinity,
-              }}
-            />
-          </div>
-          
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4 relative">
-            <Zap className="inline-block w-8 h-8 mr-2 text-yellow-500" />
+          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">
             Event Timeline
           </h2>
-          <p className="text-xl text-yellow-100/80">Powering Innovation and Technology</p>
-          <div className="w-24 h-1 bg-gradient-to-r from-yellow-500 via-blue-500 to-yellow-500 mx-auto mt-4"/>
+          <p className="text-xl text-gray-300">Three Days of Innovation and Culture</p>
+          <div className="w-24 h-1 bg-gradient-to-r from-orange-500 via-cyan-500 to-orange-500 mx-auto mt-4"/>
         </motion.div>
 
-        {/* Timeline Content */}
+        {/* EventTimeline Content */}
         <div className="space-y-12">
           {events.map((day, dayIndex) => (
             <motion.div
@@ -205,20 +150,17 @@ const EventTimeline = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: dayIndex * 0.2 }}
-              className="relative"
             >
-              {/* Circuit connections between days */}
-              <CircuitLine className="left-0 right-0 top-16" />
-              
+              {/* Day Header */}
               <motion.h3
-                className="text-2xl md:text-3xl font-bold text-yellow-500 mb-8 relative inline-block"
+                className="text-2xl md:text-3xl font-bold text-orange-500 mb-8 relative inline-block"
                 whileHover={{ x: 10 }}
               >
-                <Battery className="inline-block w-6 h-6 mr-2" />
                 {day.date}
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-yellow-500/30" />
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-orange-500/30" />
               </motion.h3>
 
+              {/* Day Events */}
               <div className="grid gap-6">
                 {day.events.map((event, eventIndex) => (
                   <motion.div
@@ -227,39 +169,37 @@ const EventTimeline = () => {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: eventIndex * 0.1 }}
-                    className="bg-blue-900/10 backdrop-blur-sm rounded-lg p-6 hover:bg-blue-900/20 transition-colors border border-yellow-500/20 relative"
+                    className="bg-white/5 backdrop-blur-sm rounded-lg p-6 hover:bg-white/10 transition-colors"
                   >
-                    {/* Circuit node decorations */}
-                    <div className="absolute -left-2 top-1/2 w-4 h-4 rounded-full border-2 border-yellow-500/50 transform -translate-y-1/2" />
-                    
                     <div className="flex flex-col md:flex-row md:items-start gap-4">
+                      {/* Time and Location */}
                       <div className="md:w-1/4">
-                        <div className="flex items-center text-yellow-500 mb-2">
+                        <div className="flex items-center text-cyan-500 mb-2">
                           <Clock className="w-4 h-4 mr-2" />
                           <span>{event.time}</span>
                         </div>
-                        <div className="flex items-center text-blue-400">
+                        <div className="flex items-center text-gray-400">
                           <MapPin className="w-4 h-4 mr-2" />
                           <span>{event.location}</span>
                         </div>
                       </div>
 
+                      {/* Event Details */}
                       <div className="md:w-3/4">
-                        <h4 className="text-xl font-semibold text-yellow-100 mb-2 flex items-center">
-                          <Radio className="w-5 h-5 mr-2 text-yellow-500" />
+                        <h4 className="text-xl font-semibold text-white mb-2">
                           {event.title}
                         </h4>
-                        <p className="text-blue-100/80 mb-4">
+                        <p className="text-gray-300 mb-4">
                           {event.description}
                         </p>
                         
+                        {/* Highlights */}
                         <div className="flex flex-wrap gap-2">
                           {event.highlights.map((highlight, index) => (
                             <span
                               key={index}
-                              className="text-sm bg-yellow-500/10 text-yellow-400 rounded-full px-3 py-1 border border-yellow-500/20"
+                              className="text-sm bg-orange-500/10 text-orange-500 rounded-full px-3 py-1"
                             >
-                              <Cpu className="w-3 h-3 inline-block mr-1" />
                               {highlight}
                             </span>
                           ))}
@@ -273,7 +213,7 @@ const EventTimeline = () => {
           ))}
         </div>
 
-        {/* Download Button with Electrical Theme */}
+        {/* Download Button */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -281,17 +221,16 @@ const EventTimeline = () => {
           transition={{ delay: 0.5 }}
           className="mt-16 text-center"
         >
-          <button className="bg-gradient-to-r from-yellow-500 to-blue-500 text-white px-8 py-3 rounded-full hover:opacity-90 transition-opacity flex items-center justify-center mx-auto">
-            <Zap className="w-5 h-5 mr-2" />
+          <button className="bg-gradient-to-r from-orange-500 to-cyan-500 text-white px-8 py-3 rounded-full hover:opacity-90 transition-opacity">
             Download Schedule
           </button>
         </motion.div>
       </div>
 
-      {/* Electrical-themed Decorative Elements */}
+      {/* Decorative Elements */}
       <div className="absolute bottom-0 right-0 w-64 h-64">
         <motion.div
-          className="absolute inset-0 border-r-2 border-b-2 border-yellow-500/20"
+          className="absolute inset-0 border-r-2 border-b-2 border-orange-500/20"
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2],
@@ -304,7 +243,7 @@ const EventTimeline = () => {
       </div>
       <div className="absolute top-0 left-0 w-64 h-64">
         <motion.div
-          className="absolute inset-0 border-l-2 border-t-2 border-blue-500/20"
+          className="absolute inset-0 border-l-2 border-t-2 border-cyan-500/20"
           animate={{
             scale: [1, 1.1, 1],
             opacity: [0.2, 0.4, 0.2],

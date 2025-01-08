@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Menu, X, Cpu, Code, Radio, Zap, Cog, TestTube, Dna } from 'lucide-react'
+import { Menu, X, Cpu, Code, Radio, Zap, Cog, TestTube } from 'lucide-react'
 import { motion, AnimatePresence, useScroll } from 'framer-motion'
 import gsap from 'gsap'
 import { usePathname } from 'next/navigation'
@@ -148,7 +148,7 @@ const Header = () => {
         {
             label: 'Sponsors',
             href: '/sponsors',
-            icon: Dna,
+            icon: TestTube,
             branch: 'biotech',
         }
     ]
