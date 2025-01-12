@@ -33,7 +33,7 @@ const Timeline = ({ timelineEvents }) => {
   );
 };
 
-const TimelineEvent = ({
+export const TimelineEvent = ({
   year,
   title,
   description,

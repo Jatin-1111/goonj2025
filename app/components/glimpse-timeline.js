@@ -2,13 +2,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence, useScroll } from "framer-motion";
 import { CircuitBoard, Cpu, QrCode, Hexagon, ChevronDown } from "lucide-react";
-import Timeline from "./Timeline";
 import gsap from "gsap";
 import MotionPathPlugin from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Image from "next/image";
 
-const TimelineEvent = ({
+export const TimelineEvent = ({
   year,
   title,
   description,
@@ -16,9 +14,9 @@ const TimelineEvent = ({
   achievements,
   icon: Icon,
   position,
+  isExpanded,
+  setIsExpanded,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-
   const cardVariants = {
     hidden: {
       opacity: 0,
@@ -45,7 +43,7 @@ const TimelineEvent = ({
       },
     },
     visible: {
-      opacity: 1,
+      opacity: 2,
       height: "auto",
       transition: {
         duration: 0.3,
@@ -55,24 +53,17 @@ const TimelineEvent = ({
   };
 
   return (
-    <div
-      className={`relative w-full flex
-      ${position % 2 === 0 ? "md:justify-start" : "md:justify-end"}
-      justify-start
-      `}
-    >
+    <div className={`flex`}>
       <motion.div
         variants={cardVariants}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
-        className={`w-full md:w-[45%] p-4 md:p-6 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 
-      hover:bg-white/10 transition-all duration-300 ease-out
-      hover:shadow-lg hover:shadow-cyan-500/10
-      ${position % 2 === 0 ? "md:mr-auto" : "md:ml-auto"}
-      `}
+        className={`w-full p-4 md:p-6 bg-[#0D0221] rounded-lg border border-white 
+          transition-all duration-300 
+          ease-out hover:shadow-lg hover:shadow-cyan-500/10`}
       >
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-4 space-y-2 md:space-y-0">
+        <div className="mb-2">
           <div className="flex items-center space-x-4 group">
             {Icon && (
               <div className="p-2 rounded-lg bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors duration-300">
@@ -83,20 +74,6 @@ const TimelineEvent = ({
               {title}
             </h3>
           </div>
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center space-x-2 text-cyan-500 hover:text-cyan-400 transition-colors"
-          >
-            <span className="text-sm md:text-base">
-              {isExpanded ? "Collapse" : "Explore"}
-            </span>
-            <motion.div
-              animate={{ rotate: isExpanded ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <ChevronDown className="w-4 h-4" />
-            </motion.div>
-          </button>
         </div>
 
         <AnimatePresence>
@@ -106,9 +83,9 @@ const TimelineEvent = ({
               initial="hidden"
               animate="visible"
               exit="hidden"
-              className="space-y-4 overflow-hidden"
+              className="space-y-4 overflow-hidden max-w-md max-lg:max-w-xs max-md:max-w-md max-sm:max-w-xs"
             >
-              <p className="text-sm md:text-base text-gray-300 leading-relaxed">
+              <p className="text-sm md:text-base text-gray-300 leading-relaxed text-left text-pretty">
                 {description}
               </p>
 
@@ -133,7 +110,7 @@ const TimelineEvent = ({
                         className="flex items-center space-x-2 group"
                       >
                         <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-green-500 rounded-full mr-2 group-hover:scale-125 transition-transform duration-300"></span>
-                        <span className="text-xs md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                        <span className="text-xs md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300 text-left text-wrap">
                           {highlight}
                         </span>
                       </motion.li>
@@ -147,8 +124,8 @@ const TimelineEvent = ({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.3 }}
                 >
-                  <h4 className="text-base md:text-lg font-semibold text-purple-500 mb-3 flex items-center">
-                    <span className="w-1 h-4 bg-purple-500 rounded mr-2"></span>
+                  <h4 className="text-base md:text-lg font-semibold text-purple-500 mb-3 flex items-center text-left">
+                    <span className="w-1 h-4 md:h-8 lg:h-4 bg-purple-500 rounded mr-2"></span>
                     Major Achievements
                   </h4>
                   <ul className="space-y-3">
@@ -161,7 +138,7 @@ const TimelineEvent = ({
                         className="flex items-center space-x-2 group"
                       >
                         <span className="w-1.5 h-1.5 md:w-2 md:h-2 bg-purple-500 rounded-full mr-2 group-hover:scale-125 transition-transform duration-300"></span>
-                        <span className="text-xs md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300">
+                        <span className="text-xs md:text-sm text-gray-400 group-hover:text-gray-300 transition-colors duration-300 text-left text-wrap">
                           {achievement}
                         </span>
                       </motion.li>
@@ -172,6 +149,23 @@ const TimelineEvent = ({
             </motion.div>
           )}
         </AnimatePresence>
+        <div className="flex flex-row justify-between items-baseline">
+          <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            className={`max-md:order-2 flex items-center space-x-2 text-cyan-500 hover:text-cyan-400 transition-colors mt-4`}
+          >
+            <span className="text-sm md:text-base">
+              {isExpanded ? "Collapse" : "Explore"}
+            </span>
+            <motion.div
+              animate={{ rotate: isExpanded ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronDown className="w-4 h-4" />
+            </motion.div>
+          </button>
+          <span className="h-min max-md:order-1">{year}</span>
+        </div>
       </motion.div>
     </div>
   );
@@ -179,6 +173,7 @@ const TimelineEvent = ({
 
 const GlimpseTimeline = () => {
   const ref = useRef(null);
+  const [isExpanded, setIsExpanded] = useState(false);
   const containerRef = useRef(null);
   const [progress, setProgress] = useState(0);
   const { scrollYProgress } = useScroll({
@@ -281,18 +276,17 @@ const GlimpseTimeline = () => {
         autoRotate: true,
       },
       scrollTrigger: {
-        trigger: ".path",
-        start: "top center",
-        end: "bottom center",
+        trigger: ".start-trigger",
+        start: "top center+=10%",
+        endTrigger: ".end-trigger",
+        end: "bottom center+=10%",
+        markers: false, // Markers that show where the animation starts and ends
         scrub: 1,
       },
     });
+    gsap.delayedCall(3, () => ScrollTrigger.refresh());
     setInterval(() => {
-      const rawPath = MotionPathPlugin.getRawPath(".path");
-      let point = MotionPathPlugin.getPositionOnPath(rawPath, animation.progress(), true);
-      console.log(point);
       setProgress(animation.progress());
-      console.log("Progress:", animation.progress());
     }, 1000);
   }, []);
 
@@ -306,9 +300,85 @@ const GlimpseTimeline = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,...')] opacity-5"></div>
       </div>
-
+      <div className="fixed top-[20%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+        {(() => {
+          if (progress > 0.01 && progress < 0.125) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[0]}
+                postion={0}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.125 && progress < 0.25) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[1]}
+                postion={1}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.25 && progress < 0.375) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[2]}
+                postion={2}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.375 && progress < 0.5) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[3]}
+                postion={3}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.5 && progress < 0.625) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[4]}
+                postion={4}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.625 && progress < 0.75) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[5]}
+                postion={5}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.75 && progress < 0.875) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[6]}
+                postion={6}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          } else if (progress >= 0.875 && progress < 1) {
+            return (
+              <TimelineEvent
+                {...timelineEvents[7]}
+                postion={7}
+                isExpanded={isExpanded}
+                setIsExpanded={setIsExpanded}
+              />
+            );
+          }
+        })()}
+      </div>
       <div
-        className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10"
+        className="max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 mx-auto"
         ref={ref}
       >
         {/* Section Title */}
@@ -343,6 +413,7 @@ const GlimpseTimeline = () => {
           />
         </motion.div>
         <div className="md:w-[80%] mx-auto">
+          <div className="start-trigger" />
           <svg
             viewBox="0 -1 40 161"
             height="100%"
@@ -351,7 +422,7 @@ const GlimpseTimeline = () => {
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              className="path stroke-white stroke-[0.5]"
+              className="path stroke-white stroke-[0.1]"
               fill="none"
               d={`M 0 0 
                 L 40 20 
@@ -372,6 +443,7 @@ const GlimpseTimeline = () => {
               fill="blue"
             />
           </svg>
+          <div className="end-trigger" />
         </div>
       </div>
     </div>
