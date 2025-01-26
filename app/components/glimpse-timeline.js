@@ -287,7 +287,7 @@ const GlimpseTimeline = () => {
     gsap.delayedCall(3, () => ScrollTrigger.refresh());
     setInterval(() => {
       setProgress(animation.progress());
-    }, 1000);
+    }, 100);
   }, []);
 
   return (
