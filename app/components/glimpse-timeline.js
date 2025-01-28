@@ -300,83 +300,6 @@ const GlimpseTimeline = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/10 via-purple-900/10 to-indigo-900/10 animate-[pulse_10s_infinite]"></div>
         <div className="absolute top-0 left-0 w-full h-full bg-[url('data:image/svg+xml,...')] opacity-5"></div>
       </div>
-      <div className="fixed top-[20%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
-        {(() => {
-          if (progress > 0.01 && progress < 0.125) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[0]}
-                postion={0}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.125 && progress < 0.25) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[1]}
-                postion={1}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.25 && progress < 0.375) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[2]}
-                postion={2}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.375 && progress < 0.5) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[3]}
-                postion={3}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.5 && progress < 0.625) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[4]}
-                postion={4}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.625 && progress < 0.75) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[5]}
-                postion={5}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.75 && progress < 0.875) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[6]}
-                postion={6}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          } else if (progress >= 0.875 && progress < 1) {
-            return (
-              <TimelineEvent
-                {...timelineEvents[7]}
-                postion={7}
-                isExpanded={isExpanded}
-                setIsExpanded={setIsExpanded}
-              />
-            );
-          }
-        })()}
-      </div>
       <div
         className="max-w-6xl px-4 sm:px-6 lg:px-8 relative z-10 mx-auto"
         ref={ref}
@@ -413,6 +336,97 @@ const GlimpseTimeline = () => {
           />
         </motion.div>
         <div className="md:w-[80%] mx-auto">
+          {(() => {
+            if (progress > 0.05 && progress < 0.075) {
+              return (
+                <div className="absolute top-[9.5%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[0]}
+                    postion={0}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.175 && progress < 0.20) {
+              return (
+                <div className="absolute top-[21%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[1]}
+                    postion={1}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.30 && progress < 0.325) {
+              return (
+                <div className="absolute top-[33%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[2]}
+                    postion={2}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.425 && progress < 0.45) {
+              return (
+                <div className="absolute top-[45%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[3]}
+                    postion={3}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.55 && progress < 0.575) {
+              return (
+                <div className="absolute top-[60%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[4]}
+                    postion={4}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.675 && progress < 0.70) {
+              return (
+                <div className="absolute top-[75%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[5]}
+                    postion={5}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.80 && progress < 0.825) {
+              return (
+                <div className="absolute top-[87.5%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[6]}
+                    postion={6}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            } else if (progress >= 0.925 && progress < 0.95) {
+              return (
+                <div className="absolute top-[100%] left-1/2 -translate-x-1/2 z-50 max-sm:w-full max-sm:px-4">
+                  <TimelineEvent
+                    {...timelineEvents[7]}
+                    postion={7}
+                    isExpanded={isExpanded}
+                    setIsExpanded={setIsExpanded}
+                  />
+                </div>
+              );
+            }
+          })()}
           <div className="start-trigger" />
           <svg
             viewBox="0 -1 40 161"
